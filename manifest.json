@@ -1,7 +1,7 @@
 {
   "name": "八東 国語フラッシュカード",
   "short_name": "八東国語",
-  "start_url": "./splash.html",
+  "start_url": "./index.html",
   "display": "standalone"
   "scope": "./",
   "display": "standalone",
