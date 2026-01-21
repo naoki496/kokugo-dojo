@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>八東 国語フラッシュカード</title>
+
+  <!-- PWA -->
+  <meta name="theme-color" content="#241612" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <style>
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans JP",sans-serif;
+      background:#241612;
+      color:#eee;
+    }
+    .wrap{
+      max-width:1000px;
+      margin:0 auto;
+      padding:18px 16px 24px;
+    }
+    .hero{
+      background:#2d1c16;
+      border:1px solid #4a3228;
+      border-radius:18px;
+      padding:16px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin-bottom:14px;
+    }
+    .hero img{
+      max-width:100%;
+      height:90px;
+      object-fit:contain;
+      display:block;
+    }
+    .lead{
+      margin:10px 4px 18px;
+      font-size:13px;
+      line-height:1.7;
+      color:#c9b7ad;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+      gap:16px;
+    }
+    .card{
+      background:#2d1c16;
+      border:1px solid #4a3228;
+      border-radius:18px;
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      min-height:260px;
+    }
+    .badge{
+      background:#241612;
+      border:1px solid #4a3228;
+      border-radius:16px;
+      height:140px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+    }
+    .badge img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      display:block;
+    }
+    .title{font-size:18px;margin:0;}
+    .desc{
+      font-size:13px;
+      line-height:1.6;
+      color:#c9b7ad;
+      margin:0;
+    }
+    .btn{
+      margin-top:auto;
+      text-align:center;
+      padding:11px 12px;
+      border-radius:14px;
+      border:1px solid #5a3d31;
+      background:#332019;
+      color:#eee;
+      text-decoration:none;
+      font-weight:600;
+    }
+    .btn:hover{background:#3a241c;}
+    .foot{
+      margin-top:18px;
+      font-size:12px;
+      color:#c9b7ad;
+    }
+    code{
+      background:#281914;
+      border:1px solid #4a3228;
+      padding:1px 6px;
+      border-radius:8px;
+      color:#f2e8e3;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <img src="./header.png" alt="国語道場">
+    </div>
+
+    <div class="lead">
+      今日やるものを1つ選ぶ。<br>
+      スマホは「ホーム画面に追加」でアプリ風に使えます。<br>
+      更新が反映されない場合は、URL末尾に <code>?v=2</code> を付けてください。
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="badge"><img src="./kobun.png" alt="古文単語"></div>
+        <h2 class="title">古文単語</h2>
+        <p class="desc">読解の土台となる基礎語彙。<br>まずはここから。</p>
+        <a class="btn" href="https://YOURNAME.github.io/hatto-kobun-word/">開く</a>
+      </div>
+
+      <div class="card">
+        <div class="badge"><img src="./jodou.png" alt="助動詞"></div>
+        <h2 class="title">助動詞</h2>
+        <p class="desc">意味・用法・活用形の判断。<br>得点差がつく分野。</p>
+        <a class="btn" href="https://YOURNAME.github.io/hatto-kobun-jodoushi/">開く</a>
+      </div>
+
+      <div class="card">
+        <div class="badge"><img src="./bunn.png" alt="文学史総合"></div>
+        <h2 class="title">文学史総合</h2>
+        <p class="desc">作者・作品・時代背景を整理。<br>知識を一気に固める。</p>
+        <a class="btn" href="https://YOURNAME.github.io/hatto-bungakushi/">開く</a>
+      </div>
+    </div>
+
+    <div class="foot">
+      ※ 画像は「固定サイズの枠＋contain表示」のため、端末差でレイアウトが崩れません。<br>
+      ※ このページ自体もPWA対応です（オフライン閲覧可）。
+    </div>
+  </div>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./sw.js").catch(() => {});
+    });
+  }
+</script>
+</body>
+</html>
