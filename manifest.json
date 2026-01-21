@@ -1,7 +1,8 @@
 {
   "name": "八東 国語フラッシュカード",
   "short_name": "八東国語",
-  "start_url": "./index.html",
+  "start_url": "./splash.html",
+  "display": "standalone"
   "scope": "./",
   "display": "standalone",
   "background_color": "#241612",
