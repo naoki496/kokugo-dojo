@@ -2,196 +2,207 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>八東 国語フラッシュカード</title>
-  <meta name="theme-color" content="#241612" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#2a1b14" />
+  <title>八東国語LOBBY</title>
 
   <style>
-    /* ===== 基本（焦げ茶テーマ） ===== */
-    body{
-      margin:0;
-      font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans JP",sans-serif;
-      background:#241612;
-      color:#eee;
-    }
-    .wrap{
-      max-width:1000px;
-      margin:0 auto;
-      padding:18px 16px 24px;
+    :root{
+      /* ==== Brown Theme (kobun-quiz UIを踏襲しつつ茶色へ) ==== */
+      --bg0:#070504;
+      --bg1:#120b08;
+      --glass: rgba(255,255,255,0.05);
+      --line: rgba(205,160,120,0.35);   /* 線：茶系 */
+      --glow: rgba(205,160,120,0.22);   /* 発光：茶系 */
+      --accent: #d1a07a;               /* アクセント */
+      --text: #ffffff;
+      --muted: rgba(255,255,255,0.74);
+      --muted2: rgba(255,255,255,0.62);
+      --warn: rgba(255,230,107,0.85);
     }
 
-    /* ===== ヘッダー ===== */
-    .hero{
-      background:#2d1c16;
-      border:1px solid #4a3228;
-      border-radius:18px;
-      padding:16px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      margin-bottom:14px;
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      text-align:center;
+      -webkit-tap-highlight-color: transparent;
+
+      /* kobun-quizの「暗背景＋放射」設計を茶色へ */
+      background:
+        radial-gradient(1200px 700px at 50% 0%,
+          #2b1a12 0%,
+          var(--bg0) 52%,
+          #000 100%);
     }
-    .hero img{
-      max-width:100%;
-      height:90px;           /* 高さ固定で崩れ防止 */
-      object-fit:contain;
-      display:block;
+
+    h1{
+      margin: 18px 0 10px;
+      font-size: 22px;
+      letter-spacing: 0.04em;
+      text-shadow: 0 0 14px var(--glow);
+      opacity: .98;
+    }
+
+    .panel{
+      width: 92%;
+      max-width: 560px;
+      margin: 0 auto 18px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow:
+        0 18px 40px rgba(0,0,0,0.55),
+        inset 0 0 0 1px rgba(205,160,120,0.08);
+      padding: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel-inner{
+      border-radius: 16px;
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(205,160,120,0.18);
+      box-shadow: 0 0 22px rgba(205,160,120,0.12);
+      padding: 14px;
+      margin-top: 12px;
+      text-align:left;
     }
 
     .lead{
-      margin:10px 4px 18px;
-      font-size:13px;
-      line-height:1.7;
-      color:#c9b7ad;
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+    .lead code{
+      color: rgba(255,255,255,0.90);
+      background: rgba(255,255,255,0.06);
+      padding: 1px 6px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.10);
     }
 
-    /* ===== グリッド（端末幅で自動変形） ===== */
-    .grid{
+    /* ===== Menu Cards ===== */
+    .menu{
       display:grid;
-      grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
-      gap:16px;
+      gap: 12px;
+      margin-top: 12px;
     }
 
-    /* ===== 各カード ===== */
-    .card{
-      background:#2d1c16;
-      border:1px solid #4a3228;
-      border-radius:18px;
-      padding:14px;
+    .menu-card{
+      border-radius: 16px;
+      padding: 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(205,160,120,0.14);
+      box-shadow: 0 0 18px rgba(205,160,120,0.10), inset 0 0 0 1px rgba(255,255,255,0.04);
+    }
+
+    .menu-title{
+      margin: 0 0 8px;
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: .02em;
+      text-shadow: 0 0 12px rgba(205,160,120,0.18);
+    }
+
+    .menu-desc{
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.72);
+    }
+
+    .actions{
+      margin-top: 12px;
       display:flex;
-      flex-direction:column;
-      gap:12px;
-      min-height:280px;
+      justify-content:flex-end;
     }
 
-    /* ===== アイコン表示エリア：白背景（ここが要件） ===== */
-    .badge{
-      background:#3a241c;        /* 濃い茶色 */
-      border:1px solid #5a3d31;  /* 少し明るい縁 */
-      border-radius:16px;
-      height:150px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      overflow:hidden;
-    }
-    .badge img{
-      width:100%;
-      height:100%;
-      object-fit:contain;          /* 切らずに収める */
-      display:block;
-    }
-
-    .title{
-      font-size:18px;
-      margin:0;
-    }
-    .desc{
-      font-size:13px;
-      line-height:1.6;
-      color:#c9b7ad;
-      margin:0;
-    }
-
-    .btn{
-      margin-top:auto;
-      text-align:center;
-      padding:11px 12px;
-      border-radius:14px;
-      border:1px solid #5a3d31;
-      background:#332019;
-      color:#eee;
+    /* kobun-quizのctrlボタン設計を踏襲（茶へ） */
+    .ctrl{
+      flex: 0 0 auto;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(205,160,120,0.18);
+      background: rgba(0,0,0,0.35);
+      color:#fff;
+      font-size: 14px;
+      font-weight: 800;
+      cursor:pointer;
       text-decoration:none;
-      font-weight:600;
+      box-shadow: 0 0 18px rgba(205,160,120,0.10);
+      white-space: nowrap;
     }
-    .btn:hover{
-      background:#3a241c;
+    .ctrl:active{ transform: scale(0.99); }
+    .ctrl:hover{
+      border-color: rgba(205,160,120,0.34);
+      box-shadow: 0 0 22px rgba(205,160,120,0.16);
     }
 
     .foot{
-      margin-top:18px;
-      font-size:12px;
-      color:#c9b7ad;
+      margin-top: 12px;
+      font-size: 12px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.62);
     }
-    code{
-      background:#281914;
-      border:1px solid #4a3228;
-      padding:1px 6px;
-      border-radius:8px;
-      color:#f2e8e3;
+    .foot code{
+      color: rgba(255,255,255,0.90);
+      background: rgba(255,255,255,0.06);
+      padding: 1px 6px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+
+    /* small screens */
+    @media (max-width: 420px){
+      .menu-title{ font-size: 15px; }
+      .ctrl{ width: 100%; text-align:center; }
+      .actions{ justify-content: stretch; }
     }
   </style>
 </head>
 
 <body>
-  <div class="wrap">
+  <h1>八東国語LOBBY</h1>
 
-    <!-- ===== ヘッダー画像 ===== -->
-    <div class="hero">
-      <img src="./header.png" alt="国語道場">
-    </div>
+  <div class="panel">
+    <div class="panel-inner">
+      <p class="lead">今日やるものを1つ選ぶ。<br>
+      
+      更新が反映されない場合は、URL末尾に <code>?v=2</code> を付けてください。</p>
 
-    <div class="lead">
-      今日やるものを1つ選ぶ。<br>
-      スマホは「ホーム画面に追加」でアプリ風に使えます。<br>
-      更新が反映されない場合は、URL末尾に <code>?v=2</code> を付けてください。
-    </div>
+      <div class="menu">
+        <section class="menu-card" aria-label="古文単語">
+          <h2 class="menu-title">古文単語</h2>
+          <p class="menu-desc">読解の土台となる基礎語彙。<br>まずはここから。</p>
+          <div class="actions">
+            <a class="ctrl" href="https://naoki496.github.io/flashcards/" target="_blank" rel="noopener noreferrer">開く</a>
+          </div>
+        </section>
 
-    <!-- ===== 教材リンク ===== -->
-    <div class="grid">
+        <section class="menu-card" aria-label="助動詞">
+          <h2 class="menu-title">助動詞</h2>
+          <p class="menu-desc">意味・用法・活用形の判断。<br>得点差がつく分野。</p>
+          <div class="actions">
+            <a class="ctrl" href="https://naoki496.github.io/hatto-kobun-jodoushi/" target="_blank" rel="noopener noreferrer">開く</a>
+          </div>
+        </section>
 
-      <!-- 古文単語 -->
-      <div class="card">
-        <div class="badge">
-          <img src="./kobun.png" alt="古文単語">
-        </div>
-        <h2 class="title">古文単語</h2>
-        <p class="desc">
-          読解の土台となる基礎語彙。<br>
-          まずはここから。
-        </p>
-        <a class="btn" href="https://naoki496.github.io/flashcards/">
-          開く
-        </a>
+        <section class="menu-card" aria-label="文学史総合">
+          <h2 class="menu-title">文学知識総合</h2>
+          <p class="menu-desc">作者・作品・時代背景を整理。<br>知識を一気に固める。</p>
+          <div class="actions">
+            <a class="ctrl" href="https://naoki496.github.io/bungaku/" target="_blank" rel="noopener noreferrer">開く</a>
+          </div>
+        </section>
       </div>
 
-      <!-- 助動詞 -->
-      <div class="card">
-        <div class="badge">
-          <img src="./jodou.png" alt="助動詞">
-        </div>
-        <h2 class="title">助動詞</h2>
-        <p class="desc">
-          意味・用法・活用形の判断。<br>
-          得点差がつく分野。
-        </p>
-        <a class="btn" href="https://naoki496.github.io/hatto-kobun-jodoushi/">
-          開く
-        </a>
+      <div class="foot">
+        ※ PWA更新が反映されないときは、ホーム画面から削除→再追加が確実です。
       </div>
-
-      <!-- 文学史 -->
-      <div class="card">
-        <div class="badge">
-          <img src="./bunn.png" alt="文学史総合">
-        </div>
-        <h2 class="title">文学史総合</h2>
-        <p class="desc">
-          作者・作品・時代背景を整理。<br>
-          知識を一気に固める。
-        </p>
-        <a class="btn" href="https://naoki496.github.io/bungaku/">
-          開く
-        </a>
-      </div>
-
     </div>
-
-    <div class="foot">
-      ※ アイコン表示エリアは白背景固定（<code>.badge</code>）なので、端末差で崩れません。<br>
-      ※ PWA更新が反映されないときは、ホーム画面から削除→再追加が確実です。
-    </div>
-
   </div>
 </body>
 </html>
