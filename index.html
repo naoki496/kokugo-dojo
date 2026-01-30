@@ -12,15 +12,16 @@
       --bg0:#050307;
       --bg1:#0b0610;
 
-      --glass: rgba(255,255,255,0.05);
-      --line: rgba(203, 255, 92, 0.28);     /* neon lime line */
+      --line: rgba(203, 255, 92, 0.26);     /* neon lime line */
       --glow: rgba(255, 61, 207, 0.22);     /* neon magenta glow */
 
       --accent1:#ff3dcf;   /* magenta */
       --accent2:#cbff5c;   /* lime */
+
       --text:#ffffff;
       --muted: rgba(255,255,255,0.74);
       --muted2: rgba(255,255,255,0.62);
+      --danger: rgba(255,110,110,0.85);
     }
 
     *{ box-sizing:border-box; }
@@ -31,7 +32,6 @@
       text-align:center;
       -webkit-tap-highlight-color: transparent;
 
-      /* cyber background */
       background:
         radial-gradient(1100px 680px at 50% 0%,
           rgba(255,61,207,0.20) 0%,
@@ -43,20 +43,42 @@
         linear-gradient(180deg, var(--bg1), #000 72%, #000 100%);
     }
 
+    /* ===== Header (将来ロゴ差替え前提) ===== */
+    .header{
+      padding: 18px 0 10px;
+    }
     h1{
-      margin: 18px 0 10px;
+      margin: 0;
       font-size: 22px;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.06em;
       text-shadow:
         0 0 14px rgba(255,61,207,0.35),
         0 0 24px rgba(203,255,92,0.12);
       opacity: .98;
     }
 
-    .panel{
+    /* ===== Layout =====
+       ①「全体幅に対して半分」= 2カラム（左右2つ並び）
+       - PC: 2列固定
+       - スマホ: 1列（可読性優先）
+    */
+    .wrap{
       width: 92%;
-      max-width: 560px;
+      max-width: 980px;         /* 2列でも間延びしない */
       margin: 0 auto 18px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      align-items: start;
+    }
+    @media (max-width: 720px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    /* ===== Card ===== */
+    .card{
       border-radius: 18px;
       background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
       border: 1px solid rgba(255,255,255,0.08);
@@ -66,10 +88,10 @@
       padding: 14px;
       position: relative;
       overflow: hidden;
+      text-align:left;
+      min-height: 168px;
     }
-
-    /* subtle scanline */
-    .panel::before{
+    .card::before{
       content:"";
       position:absolute;
       inset:0;
@@ -86,50 +108,18 @@
       mix-blend-mode: overlay;
     }
 
-    .panel-inner{
+    .card-inner{
       position:relative;
       border-radius: 16px;
-      background: rgba(0,0,0,0.40);
+      background: rgba(0,0,0,0.42);
       border: 1px solid rgba(203,255,92,0.16);
       box-shadow:
         0 0 22px rgba(255,61,207,0.16),
         0 0 18px rgba(203,255,92,0.10);
       padding: 14px;
-      margin-top: 12px;
-      text-align:left;
     }
 
-    .lead{
-      margin: 0;
-      font-size: 14px;
-      line-height: 1.7;
-      color: var(--muted);
-    }
-    .lead code{
-      color: rgba(255,255,255,0.90);
-      background: rgba(255,255,255,0.06);
-      padding: 1px 6px;
-      border-radius: 8px;
-      border: 1px solid rgba(255,255,255,0.10);
-    }
-
-    .menu{
-      display:grid;
-      gap: 12px;
-      margin-top: 12px;
-    }
-
-    .menu-card{
-      border-radius: 16px;
-      padding: 14px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(203,255,92,0.12);
-      box-shadow:
-        0 0 18px rgba(255,61,207,0.10),
-        inset 0 0 0 1px rgba(255,255,255,0.04);
-    }
-
-    .menu-title{
+    .title{
       margin: 0 0 8px;
       font-size: 16px;
       font-weight: 900;
@@ -137,7 +127,7 @@
       text-shadow: 0 0 12px rgba(255,61,207,0.22);
     }
 
-    .menu-desc{
+    .desc{
       margin: 0;
       font-size: 13px;
       line-height: 1.6;
@@ -148,15 +138,16 @@
       margin-top: 12px;
       display:flex;
       justify-content:flex-end;
+      gap:10px;
+      flex-wrap: wrap;
     }
 
-    /* ===== START button: make it unmistakably a button ===== */
-    .ctrl{
+    /* ===== START button (目立つ) ===== */
+    .btn{
       flex: 0 0 auto;
       padding: 12px 16px;
       border-radius: 14px;
 
-      /* filled + gradient */
       background: linear-gradient(135deg, rgba(255,61,207,0.92), rgba(203,255,92,0.72));
       color:#111;
       font-size: 14px;
@@ -169,27 +160,71 @@
       white-space: nowrap;
 
       box-shadow:
-        0 10px 26px rgba(255,61,207,0.22),
-        0 10px 22px rgba(203,255,92,0.14),
-        0 0 0 1px rgba(0,0,0,0.25) inset;
-    }
-    .ctrl:hover{
-      transform: translateY(-1px);
-      filter: saturate(1.08);
-      box-shadow:
-        0 12px 30px rgba(255,61,207,0.28),
+        0 12px 30px rgba(255,61,207,0.26),
         0 12px 26px rgba(203,255,92,0.18),
         0 0 0 1px rgba(0,0,0,0.25) inset;
+      user-select: none;
     }
-    .ctrl:active{
+    .btn:hover{
+      transform: translateY(-1px);
+      filter: saturate(1.08);
+    }
+    .btn:active{
       transform: translateY(0px) scale(0.99);
     }
 
-    .foot{
+    /* secondary button (戻る等に使える) */
+    .btn-sub{
+      background: rgba(255,255,255,0.06);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: 0 0 18px rgba(255,61,207,0.10);
+      letter-spacing: 0.03em;
+    }
+
+    /* ===== Flashcard menu list (3つのページ) ===== */
+    .menu{
       margin-top: 12px;
+      display:grid;
+      gap: 10px;
+    }
+    .menu-item{
+      border-radius: 14px;
+      padding: 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(203,255,92,0.12);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
+    }
+    .menu-item h3{
+      margin: 0 0 6px;
+      font-size: 14px;
+      font-weight: 900;
+    }
+    .menu-item p{
+      margin: 0;
+      font-size: 12.5px;
+      line-height: 1.55;
+      color: rgba(255,255,255,0.70);
+    }
+
+    /* 工事中表示 */
+    .notice{
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,110,110,0.22);
+      background: rgba(255,110,110,0.06);
+      color: rgba(255,255,255,0.86);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .foot{
+      margin: 14px auto 0;
       font-size: 12px;
       line-height: 1.7;
       color: rgba(255,255,255,0.62);
+      text-align:center;
     }
     .foot code{
       color: rgba(255,255,255,0.90);
@@ -198,58 +233,109 @@
       border-radius: 8px;
       border: 1px solid rgba(255,255,255,0.10);
     }
-
-    @media (max-width: 420px){
-      .ctrl{ width: 100%; text-align:center; }
-      .actions{ justify-content: stretch; }
-    }
   </style>
 </head>
 
 <body>
-  <h1>八東国語LOBBY</h1>
+  <div class="header">
+    <!-- 今後ここをロゴ画像に差し替え予定 -->
+    <h1>八東国語LOBBY</h1>
+  </div>
 
-  <div class="panel">
-    <div class="panel-inner">
+  <div class="wrap">
+    <!-- ①：左右2つ並び（2カラム） -->
+    <div class="grid">
 
-      <!-- ②：説明文の2行目を削除（「スマホは…」を消す） -->
-      <p class="lead">
-        今日やるものを1つ選ぶ。<br>
-        更新が反映されない場合は、URL末尾に <code>?v=2</code> を付けてください。
-      </p>
+      <!-- ②：最初に見せる「フラッシュカード」ボタン -->
+      <section class="card" aria-label="フラッシュカード">
+        <div class="card-inner">
+          <h2 class="title">フラッシュカード</h2>
+          <p class="desc">今日やるものを1つ選ぶ。</p>
 
-      <div class="menu">
-        <!-- ②：各説明の2行目を削除 -->
-        <section class="menu-card" aria-label="古文単語">
-          <h2 class="menu-title">古文単語</h2>
-          <p class="menu-desc">読解の土台となる基礎語彙。</p>
           <div class="actions">
-            <a class="ctrl" href="https://naoki496.github.io/flashcards/" target="_blank" rel="noopener noreferrer">START</a>
+            <button class="btn" id="btnFlash" type="button">START</button>
           </div>
-        </section>
 
-        <section class="menu-card" aria-label="助動詞">
-          <h2 class="menu-title">助動詞</h2>
-          <p class="menu-desc">意味・用法・活用形の判断。</p>
+          <!-- 押したら出るメニュー -->
+          <div class="menu" id="flashMenu" style="display:none;">
+            <div class="menu-item">
+              <h3>古文単語</h3>
+              <p>読解の土台となる基礎語彙。</p>
+              <div class="actions">
+                <a class="btn" href="https://naoki496.github.io/flashcards/" target="_blank" rel="noopener noreferrer">START</a>
+              </div>
+            </div>
+
+            <div class="menu-item">
+              <h3>助動詞</h3>
+              <p>意味・用法・活用形の判断。</p>
+              <div class="actions">
+                <a class="btn" href="https://naoki496.github.io/hatto-kobun-jodoushi/" target="_blank" rel="noopener noreferrer">START</a>
+              </div>
+            </div>
+
+            <div class="menu-item">
+              <h3>文学史総合</h3>
+              <p>作者・作品・時代背景を整理。</p>
+              <div class="actions">
+                <a class="btn" href="https://naoki496.github.io/bungaku/" target="_blank" rel="noopener noreferrer">START</a>
+              </div>
+            </div>
+
+            <div class="actions" style="justify-content:flex-start;">
+              <button class="btn btn-sub" id="btnBack" type="button">戻る</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ②：最初に見せる「国語道場」ボタン -->
+      <section class="card" aria-label="国語道場">
+        <div class="card-inner">
+          <h2 class="title">国語道場</h2>
+          <p class="desc">（準備中）</p>
+
           <div class="actions">
-            <a class="ctrl" href="https://naoki496.github.io/hatto-kobun-jodoushi/" target="_blank" rel="noopener noreferrer">START</a>
+            <button class="btn" id="btnDojo" type="button">START</button>
           </div>
-        </section>
 
-        <section class="menu-card" aria-label="文学史総合">
-          <h2 class="menu-title">文学知識総合</h2>
-          <p class="menu-desc">様々な知識を整理。</p>
-          <div class="actions">
-            <a class="ctrl" href="https://naoki496.github.io/bungaku/" target="_blank" rel="noopener noreferrer">START</a>
+          <div class="notice" id="dojoNotice" style="display:none;">
+            工事中
           </div>
-        </section>
-      </div>
-
-      <div class="foot">
-        ※ PWA更新が反映されないときは、ホーム画面から削除→再追加が確実です。
-      </div>
+        </div>
+      </section>
 
     </div>
+
+    <div class="foot">
+      更新が反映されない場合は、URL末尾に <code>?v=2</code> を付けてください。<br>
+      ※ PWA更新が反映されないときは、ホーム画面から削除→再追加が確実です。
+    </div>
   </div>
+
+  <script>
+    // ===== UI behavior =====
+    const btnFlash = document.getElementById("btnFlash");
+    const flashMenu = document.getElementById("flashMenu");
+    const btnBack = document.getElementById("btnBack");
+
+    const btnDojo = document.getElementById("btnDojo");
+    const dojoNotice = document.getElementById("dojoNotice");
+
+    btnFlash.addEventListener("click", () => {
+      flashMenu.style.display = "grid";
+      btnFlash.style.display = "none";
+    });
+
+    btnBack.addEventListener("click", () => {
+      flashMenu.style.display = "none";
+      btnFlash.style.display = "inline-block";
+    });
+
+    btnDojo.addEventListener("click", () => {
+      dojoNotice.style.display = "block";
+      // クリックのたびに強調したい場合は軽い点滅なども可能（今は控えめに）
+    });
+  </script>
 </body>
 </html>
