@@ -22,6 +22,12 @@
       --muted: rgba(255,255,255,0.74);
       --muted2: rgba(255,255,255,0.62);
       --danger: rgba(255,110,110,0.85);
+
+      /* ===== Solid Button colors ===== */
+      --btn-fill: rgba(10, 10, 10, 0.92);   /* ソリッド寄りの黒 */
+      --btn-border: rgba(203,255,92,0.55);  /* ライムの輪郭で視認性 */
+      --btn-glow: rgba(203,255,92,0.28);
+      --btn-text: #ffffff;
     }
 
     *{ box-sizing:border-box; }
@@ -44,9 +50,7 @@
     }
 
     /* ===== Header (将来ロゴ差替え前提) ===== */
-    .header{
-      padding: 18px 0 10px;
-    }
+    .header{ padding: 18px 0 10px; }
     h1{
       margin: 0;
       font-size: 22px;
@@ -57,14 +61,10 @@
       opacity: .98;
     }
 
-    /* ===== Layout =====
-       ①「全体幅に対して半分」= 2カラム（左右2つ並び）
-       - PC: 2列固定
-       - スマホ: 1列（可読性優先）
-    */
+    /* ===== Layout ===== */
     .wrap{
       width: 92%;
-      max-width: 980px;         /* 2列でも間延びしない */
+      max-width: 980px;
       margin: 0 auto 18px;
     }
     .grid{
@@ -74,6 +74,7 @@
       align-items: start;
     }
     @media (max-width: 720px){
+      /* スマホでは1列（タップしやすさ優先） */
       .grid{ grid-template-columns: 1fr; }
     }
 
@@ -126,7 +127,6 @@
       letter-spacing: .02em;
       text-shadow: 0 0 12px rgba(255,61,207,0.22);
     }
-
     .desc{
       margin: 0;
       font-size: 13px;
@@ -134,55 +134,59 @@
       color: rgba(255,255,255,0.72);
     }
 
+    /* ===== Buttons ===== */
     .actions{
       margin-top: 12px;
       display:flex;
-      justify-content:flex-end;
+      justify-content:stretch;   /* ★ 幅広ボタンのため */
       gap:10px;
       flex-wrap: wrap;
     }
 
-    /* ===== START button (目立つ) ===== */
+    /* 主ボタン：ソリッド＋輪郭＋グロー */
     .btn{
-      flex: 0 0 auto;
-      padding: 12px 16px;
+      width: 100%;               /* ★ 幅広（導線強化） */
+      padding: 14px 16px;        /* ★ 押しやすく */
       border-radius: 14px;
 
-      background: linear-gradient(135deg, rgba(255,61,207,0.92), rgba(203,255,92,0.72));
-      color:#111;
+      background: var(--btn-fill);
+      color: var(--btn-text);
       font-size: 14px;
-      font-weight: 900;
-      letter-spacing: 0.06em;
+      font-weight: 950;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
 
-      border: 1px solid rgba(255,255,255,0.14);
+      border: 1px solid var(--btn-border);
       text-decoration:none;
       cursor:pointer;
-      white-space: nowrap;
+      user-select: none;
 
       box-shadow:
-        0 12px 30px rgba(255,61,207,0.26),
-        0 12px 26px rgba(203,255,92,0.18),
-        0 0 0 1px rgba(0,0,0,0.25) inset;
-      user-select: none;
+        0 0 0 1px rgba(0,0,0,0.35) inset,
+        0 0 22px var(--btn-glow);
     }
     .btn:hover{
       transform: translateY(-1px);
-      filter: saturate(1.08);
+      box-shadow:
+        0 0 0 1px rgba(0,0,0,0.35) inset,
+        0 0 28px rgba(203,255,92,0.38);
     }
     .btn:active{
       transform: translateY(0px) scale(0.99);
+      box-shadow:
+        0 0 0 1px rgba(0,0,0,0.35) inset,
+        0 0 18px rgba(203,255,92,0.22);
     }
 
-    /* secondary button (戻る等に使える) */
+    /* 戻る等：控えめ */
     .btn-sub{
       background: rgba(255,255,255,0.06);
-      color: #fff;
-      border: 1px solid rgba(255,255,255,0.14);
-      box-shadow: 0 0 18px rgba(255,61,207,0.10);
-      letter-spacing: 0.03em;
+      border-color: rgba(255,255,255,0.18);
+      box-shadow: 0 0 16px rgba(255,61,207,0.10);
+      letter-spacing: 0.06em;
     }
 
-    /* ===== Flashcard menu list (3つのページ) ===== */
+    /* ===== Flashcard menu list ===== */
     .menu{
       margin-top: 12px;
       display:grid;
@@ -207,7 +211,6 @@
       color: rgba(255,255,255,0.70);
     }
 
-    /* 工事中表示 */
     .notice{
       margin-top: 10px;
       padding: 10px 12px;
@@ -238,25 +241,21 @@
 
 <body>
   <div class="header">
-    <!-- 今後ここをロゴ画像に差し替え予定 -->
     <h1>八東国語LOBBY</h1>
   </div>
 
   <div class="wrap">
-    <!-- ①：左右2つ並び（2カラム） -->
     <div class="grid">
 
-      <!-- ②：最初に見せる「フラッシュカード」ボタン -->
       <section class="card" aria-label="フラッシュカード">
         <div class="card-inner">
-          <h2 class="title">フラッシュカード</h2>
+          <h2 class="title">Flash Card</h2>
           <p class="desc">今日やるものを1つ選ぶ。</p>
 
           <div class="actions">
             <button class="btn" id="btnFlash" type="button">START</button>
           </div>
 
-          <!-- 押したら出るメニュー -->
           <div class="menu" id="flashMenu" style="display:none;">
             <div class="menu-item">
               <h3>古文単語</h3>
@@ -282,17 +281,16 @@
               </div>
             </div>
 
-            <div class="actions" style="justify-content:flex-start;">
+            <div class="actions" style="justify-content:stretch;">
               <button class="btn btn-sub" id="btnBack" type="button">戻る</button>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ②：最初に見せる「国語道場」ボタン -->
       <section class="card" aria-label="国語道場">
         <div class="card-inner">
-          <h2 class="title">国語道場</h2>
+          <h2 class="title">Blitz Circuit</h2>
           <p class="desc">（準備中）</p>
 
           <div class="actions">
@@ -314,10 +312,9 @@
   </div>
 
   <script>
-    // ===== UI behavior =====
     const btnFlash = document.getElementById("btnFlash");
     const flashMenu = document.getElementById("flashMenu");
-    const btnBack = document.getElementById("btnBack");
+    const btnBack  = document.getElementById("btnBack");
 
     const btnDojo = document.getElementById("btnDojo");
     const dojoNotice = document.getElementById("dojoNotice");
@@ -334,7 +331,6 @@
 
     btnDojo.addEventListener("click", () => {
       dojoNotice.style.display = "block";
-      // クリックのたびに強調したい場合は軽い点滅なども可能（今は控えめに）
     });
   </script>
 </body>
