@@ -3,22 +3,24 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#2a1b14" />
+  <meta name="theme-color" content="#140817" />
   <title>八東国語LOBBY</title>
 
   <style>
     :root{
-      /* ==== Brown Theme (kobun-quiz UIを踏襲しつつ茶色へ) ==== */
-      --bg0:#070504;
-      --bg1:#120b08;
+      /* ===== Cyber (NOT blue) ===== */
+      --bg0:#050307;
+      --bg1:#0b0610;
+
       --glass: rgba(255,255,255,0.05);
-      --line: rgba(205,160,120,0.35);   /* 線：茶系 */
-      --glow: rgba(205,160,120,0.22);   /* 発光：茶系 */
-      --accent: #d1a07a;               /* アクセント */
-      --text: #ffffff;
+      --line: rgba(203, 255, 92, 0.28);     /* neon lime line */
+      --glow: rgba(255, 61, 207, 0.22);     /* neon magenta glow */
+
+      --accent1:#ff3dcf;   /* magenta */
+      --accent2:#cbff5c;   /* lime */
+      --text:#ffffff;
       --muted: rgba(255,255,255,0.74);
       --muted2: rgba(255,255,255,0.62);
-      --warn: rgba(255,230,107,0.85);
     }
 
     *{ box-sizing:border-box; }
@@ -29,19 +31,25 @@
       text-align:center;
       -webkit-tap-highlight-color: transparent;
 
-      /* kobun-quizの「暗背景＋放射」設計を茶色へ */
+      /* cyber background */
       background:
-        radial-gradient(1200px 700px at 50% 0%,
-          #2b1a12 0%,
-          var(--bg0) 52%,
-          #000 100%);
+        radial-gradient(1100px 680px at 50% 0%,
+          rgba(255,61,207,0.20) 0%,
+          rgba(203,255,92,0.10) 22%,
+          rgba(0,0,0,0) 55%),
+        radial-gradient(900px 600px at 10% 90%,
+          rgba(203,255,92,0.14) 0%,
+          rgba(0,0,0,0) 55%),
+        linear-gradient(180deg, var(--bg1), #000 72%, #000 100%);
     }
 
     h1{
       margin: 18px 0 10px;
       font-size: 22px;
       letter-spacing: 0.04em;
-      text-shadow: 0 0 14px var(--glow);
+      text-shadow:
+        0 0 14px rgba(255,61,207,0.35),
+        0 0 24px rgba(203,255,92,0.12);
       opacity: .98;
     }
 
@@ -54,17 +62,38 @@
       border: 1px solid rgba(255,255,255,0.08);
       box-shadow:
         0 18px 40px rgba(0,0,0,0.55),
-        inset 0 0 0 1px rgba(205,160,120,0.08);
+        inset 0 0 0 1px rgba(255,61,207,0.08);
       padding: 14px;
       position: relative;
       overflow: hidden;
     }
 
+    /* subtle scanline */
+    .panel::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(255,255,255,0.03),
+          rgba(255,255,255,0.03) 1px,
+          rgba(0,0,0,0) 3px,
+          rgba(0,0,0,0) 7px
+        );
+      opacity: .22;
+      pointer-events:none;
+      mix-blend-mode: overlay;
+    }
+
     .panel-inner{
+      position:relative;
       border-radius: 16px;
-      background: rgba(0,0,0,0.35);
-      border: 1px solid rgba(205,160,120,0.18);
-      box-shadow: 0 0 22px rgba(205,160,120,0.12);
+      background: rgba(0,0,0,0.40);
+      border: 1px solid rgba(203,255,92,0.16);
+      box-shadow:
+        0 0 22px rgba(255,61,207,0.16),
+        0 0 18px rgba(203,255,92,0.10);
       padding: 14px;
       margin-top: 12px;
       text-align:left;
@@ -84,7 +113,6 @@
       border: 1px solid rgba(255,255,255,0.10);
     }
 
-    /* ===== Menu Cards ===== */
     .menu{
       display:grid;
       gap: 12px;
@@ -95,8 +123,10 @@
       border-radius: 16px;
       padding: 14px;
       background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(205,160,120,0.14);
-      box-shadow: 0 0 18px rgba(205,160,120,0.10), inset 0 0 0 1px rgba(255,255,255,0.04);
+      border: 1px solid rgba(203,255,92,0.12);
+      box-shadow:
+        0 0 18px rgba(255,61,207,0.10),
+        inset 0 0 0 1px rgba(255,255,255,0.04);
     }
 
     .menu-title{
@@ -104,7 +134,7 @@
       font-size: 16px;
       font-weight: 900;
       letter-spacing: .02em;
-      text-shadow: 0 0 12px rgba(205,160,120,0.18);
+      text-shadow: 0 0 12px rgba(255,61,207,0.22);
     }
 
     .menu-desc{
@@ -120,25 +150,39 @@
       justify-content:flex-end;
     }
 
-    /* kobun-quizのctrlボタン設計を踏襲（茶へ） */
+    /* ===== START button: make it unmistakably a button ===== */
     .ctrl{
       flex: 0 0 auto;
-      padding: 12px 14px;
+      padding: 12px 16px;
       border-radius: 14px;
-      border: 1px solid rgba(205,160,120,0.18);
-      background: rgba(0,0,0,0.35);
-      color:#fff;
+
+      /* filled + gradient */
+      background: linear-gradient(135deg, rgba(255,61,207,0.92), rgba(203,255,92,0.72));
+      color:#111;
       font-size: 14px;
-      font-weight: 800;
-      cursor:pointer;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+
+      border: 1px solid rgba(255,255,255,0.14);
       text-decoration:none;
-      box-shadow: 0 0 18px rgba(205,160,120,0.10);
+      cursor:pointer;
       white-space: nowrap;
+
+      box-shadow:
+        0 10px 26px rgba(255,61,207,0.22),
+        0 10px 22px rgba(203,255,92,0.14),
+        0 0 0 1px rgba(0,0,0,0.25) inset;
     }
-    .ctrl:active{ transform: scale(0.99); }
     .ctrl:hover{
-      border-color: rgba(205,160,120,0.34);
-      box-shadow: 0 0 22px rgba(205,160,120,0.16);
+      transform: translateY(-1px);
+      filter: saturate(1.08);
+      box-shadow:
+        0 12px 30px rgba(255,61,207,0.28),
+        0 12px 26px rgba(203,255,92,0.18),
+        0 0 0 1px rgba(0,0,0,0.25) inset;
+    }
+    .ctrl:active{
+      transform: translateY(0px) scale(0.99);
     }
 
     .foot{
@@ -155,9 +199,7 @@
       border: 1px solid rgba(255,255,255,0.10);
     }
 
-    /* small screens */
     @media (max-width: 420px){
-      .menu-title{ font-size: 15px; }
       .ctrl{ width: 100%; text-align:center; }
       .actions{ justify-content: stretch; }
     }
@@ -169,32 +211,36 @@
 
   <div class="panel">
     <div class="panel-inner">
-      <p class="lead">今日やるものを1つ選ぶ。<br>
-      
-      更新が反映されない場合は、URL末尾に <code>?v=2</code> を付けてください。</p>
+
+      <!-- ②：説明文の2行目を削除（「スマホは…」を消す） -->
+      <p class="lead">
+        今日やるものを1つ選ぶ。<br>
+        更新が反映されない場合は、URL末尾に <code>?v=2</code> を付けてください。
+      </p>
 
       <div class="menu">
+        <!-- ②：各説明の2行目を削除 -->
         <section class="menu-card" aria-label="古文単語">
           <h2 class="menu-title">古文単語</h2>
-          <p class="menu-desc">読解の土台となる基礎語彙。<br>まずはここから。</p>
+          <p class="menu-desc">読解の土台となる基礎語彙。</p>
           <div class="actions">
-            <a class="ctrl" href="https://naoki496.github.io/flashcards/" target="_blank" rel="noopener noreferrer">開く</a>
+            <a class="ctrl" href="https://naoki496.github.io/flashcards/" target="_blank" rel="noopener noreferrer">START</a>
           </div>
         </section>
 
         <section class="menu-card" aria-label="助動詞">
-          <h2 class="menu-title">古文助動詞</h2>
-          <p class="menu-desc">助動詞は常に抑えておこう。<br>得点差がつく分野。</p>
+          <h2 class="menu-title">助動詞</h2>
+          <p class="menu-desc">意味・用法・活用形の判断。</p>
           <div class="actions">
-            <a class="ctrl" href="https://naoki496.github.io/hatto-kobun-jodoushi/" target="_blank" rel="noopener noreferrer">開く</a>
+            <a class="ctrl" href="https://naoki496.github.io/hatto-kobun-jodoushi/" target="_blank" rel="noopener noreferrer">START</a>
           </div>
         </section>
 
         <section class="menu-card" aria-label="文学史総合">
           <h2 class="menu-title">文学知識総合</h2>
-          <p class="menu-desc">作者・作品・時代背景を整理。<br>知識を一気に固める。</p>
+          <p class="menu-desc">様々な知識を整理。</p>
           <div class="actions">
-            <a class="ctrl" href="https://naoki496.github.io/bungaku/" target="_blank" rel="noopener noreferrer">開く</a>
+            <a class="ctrl" href="https://naoki496.github.io/bungaku/" target="_blank" rel="noopener noreferrer">START</a>
           </div>
         </section>
       </div>
@@ -202,6 +248,7 @@
       <div class="foot">
         ※ PWA更新が反映されないときは、ホーム画面から削除→再追加が確実です。
       </div>
+
     </div>
   </div>
 </body>
