@@ -12,20 +12,18 @@
       --bg0:#050307;
       --bg1:#0b0610;
 
-      --line: rgba(203, 255, 92, 0.26);     /* neon lime line */
-      --glow: rgba(255, 61, 207, 0.22);     /* neon magenta glow */
+      --line: rgba(203, 255, 92, 0.26);
+      --glow: rgba(255, 61, 207, 0.22);
 
-      --accent1:#ff3dcf;   /* magenta */
-      --accent2:#cbff5c;   /* lime */
+      --accent1:#ff3dcf;
+      --accent2:#cbff5c;
 
       --text:#ffffff;
       --muted: rgba(255,255,255,0.74);
-      --muted2: rgba(255,255,255,0.62);
-      --danger: rgba(255,110,110,0.85);
 
       /* ===== Solid Button colors ===== */
-      --btn-fill: rgba(10, 10, 10, 0.92);   /* ソリッド寄りの黒 */
-      --btn-border: rgba(203,255,92,0.55);  /* ライムの輪郭で視認性 */
+      --btn-fill: rgba(10, 10, 10, 0.92);
+      --btn-border: rgba(203,255,92,0.55);
       --btn-glow: rgba(203,255,92,0.28);
       --btn-text: #ffffff;
     }
@@ -49,16 +47,17 @@
         linear-gradient(180deg, var(--bg1), #000 72%, #000 100%);
     }
 
-    /* ===== Header (将来ロゴ差替え前提) ===== */
-    .header{ padding: 18px 0 10px; }
-    h1{
-      margin: 0;
-      font-size: 22px;
-      letter-spacing: 0.06em;
-      text-shadow:
-        0 0 14px rgba(255,61,207,0.35),
-        0 0 24px rgba(203,255,92,0.12);
-      opacity: .98;
+    /* ===== Header Logo ===== */
+    .header{
+      padding: 18px 0 10px;
+    }
+
+    .logo{
+      width: min(720px, 92vw);
+      height: auto;
+      display:block;
+      margin: 0 auto;
+      filter: drop-shadow(0 0 18px rgba(255,61,207,0.28));
     }
 
     /* ===== Layout ===== */
@@ -67,12 +66,14 @@
       max-width: 980px;
       margin: 0 auto 18px;
     }
+
     .grid{
       display:grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 14px;
       align-items: start;
     }
+
     @media (max-width: 720px){
       /* スマホでは1列（タップしやすさ優先） */
       .grid{ grid-template-columns: 1fr; }
@@ -92,6 +93,7 @@
       text-align:left;
       min-height: 168px;
     }
+
     .card::before{
       content:"";
       position:absolute;
@@ -127,6 +129,7 @@
       letter-spacing: .02em;
       text-shadow: 0 0 12px rgba(255,61,207,0.22);
     }
+
     .desc{
       margin: 0;
       font-size: 13px;
@@ -138,15 +141,12 @@
     .actions{
       margin-top: 12px;
       display:flex;
-      justify-content:stretch;   /* ★ 幅広ボタンのため */
-      gap:10px;
-      flex-wrap: wrap;
+      justify-content:stretch;
     }
 
-    /* 主ボタン：ソリッド＋輪郭＋グロー */
     .btn{
-      width: 100%;               /* ★ 幅広（導線強化） */
-      padding: 14px 16px;        /* ★ 押しやすく */
+      width: 100%;
+      padding: 14px 16px;
       border-radius: 14px;
 
       background: var(--btn-fill);
@@ -165,21 +165,20 @@
         0 0 0 1px rgba(0,0,0,0.35) inset,
         0 0 22px var(--btn-glow);
     }
+
     .btn:hover{
       transform: translateY(-1px);
       box-shadow:
         0 0 0 1px rgba(0,0,0,0.35) inset,
         0 0 28px rgba(203,255,92,0.38);
     }
+
     .btn:active{
-      transform: translateY(0px) scale(0.99);
-      box-shadow:
-        0 0 0 1px rgba(0,0,0,0.35) inset,
-        0 0 18px rgba(203,255,92,0.22);
+      transform: scale(0.99);
     }
 
-    /* 戻る等：控えめ */
     .btn-sub{
+      margin-top: 10px;
       background: rgba(255,255,255,0.06);
       border-color: rgba(255,255,255,0.18);
       box-shadow: 0 0 16px rgba(255,61,207,0.10);
@@ -192,6 +191,7 @@
       display:grid;
       gap: 10px;
     }
+
     .menu-item{
       border-radius: 14px;
       padding: 12px;
@@ -199,11 +199,13 @@
       border: 1px solid rgba(203,255,92,0.12);
       box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
     }
+
     .menu-item h3{
       margin: 0 0 6px;
       font-size: 14px;
       font-weight: 900;
     }
+
     .menu-item p{
       margin: 0;
       font-size: 12.5px;
@@ -219,7 +221,6 @@
       background: rgba(255,110,110,0.06);
       color: rgba(255,255,255,0.86);
       font-size: 13px;
-      line-height: 1.6;
     }
 
     .foot{
@@ -229,6 +230,7 @@
       color: rgba(255,255,255,0.62);
       text-align:center;
     }
+
     .foot code{
       color: rgba(255,255,255,0.90);
       background: rgba(255,255,255,0.06);
@@ -240,28 +242,32 @@
 </head>
 
 <body>
+  <!-- ✅ ロゴ画像タイトル -->
   <div class="header">
-    <h1>八東国語LOBBY</h1>
+    <img src="H.K.LOBBY.png" class="logo" alt="八東国語LOBBY">
   </div>
 
   <div class="wrap">
     <div class="grid">
 
-      <section class="card" aria-label="フラッシュカード">
+      <!-- フラッシュカード -->
+      <section class="card">
         <div class="card-inner">
-          <h2 class="title">Flash Card</h2>
+          <h2 class="title">フラッシュカード</h2>
           <p class="desc">今日やるものを1つ選ぶ。</p>
 
           <div class="actions">
-            <button class="btn" id="btnFlash" type="button">START</button>
+            <button class="btn" id="btnFlash">START</button>
           </div>
 
+          <!-- 展開メニュー -->
           <div class="menu" id="flashMenu" style="display:none;">
+
             <div class="menu-item">
               <h3>古文単語</h3>
               <p>読解の土台となる基礎語彙。</p>
               <div class="actions">
-                <a class="btn" href="https://naoki496.github.io/flashcards/" target="_blank" rel="noopener noreferrer">START</a>
+                <a class="btn" href="https://naoki496.github.io/flashcards/" target="_blank">START</a>
               </div>
             </div>
 
@@ -269,7 +275,7 @@
               <h3>助動詞</h3>
               <p>意味・用法・活用形の判断。</p>
               <div class="actions">
-                <a class="btn" href="https://naoki496.github.io/hatto-kobun-jodoushi/" target="_blank" rel="noopener noreferrer">START</a>
+                <a class="btn" href="https://naoki496.github.io/hatto-kobun-jodoushi/" target="_blank">START</a>
               </div>
             </div>
 
@@ -277,24 +283,23 @@
               <h3>文学史総合</h3>
               <p>作者・作品・時代背景を整理。</p>
               <div class="actions">
-                <a class="btn" href="https://naoki496.github.io/bungaku/" target="_blank" rel="noopener noreferrer">START</a>
+                <a class="btn" href="https://naoki496.github.io/bungaku/" target="_blank">START</a>
               </div>
             </div>
 
-            <div class="actions" style="justify-content:stretch;">
-              <button class="btn btn-sub" id="btnBack" type="button">戻る</button>
-            </div>
+            <button class="btn btn-sub" id="btnBack">戻る</button>
           </div>
         </div>
       </section>
 
-      <section class="card" aria-label="国語道場">
+      <!-- 国語道場 -->
+      <section class="card">
         <div class="card-inner">
-          <h2 class="title">Blitz Circuit</h2>
+          <h2 class="title">国語道場</h2>
           <p class="desc">（準備中）</p>
 
           <div class="actions">
-            <button class="btn" id="btnDojo" type="button">START</button>
+            <button class="btn" id="btnDojo">START</button>
           </div>
 
           <div class="notice" id="dojoNotice" style="display:none;">
@@ -306,15 +311,14 @@
     </div>
 
     <div class="foot">
-      更新が反映されない場合は、URL末尾に <code>?v=2</code> を付けてください。<br>
-      ※ PWA更新が反映されないときは、ホーム画面から削除→再追加が確実です。
+      更新が反映されない場合は、URL末尾に <code>?v=2</code> を付けてください。
     </div>
   </div>
 
   <script>
     const btnFlash = document.getElementById("btnFlash");
     const flashMenu = document.getElementById("flashMenu");
-    const btnBack  = document.getElementById("btnBack");
+    const btnBack = document.getElementById("btnBack");
 
     const btnDojo = document.getElementById("btnDojo");
     const dojoNotice = document.getElementById("dojoNotice");
@@ -326,12 +330,13 @@
 
     btnBack.addEventListener("click", () => {
       flashMenu.style.display = "none";
-      btnFlash.style.display = "inline-block";
+      btnFlash.style.display = "block";
     });
 
     btnDojo.addEventListener("click", () => {
       dojoNotice.style.display = "block";
     });
   </script>
+
 </body>
 </html>
