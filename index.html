@@ -177,7 +177,7 @@
       color: rgba(255,255,255,0.92);
     }
 
-    /* ✅ LINK付き行だけ少し明るくする（読みやすさの範囲で） */
+    /* ✅ LINK付き行だけ少し明るくする */
     .has-link{
       color: rgba(203,255,92,0.88);
     }
@@ -301,6 +301,10 @@
       user-select:none;
 
       box-shadow: 0 0 22px var(--btn-glow);
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
     }
 
     .btn:hover{ transform: translateY(-1px); }
@@ -340,6 +344,18 @@
       font-size: 12.5px;
       line-height: 1.55;
       color: rgba(255,255,255,0.70);
+    }
+
+    /* ✅ 追加：メニュー内STARTを「右寄せ」 */
+    .menu-item .actions{
+      display:flex;
+      justify-content:flex-end;
+    }
+
+    /* ✅ 追加：メニュー内STARTの幅を少し広げる（全幅にはしない） */
+    .menu-item .btn{
+      width: 190px;
+      max-width: 100%;
     }
 
     .notice{
