@@ -357,8 +357,10 @@
       gap: 8px;
       color: rgba(255,255,255,0.78);
       font-size: 13px;
-      line-height: 1.55;
+      line-height: 1.6;
     }
+
+    /* ここが変更点：OPENは右固定ではなく文章末尾にインライン */
     .board-list li{
       display:flex;
       align-items:flex-start;
@@ -367,7 +369,7 @@
     }
 
     /* 1行目（最重要）を強調 */
-    .board-list li:first-child{
+    .board-list li:first-child .brief-text{
       color: rgba(255,255,255,0.92);
       font-weight: 900;
     }
@@ -375,23 +377,63 @@
     .dot{
       width: 8px;
       height: 8px;
-      margin-top: 6px;
+      margin-top: 7px;
       border-radius: 999px;
       background: rgba(203,255,92,0.95);
       box-shadow: 0 0 14px rgba(203,255,92,0.35);
       flex: 0 0 auto;
     }
 
-    /* ===== Auto-link style (Mission Brief) ===== */
-    .brief-link{
-      color: rgba(203,255,92,0.95);
-      text-decoration: none;
-      border-bottom: 1px solid rgba(203,255,92,0.35);
-      padding-bottom: 1px;
+    .brief-text{
+      min-width: 0;
+      color: rgba(255,255,255,0.78);
     }
-    .brief-link:hover{
-      border-bottom-color: rgba(203,255,92,0.70);
-      text-shadow: 0 0 14px rgba(203,255,92,0.22);
+
+    /* インラインOPEN群 */
+    .brief-links{
+      display:inline-flex;
+      flex-wrap:wrap;
+      gap: 6px;
+      margin-left: 10px;   /* 文章とボタンの間隔 */
+      vertical-align: middle;
+    }
+
+    .brief-open{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+
+      padding: 6px 10px;
+      border-radius: 999px;
+
+      background: rgba(0,0,0,0.55);
+      border: 1px solid rgba(203,255,92,0.38);
+      color: rgba(255,255,255,0.92);
+
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+
+      text-decoration: none;
+      box-shadow: 0 0 14px rgba(203,255,92,0.16);
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .brief-open:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 0 18px rgba(203,255,92,0.28);
+      border-color: rgba(203,255,92,0.58);
+    }
+
+    .brief-open:active{
+      transform: scale(0.98);
+    }
+
+    @media (max-width: 720px){
+      .brief-open{ padding: 8px 12px; }
+      .brief-links{ margin-left: 8px; }
     }
   </style>
 </head>
@@ -416,7 +458,10 @@
         </div>
 
         <ul class="board-list" id="briefList">
-          <li><span class="dot"></span> 読み込み中…</li>
+          <li>
+            <span class="dot"></span>
+            <span class="brief-text">読み込み中…</span>
+          </li>
         </ul>
       </div>
     </section>
@@ -532,17 +577,43 @@
       briefDate.textContent = `${yyyy}-${mm}-${dd}`;
     }
 
-    // URLを含む文章をリンク化（http/https）
-    function linkify(text){
-      // 先にHTMLエスケープしてからURLだけをaに置換
-      const safe = escapeHtml(text);
-
-      // 1行に複数URLがあってもOK
+    function extractUrls(line){
       const urlRe = /(https?:\/\/[^\s]+)/g;
-      return safe.replace(urlRe, (url) => {
-        const href = url;
-        return `<a class="brief-link" href="${href}" target="_blank" rel="noopener noreferrer">${url}</a>`;
-      });
+      const urls = [];
+      let m;
+      while((m = urlRe.exec(line)) !== null){
+        urls.push(m[1]);
+      }
+      const textOnly = line.replace(urlRe, "").replace(/\s{2,}/g, " ").trim();
+      return { textOnly, urls };
+    }
+
+    function hostnameOf(url){
+      try{ return new URL(url).hostname; }catch{ return ""; }
+    }
+
+    function renderBriefLine(line){
+      const { textOnly, urls } = extractUrls(line);
+
+      // URLだけの行になった場合も見栄えを確保
+      const displayText = (textOnly && textOnly.length) ? textOnly : "LINK";
+
+      let linksHtml = "";
+      if(urls.length > 0){
+        linksHtml = `<span class="brief-links">` + urls.map((u, i) => {
+          const host = hostnameOf(u);
+          const label = (urls.length === 1) ? "OPEN" : `OPEN ${i+1}`;
+          const title = host ? `${host} — ${u}` : u;
+          return `<a class="brief-open" href="${escapeHtml(u)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(title)}">${escapeHtml(label)}</a>`;
+        }).join("") + `</span>`;
+      }
+
+      return `
+        <li>
+          <span class="dot"></span>
+          <span class="brief-text">${escapeHtml(displayText)}${linksHtml}</span>
+        </li>
+      `;
     }
 
     async function loadMissionBrief(){
@@ -560,7 +631,7 @@
           .filter(s => s.length > 0)
           .slice(0, 12);
 
-        // NEW判定：どこかの行に "NEW:" があれば NEWモード
+        // NEW判定（どこかに NEW: があれば）
         let hasNew = false;
         lines = lines.map(line => {
           if(/^NEW\s*:/i.test(line)){
@@ -571,15 +642,13 @@
         });
 
         if(lines.length === 0){
-          briefList.innerHTML = '<li><span class="dot"></span>（指令なし）</li>';
+          briefList.innerHTML = renderBriefLine("（指令なし）");
           briefTag.textContent = "EMPTY";
           briefTag.classList.remove("is-new");
           return;
         }
 
-        briefList.innerHTML = lines
-          .map(line => `<li><span class="dot"></span> ${linkify(line)}</li>`)
-          .join("");
+        briefList.innerHTML = lines.map(renderBriefLine).join("");
 
         if(hasNew){
           briefTag.textContent = "NEW";
@@ -590,7 +659,7 @@
         }
 
       }catch(err){
-        briefList.innerHTML = '<li><span class="dot"></span>（通信エラー：後で再読込してください）</li>';
+        briefList.innerHTML = renderBriefLine("（通信エラー：後で再読込してください）");
         briefTag.textContent = "OFFLINE";
         briefTag.classList.remove("is-new");
         setDateBadge();
