@@ -48,10 +48,7 @@
     }
 
     /* ===== Header Logo ===== */
-    .header{
-      padding: 18px 0 10px;
-    }
-
+    .header{ padding: 18px 0 10px; }
     .logo{
       width: min(720px, 92vw);
       height: auto;
@@ -67,15 +64,14 @@
       margin: 0 auto 18px;
     }
 
+    /* 先頭の掲示は2カラムの上に「全幅」で置く */
     .grid{
       display:grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 14px;
       align-items: start;
     }
-
     @media (max-width: 720px){
-      /* スマホでは1列（タップしやすさ優先） */
       .grid{ grid-template-columns: 1fr; }
     }
 
@@ -93,7 +89,6 @@
       text-align:left;
       min-height: 168px;
     }
-
     .card::before{
       content:"";
       position:absolute;
@@ -165,17 +160,13 @@
         0 0 0 1px rgba(0,0,0,0.35) inset,
         0 0 22px var(--btn-glow);
     }
-
     .btn:hover{
       transform: translateY(-1px);
       box-shadow:
         0 0 0 1px rgba(0,0,0,0.35) inset,
         0 0 28px rgba(203,255,92,0.38);
     }
-
-    .btn:active{
-      transform: scale(0.99);
-    }
+    .btn:active{ transform: scale(0.99); }
 
     .btn-sub{
       margin-top: 10px;
@@ -191,7 +182,6 @@
       display:grid;
       gap: 10px;
     }
-
     .menu-item{
       border-radius: 14px;
       padding: 12px;
@@ -199,13 +189,11 @@
       border: 1px solid rgba(203,255,92,0.12);
       box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
     }
-
     .menu-item h3{
       margin: 0 0 6px;
       font-size: 14px;
       font-weight: 900;
     }
-
     .menu-item p{
       margin: 0;
       font-size: 12.5px;
@@ -230,7 +218,6 @@
       color: rgba(255,255,255,0.62);
       text-align:center;
     }
-
     .foot code{
       color: rgba(255,255,255,0.90);
       background: rgba(255,255,255,0.06);
@@ -238,16 +225,118 @@
       border-radius: 8px;
       border: 1px solid rgba(255,255,255,0.10);
     }
+
+    /* ===== Mission Brief Panel ===== */
+    .board{
+      margin: 0 0 14px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow:
+        0 18px 40px rgba(0,0,0,0.55),
+        inset 0 0 0 1px rgba(203,255,92,0.06);
+      padding: 14px;
+      text-align:left;
+      position: relative;
+      overflow: hidden;
+    }
+    .board::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(255,255,255,0.03),
+          rgba(255,255,255,0.03) 1px,
+          rgba(0,0,0,0) 3px,
+          rgba(0,0,0,0) 7px
+        );
+      opacity: .18;
+      pointer-events:none;
+      mix-blend-mode: overlay;
+    }
+    .board-inner{
+      position:relative;
+      border-radius: 16px;
+      background: rgba(0,0,0,0.42);
+      border: 1px solid rgba(255,61,207,0.14);
+      box-shadow:
+        0 0 22px rgba(255,61,207,0.14),
+        0 0 18px rgba(203,255,92,0.08);
+      padding: 14px;
+    }
+    .board-head{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-bottom: 10px;
+    }
+    .board-title{
+      margin:0;
+      font-size: 14px;
+      font-weight: 950;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      text-shadow: 0 0 14px rgba(255,61,207,0.20);
+    }
+    .board-tag{
+      font-size: 12px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(203,255,92,0.35);
+      background: rgba(0,0,0,0.35);
+      color: rgba(255,255,255,0.85);
+    }
+    .board-list{
+      margin:0;
+      padding:0;
+      list-style:none;
+      display:grid;
+      gap: 8px;
+      color: rgba(255,255,255,0.78);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .board-list li{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+    }
+    .dot{
+      width: 8px;
+      height: 8px;
+      margin-top: 6px;
+      border-radius: 999px;
+      background: rgba(203,255,92,0.95);
+      box-shadow: 0 0 14px rgba(203,255,92,0.35);
+      flex: 0 0 auto;
+    }
   </style>
 </head>
 
 <body>
-  <!-- ✅ ロゴ画像タイトル -->
   <div class="header">
     <img src="H.K.LOBBY.png" class="logo" alt="八東国語LOBBY">
   </div>
 
   <div class="wrap">
+
+    <!-- ===== MISSION BRIEF (自動更新) ===== -->
+    <section class="board" aria-label="MISSION BRIEF">
+      <div class="board-inner">
+        <div class="board-head">
+          <h2 class="board-title">MISSION BRIEF</h2>
+          <span class="board-tag" id="briefTag">LIVE</span>
+        </div>
+
+        <ul class="board-list" id="briefList">
+          <!-- JSで置換。fetch失敗時はこのまま表示される -->
+          <li><span class="dot"></span> 読み込み中…</li>
+        </ul>
+      </div>
+    </section>
+
     <div class="grid">
 
       <!-- フラッシュカード -->
@@ -260,14 +349,13 @@
             <button class="btn" id="btnFlash">START</button>
           </div>
 
-          <!-- 展開メニュー -->
           <div class="menu" id="flashMenu" style="display:none;">
 
             <div class="menu-item">
               <h3>古文単語</h3>
               <p>読解の土台となる基礎語彙。</p>
               <div class="actions">
-                <a class="btn" href="https://naoki496.github.io/flashcards/" target="_blank">START</a>
+                <a class="btn" href="https://naoki496.github.io/flashcards/" target="_blank" rel="noopener noreferrer">START</a>
               </div>
             </div>
 
@@ -275,7 +363,7 @@
               <h3>助動詞</h3>
               <p>意味・用法・活用形の判断。</p>
               <div class="actions">
-                <a class="btn" href="https://naoki496.github.io/hatto-kobun-jodoushi/" target="_blank">START</a>
+                <a class="btn" href="https://naoki496.github.io/hatto-kobun-jodoushi/" target="_blank" rel="noopener noreferrer">START</a>
               </div>
             </div>
 
@@ -283,7 +371,7 @@
               <h3>文学知識総合</h3>
               <p>作者・作品・時代背景を整理。</p>
               <div class="actions">
-                <a class="btn" href="https://naoki496.github.io/bungaku/" target="_blank">START</a>
+                <a class="btn" href="https://naoki496.github.io/bungaku/" target="_blank" rel="noopener noreferrer">START</a>
               </div>
             </div>
 
@@ -316,6 +404,7 @@
   </div>
 
   <script>
+    // ===== Panel behavior =====
     const btnFlash = document.getElementById("btnFlash");
     const flashMenu = document.getElementById("flashMenu");
     const btnBack = document.getElementById("btnBack");
@@ -336,6 +425,54 @@
     btnDojo.addEventListener("click", () => {
       dojoNotice.style.display = "block";
     });
+
+    // ===== MISSION BRIEF auto load =====
+    const briefList = document.getElementById("briefList");
+    const briefTag = document.getElementById("briefTag");
+
+    // mission-brief.txt: 1行=1項目。空行は無視。
+    // cache対策：?t=タイムスタンプを付与（GitHub Pagesの更新反映を早める）
+    async function loadMissionBrief(){
+      try{
+        const url = "mission-brief.txt?t=" + Date.now();
+        const res = await fetch(url, { cache: "no-store" });
+        if(!res.ok) throw new Error("HTTP " + res.status);
+        const text = await res.text();
+
+        const lines = text
+          .split(/\r?\n/)
+          .map(s => s.trim())
+          .filter(s => s.length > 0)
+          .slice(0, 12);
+
+        if(lines.length === 0){
+          briefList.innerHTML = '<li><span class="dot"></span>（指令なし）</li>';
+          briefTag.textContent = "EMPTY";
+          return;
+        }
+
+        briefList.innerHTML = lines
+          .map(line => `<li><span class="dot"></span> ${escapeHtml(line)}</li>`)
+          .join("");
+
+        briefTag.textContent = "LIVE";
+      }catch(err){
+        // 失敗時は既定文
+        briefList.innerHTML = '<li><span class="dot"></span>（通信エラー：後で再読込してください）</li>';
+        briefTag.textContent = "OFFLINE";
+      }
+    }
+
+    function escapeHtml(str){
+      return str
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#39;");
+    }
+
+    loadMissionBrief();
   </script>
 
 </body>
