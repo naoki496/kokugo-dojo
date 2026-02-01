@@ -8,24 +8,17 @@
 
   <style>
     :root{
-      /* ===== Cyber (NOT blue) ===== */
       --bg0:#050307;
       --bg1:#0b0610;
-
-      --line: rgba(203, 255, 92, 0.26);
-      --glow: rgba(255, 61, 207, 0.22);
 
       --accent1:#ff3dcf;
       --accent2:#cbff5c;
 
       --text:#ffffff;
-      --muted: rgba(255,255,255,0.74);
 
-      /* ===== Solid Button colors ===== */
       --btn-fill: rgba(10, 10, 10, 0.92);
       --btn-border: rgba(203,255,92,0.55);
       --btn-glow: rgba(203,255,92,0.28);
-      --btn-text: #ffffff;
     }
 
     *{ box-sizing:border-box; }
@@ -44,10 +37,10 @@
         radial-gradient(900px 600px at 10% 90%,
           rgba(203,255,92,0.14) 0%,
           rgba(0,0,0,0) 55%),
-        linear-gradient(180deg, var(--bg1), #000 72%, #000 100%);
+        linear-gradient(180deg, var(--bg1), #000 80%);
     }
 
-    /* ===== Header Logo ===== */
+    /* ===== Header ===== */
     .header{ padding: 18px 0 10px; }
     .logo{
       width: min(720px, 92vw);
@@ -57,114 +50,260 @@
       filter: drop-shadow(0 0 18px rgba(255,61,207,0.28));
     }
 
-    /* ===== Layout ===== */
     .wrap{
       width: 92%;
       max-width: 980px;
       margin: 0 auto 18px;
     }
 
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-      align-items: start;
-    }
-    @media (max-width: 720px){
-      .grid{ grid-template-columns: 1fr; }
+    /* ===== Mission Brief ===== */
+    .board{
+      margin: 0 0 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.55);
+      padding: 14px;
+      text-align:left;
     }
 
-    /* ===== Card ===== */
+    .board-inner{
+      border-radius: 16px;
+      background: rgba(0,0,0,0.42);
+      border: 1px solid rgba(255,61,207,0.14);
+      padding: 14px;
+    }
+
+    .board-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom: 12px;
+
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(0,0,0,0.55);
+      border: 1px solid rgba(203,255,92,0.28);
+      position: relative;
+    }
+
+    .board-head::before{
+      content:"";
+      width:4px;
+      height:18px;
+      border-radius:999px;
+      background: rgba(203,255,92,0.85);
+      box-shadow: 0 0 14px rgba(203,255,92,0.45);
+      flex: 0 0 auto;
+      margin-right: 8px;
+    }
+
+    .board-title{
+      margin:0;
+      font-size: 16px;
+      font-weight: 1000;
+      letter-spacing: .20em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.95);
+      text-shadow:
+        0 0 12px rgba(255,61,207,0.35),
+        0 0 22px rgba(203,255,92,0.18);
+      flex: 1 1 auto;
+    }
+
+    .board-meta{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      flex: 0 0 auto;
+    }
+
+    .board-date{
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.78);
+      white-space: nowrap;
+    }
+
+    .board-tag{
+      font-size: 12px;
+      font-weight: 900;
+      padding: 4px 12px;
+      border-radius: 999px;
+
+      background: rgba(203,255,92,0.18);
+      border: 1px solid rgba(203,255,92,0.45);
+
+      color: rgba(255,255,255,0.92);
+      box-shadow: 0 0 14px rgba(203,255,92,0.22);
+      white-space: nowrap;
+    }
+
+    @keyframes pulseGlow{
+      0%   { box-shadow: 0 0 10px rgba(203,255,92,0.22); transform: translateY(0); }
+      50%  { box-shadow: 0 0 22px rgba(203,255,92,0.42); transform: translateY(-1px); }
+      100% { box-shadow: 0 0 10px rgba(203,255,92,0.22); transform: translateY(0); }
+    }
+
+    .is-new{
+      background: rgba(255,61,207,0.14);
+      border-color: rgba(255,61,207,0.55);
+      animation: pulseGlow 1.6s ease-in-out infinite;
+    }
+
+    .board-list{
+      margin:0;
+      padding:0;
+      list-style:none;
+      display:grid;
+      gap: 8px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .board-list li{
+      display:flex;
+      gap:10px;
+      word-break: break-word;
+      color: rgba(255,255,255,0.76);
+    }
+
+    .board-list li:first-child{
+      font-weight: 900;
+      color: rgba(255,255,255,0.92);
+    }
+
+    /* ✅ LINK付き行だけ少し明るくする（読みやすさの範囲で） */
+    .has-link{
+      color: rgba(203,255,92,0.88);
+    }
+
+    .dot{
+      width: 8px;
+      height: 8px;
+      margin-top: 7px;
+      border-radius: 999px;
+      background: rgba(203,255,92,0.95);
+      box-shadow: 0 0 14px rgba(203,255,92,0.20);
+      flex: 0 0 auto;
+    }
+
+    /* LINKバッジ（インライン） */
+    .brief-links{
+      display:inline-flex;
+      flex-wrap:wrap;
+      gap: 6px;
+      margin-left: 8px;
+      vertical-align: baseline;
+    }
+
+    .brief-open{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+
+      padding: 2px 8px;
+      border-radius: 999px;
+
+      background: rgba(203,255,92,0.10);
+      border: 1px solid rgba(203,255,92,0.28);
+
+      color: rgba(255,255,255,0.82);
+
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+
+      text-decoration:none;
+      box-shadow: none;
+      white-space: nowrap;
+    }
+
+    .brief-open:hover{
+      background: rgba(203,255,92,0.18);
+      border-color: rgba(203,255,92,0.45);
+      color: rgba(255,255,255,0.95);
+    }
+
+    .brief-open:active{
+      transform: scale(0.98);
+    }
+
+    /* ===== Main Grid ===== */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap:14px;
+      align-items: start;
+    }
+
+    @media (max-width:720px){
+      .grid{ grid-template-columns:1fr; }
+    }
+
+    /* ===== Cards ===== */
     .card{
       border-radius: 18px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.08);
-      box-shadow:
-        0 18px 40px rgba(0,0,0,0.55),
-        inset 0 0 0 1px rgba(255,61,207,0.08);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.45);
       padding: 14px;
+      text-align:left;
       position: relative;
       overflow: hidden;
-      text-align:left;
       min-height: 168px;
-    }
-    .card::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:
-        repeating-linear-gradient(
-          to bottom,
-          rgba(255,255,255,0.03),
-          rgba(255,255,255,0.03) 1px,
-          rgba(0,0,0,0) 3px,
-          rgba(0,0,0,0) 7px
-        );
-      opacity: .22;
-      pointer-events:none;
-      mix-blend-mode: overlay;
     }
 
     .card-inner{
-      position:relative;
       border-radius: 16px;
       background: rgba(0,0,0,0.42);
-      border: 1px solid rgba(203,255,92,0.16);
-      box-shadow:
-        0 0 22px rgba(255,61,207,0.16),
-        0 0 18px rgba(203,255,92,0.10);
+      border: 1px solid rgba(203,255,92,0.14);
       padding: 14px;
     }
 
     .title{
-      margin: 0 0 8px;
-      font-size: 16px;
-      font-weight: 900;
+      margin:0 0 8px;
+      font-size:16px;
+      font-weight:900;
       letter-spacing: .02em;
-      text-shadow: 0 0 12px rgba(255,61,207,0.22);
+      text-shadow: 0 0 12px rgba(255,61,207,0.18);
     }
 
     .desc{
-      margin: 0;
-      font-size: 13px;
+      margin:0;
+      font-size:13px;
       line-height: 1.6;
       color: rgba(255,255,255,0.72);
     }
 
-    /* ===== Buttons ===== */
-    .actions{
-      margin-top: 12px;
-      display:flex;
-      justify-content:stretch;
-    }
+    .actions{ margin-top: 12px; }
 
     .btn{
-      width: 100%;
-      padding: 14px 16px;
-      border-radius: 14px;
+      width:100%;
+      padding:14px 16px;
+      border-radius:14px;
 
+      border:1px solid var(--btn-border);
       background: var(--btn-fill);
-      color: var(--btn-text);
-      font-size: 14px;
-      font-weight: 950;
-      letter-spacing: 0.10em;
-      text-transform: uppercase;
+      color:#fff;
 
-      border: 1px solid var(--btn-border);
-      text-decoration:none;
+      font-size:14px;
+      font-weight:950;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+
       cursor:pointer;
-      user-select: none;
+      user-select:none;
 
-      box-shadow:
-        0 0 0 1px rgba(0,0,0,0.35) inset,
-        0 0 22px var(--btn-glow);
+      box-shadow: 0 0 22px var(--btn-glow);
     }
-    .btn:hover{
-      transform: translateY(-1px);
-      box-shadow:
-        0 0 0 1px rgba(0,0,0,0.35) inset,
-        0 0 28px rgba(203,255,92,0.38);
-    }
+
+    .btn:hover{ transform: translateY(-1px); }
     .btn:active{ transform: scale(0.99); }
 
     .btn-sub{
@@ -175,24 +314,27 @@
       letter-spacing: 0.06em;
     }
 
-    /* ===== Flashcard menu list ===== */
+    /* ===== Flash menu ===== */
     .menu{
       margin-top: 12px;
       display:grid;
       gap: 10px;
     }
+
     .menu-item{
       border-radius: 14px;
       padding: 12px;
       background: rgba(255,255,255,0.04);
       border: 1px solid rgba(203,255,92,0.12);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
     }
+
     .menu-item h3{
       margin: 0 0 6px;
       font-size: 14px;
       font-weight: 900;
     }
+
     .menu-item p{
       margin: 0;
       font-size: 12.5px;
@@ -201,10 +343,10 @@
     }
 
     .notice{
-      margin-top: 10px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,110,110,0.22);
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,110,110,0.22);
       background: rgba(255,110,110,0.06);
       color: rgba(255,255,255,0.86);
       font-size: 13px;
@@ -224,217 +366,6 @@
       border-radius: 8px;
       border: 1px solid rgba(255,255,255,0.10);
     }
-
-    /* ===== Mission Brief Panel ===== */
-    .board{
-      margin: 0 0 14px;
-      border-radius: 18px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
-      border: 1px solid rgba(255,255,255,0.08);
-      box-shadow:
-        0 18px 40px rgba(0,0,0,0.55),
-        inset 0 0 0 1px rgba(203,255,92,0.06);
-      padding: 14px;
-      text-align:left;
-      position: relative;
-      overflow: hidden;
-    }
-    .board::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:
-        repeating-linear-gradient(
-          to bottom,
-          rgba(255,255,255,0.03),
-          rgba(255,255,255,0.03) 1px,
-          rgba(0,0,0,0) 3px,
-          rgba(0,0,0,0) 7px
-        );
-      opacity: .18;
-      pointer-events:none;
-      mix-blend-mode: overlay;
-    }
-    .board-inner{
-      position:relative;
-      border-radius: 16px;
-      background: rgba(0,0,0,0.42);
-      border: 1px solid rgba(255,61,207,0.14);
-      box-shadow:
-        0 0 22px rgba(255,61,207,0.14),
-        0 0 18px rgba(203,255,92,0.08);
-      padding: 14px;
-    }
-
-    /* ===== Head enhanced (bar + left line) ===== */
-    .board-head{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom: 12px;
-
-      padding: 10px 12px;
-      border-radius: 14px;
-      background: rgba(0,0,0,0.55);
-      border: 1px solid rgba(203,255,92,0.28);
-
-      box-shadow:
-        0 0 18px rgba(203,255,92,0.18),
-        inset 0 0 0 1px rgba(255,61,207,0.10);
-
-      position: relative;
-    }
-    .board-head::before{
-      content:"";
-      width:4px;
-      height:18px;
-      border-radius:999px;
-      background: rgba(203,255,92,0.85);
-      box-shadow: 0 0 14px rgba(203,255,92,0.45);
-      flex: 0 0 auto;
-      margin-right: 8px;
-    }
-    .board-title{
-      margin:0;
-      font-size: 16px;
-      font-weight: 1000;
-      letter-spacing: .20em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.95);
-      text-shadow:
-        0 0 12px rgba(255,61,207,0.35),
-        0 0 22px rgba(203,255,92,0.18);
-      flex: 1 1 auto;
-    }
-
-    .board-meta{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      flex: 0 0 auto;
-    }
-
-    .board-date{
-      font-size: 12px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.16);
-      background: rgba(255,255,255,0.06);
-      color: rgba(255,255,255,0.78);
-    }
-
-    .board-tag{
-      font-size: 12px;
-      font-weight: 900;
-      padding: 4px 12px;
-      border-radius: 999px;
-
-      background: rgba(203,255,92,0.18);
-      border: 1px solid rgba(203,255,92,0.45);
-
-      color: rgba(255,255,255,0.92);
-      box-shadow: 0 0 14px rgba(203,255,92,0.22);
-    }
-
-    /* NEWだけ“脈動” */
-    @keyframes pulseGlow{
-      0%   { box-shadow: 0 0 10px rgba(203,255,92,0.22); transform: translateY(0); }
-      50%  { box-shadow: 0 0 22px rgba(203,255,92,0.42); transform: translateY(-1px); }
-      100% { box-shadow: 0 0 10px rgba(203,255,92,0.22); transform: translateY(0); }
-    }
-    .is-new{
-      background: rgba(255,61,207,0.14);
-      border-color: rgba(255,61,207,0.55);
-      animation: pulseGlow 1.6s ease-in-out infinite;
-    }
-
-    .board-list{
-      margin:0;
-      padding:0;
-      list-style:none;
-      display:grid;
-      gap: 8px;
-      color: rgba(255,255,255,0.78);
-      font-size: 13px;
-      line-height: 1.6;
-    }
-
-    /* ここが変更点：OPENは右固定ではなく文章末尾にインライン */
-    .board-list li{
-      display:flex;
-      align-items:flex-start;
-      gap:10px;
-      word-break: break-word;
-    }
-
-    /* 1行目（最重要）を強調 */
-    .board-list li:first-child .brief-text{
-      color: rgba(255,255,255,0.92);
-      font-weight: 900;
-    }
-
-    .dot{
-      width: 8px;
-      height: 8px;
-      margin-top: 7px;
-      border-radius: 999px;
-      background: rgba(203,255,92,0.95);
-      box-shadow: 0 0 14px rgba(203,255,92,0.35);
-      flex: 0 0 auto;
-    }
-
-    .brief-text{
-      min-width: 0;
-      color: rgba(255,255,255,0.78);
-    }
-
-    /* インラインOPEN群 */
-    .brief-links{
-      display:inline-flex;
-      flex-wrap:wrap;
-      gap: 6px;
-      margin-left: 10px;   /* 文章とボタンの間隔 */
-      vertical-align: middle;
-    }
-
-    .brief-open{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-
-      padding: 6px 10px;
-      border-radius: 999px;
-
-      background: rgba(0,0,0,0.55);
-      border: 1px solid rgba(203,255,92,0.38);
-      color: rgba(255,255,255,0.92);
-
-      font-size: 12px;
-      font-weight: 950;
-      letter-spacing: 0.10em;
-      text-transform: uppercase;
-
-      text-decoration: none;
-      box-shadow: 0 0 14px rgba(203,255,92,0.16);
-      user-select: none;
-      white-space: nowrap;
-    }
-
-    .brief-open:hover{
-      transform: translateY(-1px);
-      box-shadow: 0 0 18px rgba(203,255,92,0.28);
-      border-color: rgba(203,255,92,0.58);
-    }
-
-    .brief-open:active{
-      transform: scale(0.98);
-    }
-
-    @media (max-width: 720px){
-      .brief-open{ padding: 8px 12px; }
-      .brief-links{ margin-left: 8px; }
-    }
   </style>
 </head>
 
@@ -450,7 +381,6 @@
       <div class="board-inner">
         <div class="board-head">
           <h2 class="board-title">MISSION BRIEF</h2>
-
           <div class="board-meta">
             <span class="board-date" id="briefDate">----</span>
             <span class="board-tag" id="briefTag">LIVE</span>
@@ -458,18 +388,16 @@
         </div>
 
         <ul class="board-list" id="briefList">
-          <li>
-            <span class="dot"></span>
-            <span class="brief-text">読み込み中…</span>
-          </li>
+          <li><span class="dot"></span><span class="brief-text">読み込み中…</span></li>
         </ul>
       </div>
     </section>
 
+    <!-- ===== Main ===== -->
     <div class="grid">
 
-      <!-- フラッシュカード -->
-      <section class="card">
+      <!-- FLASH CARD -->
+      <section class="card" aria-label="FLASH CARD">
         <div class="card-inner">
           <h2 class="title">FLASH CARD</h2>
           <p class="desc">今日やるものを1つ選ぶ。</p>
@@ -478,6 +406,7 @@
             <button class="btn" id="btnFlash">START</button>
           </div>
 
+          <!-- 展開メニュー（初期は非表示） -->
           <div class="menu" id="flashMenu" style="display:none;">
 
             <div class="menu-item">
@@ -509,8 +438,8 @@
         </div>
       </section>
 
-      <!-- 国語道場 -->
-      <section class="card">
+      <!-- BLITZ QUEST -->
+      <section class="card" aria-label="BLITZ QUEST">
         <div class="card-inner">
           <h2 class="title">BLITZ QUEST</h2>
           <p class="desc">（準備中）</p>
@@ -530,16 +459,14 @@
     <div class="foot">
       更新が反映されない場合は、URL末尾に <code>?v=2</code> を付けてください。
     </div>
+
   </div>
 
   <script>
-    // ===== Panel behavior =====
-    const btnFlash = document.getElementById("btnFlash");
+    // ===== FLASH CARD 展開 =====
+    const btnFlash  = document.getElementById("btnFlash");
     const flashMenu = document.getElementById("flashMenu");
-    const btnBack = document.getElementById("btnBack");
-
-    const btnDojo = document.getElementById("btnDojo");
-    const dojoNotice = document.getElementById("dojoNotice");
+    const btnBack   = document.getElementById("btnBack");
 
     btnFlash.addEventListener("click", () => {
       flashMenu.style.display = "grid";
@@ -551,14 +478,25 @@
       btnFlash.style.display = "block";
     });
 
+    // ===== BLITZ QUEST =====
+    const btnDojo = document.getElementById("btnDojo");
+    const dojoNotice = document.getElementById("dojoNotice");
     btnDojo.addEventListener("click", () => {
       dojoNotice.style.display = "block";
     });
 
     // ===== MISSION BRIEF auto load =====
     const briefList = document.getElementById("briefList");
-    const briefTag = document.getElementById("briefTag");
+    const briefTag  = document.getElementById("briefTag");
     const briefDate = document.getElementById("briefDate");
+
+    function setDateBadge(){
+      const d = new Date();
+      briefDate.textContent =
+        d.getFullYear() + "-" +
+        String(d.getMonth()+1).padStart(2,"0") + "-" +
+        String(d.getDate()).padStart(2,"0");
+    }
 
     function escapeHtml(str){
       return str
@@ -567,14 +505,6 @@
         .replaceAll(">","&gt;")
         .replaceAll('"',"&quot;")
         .replaceAll("'","&#39;");
-    }
-
-    function setDateBadge(){
-      const d = new Date();
-      const yyyy = d.getFullYear();
-      const mm = String(d.getMonth()+1).padStart(2,"0");
-      const dd = String(d.getDate()).padStart(2,"0");
-      briefDate.textContent = `${yyyy}-${mm}-${dd}`;
     }
 
     function extractUrls(line){
@@ -594,22 +524,22 @@
 
     function renderBriefLine(line){
       const { textOnly, urls } = extractUrls(line);
-
-      // URLだけの行になった場合も見栄えを確保
       const displayText = (textOnly && textOnly.length) ? textOnly : "LINK";
 
       let linksHtml = "";
       if(urls.length > 0){
         linksHtml = `<span class="brief-links">` + urls.map((u, i) => {
           const host = hostnameOf(u);
-          const label = (urls.length === 1) ? "OPEN" : `OPEN ${i+1}`;
+          const label = (urls.length === 1) ? "LINK" : `LINK ${i+1}`;
           const title = host ? `${host} — ${u}` : u;
           return `<a class="brief-open" href="${escapeHtml(u)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(title)}">${escapeHtml(label)}</a>`;
         }).join("") + `</span>`;
       }
 
+      const liClass = urls.length ? "has-link" : "";
+
       return `
-        <li>
+        <li class="${liClass}">
           <span class="dot"></span>
           <span class="brief-text">${escapeHtml(displayText)}${linksHtml}</span>
         </li>
@@ -631,7 +561,6 @@
           .filter(s => s.length > 0)
           .slice(0, 12);
 
-        // NEW判定（どこかに NEW: があれば）
         let hasNew = false;
         lines = lines.map(line => {
           if(/^NEW\s*:/i.test(line)){
