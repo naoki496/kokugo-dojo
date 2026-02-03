@@ -467,7 +467,8 @@
           <div class="notice" id="dojoNotice" style="display:none;">
             工事中
           </div>
-            <button class="btn btn-sub" id="btnBack">戻る</button>
+
+          <button class="btn btn-sub" id="btnDojoBack" style="display:none;">戻る</button>
 
         </div>
       </section>
@@ -499,8 +500,18 @@
     // ===== BLITZ QUEST =====
     const btnDojo = document.getElementById("btnDojo");
     const dojoNotice = document.getElementById("dojoNotice");
+    const btnDojoBack = document.getElementById("btnDojoBack");
+
     btnDojo.addEventListener("click", () => {
       dojoNotice.style.display = "block";
+      btnDojo.style.display = "none";
+      btnDojoBack.style.display = "inline-flex";
+    });
+
+    btnDojoBack.addEventListener("click", () => {
+      dojoNotice.style.display = "none";
+      btnDojo.style.display = "inline-flex";
+      btnDojoBack.style.display = "none";
     });
 
     // ===== MISSION BRIEF auto load =====
