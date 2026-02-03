@@ -56,7 +56,7 @@
       margin: 0 auto 18px;
     }
 
-    /* ===== ✅MISSION BRIEF 復活 ===== */
+    /* ===== Mission Brief ===== */
     .board{
       margin: 0 0 14px;
       border-radius: 18px;
@@ -80,10 +80,23 @@
       justify-content:space-between;
       gap:10px;
       margin-bottom: 12px;
+
       padding: 10px 12px;
       border-radius: 14px;
       background: rgba(0,0,0,0.55);
       border: 1px solid rgba(203,255,92,0.28);
+      position: relative;
+    }
+
+    .board-head::before{
+      content:"";
+      width:4px;
+      height:18px;
+      border-radius:999px;
+      background: rgba(203,255,92,0.85);
+      box-shadow: 0 0 14px rgba(203,255,92,0.45);
+      flex: 0 0 auto;
+      margin-right: 8px;
     }
 
     .board-title{
@@ -92,12 +105,18 @@
       font-weight: 1000;
       letter-spacing: .20em;
       text-transform: uppercase;
+      color: rgba(255,255,255,0.95);
+      text-shadow:
+        0 0 12px rgba(255,61,207,0.35),
+        0 0 22px rgba(203,255,92,0.18);
+      flex: 1 1 auto;
     }
 
     .board-meta{
       display:flex;
       gap:8px;
       align-items:center;
+      flex: 0 0 auto;
     }
 
     .board-date{
@@ -107,6 +126,7 @@
       border: 1px solid rgba(255,255,255,0.16);
       background: rgba(255,255,255,0.06);
       color: rgba(255,255,255,0.78);
+      white-space: nowrap;
     }
 
     .board-tag{
@@ -114,8 +134,25 @@
       font-weight: 900;
       padding: 4px 12px;
       border-radius: 999px;
+
       background: rgba(203,255,92,0.18);
       border: 1px solid rgba(203,255,92,0.45);
+
+      color: rgba(255,255,255,0.92);
+      box-shadow: 0 0 14px rgba(203,255,92,0.22);
+      white-space: nowrap;
+    }
+
+    @keyframes pulseGlow{
+      0%   { box-shadow: 0 0 10px rgba(203,255,92,0.22); transform: translateY(0); }
+      50%  { box-shadow: 0 0 22px rgba(203,255,92,0.42); transform: translateY(-1px); }
+      100% { box-shadow: 0 0 10px rgba(203,255,92,0.22); transform: translateY(0); }
+    }
+
+    .is-new{
+      background: rgba(255,61,207,0.14);
+      border-color: rgba(255,61,207,0.55);
+      animation: pulseGlow 1.6s ease-in-out infinite;
     }
 
     .board-list{
@@ -128,13 +165,73 @@
       line-height: 1.6;
     }
 
+    .board-list li{
+      display:flex;
+      gap:10px;
+      word-break: break-word;
+      color: rgba(255,255,255,0.76);
+    }
+
+    .board-list li:first-child{
+      font-weight: 900;
+      color: rgba(255,255,255,0.92);
+    }
+
+    /* ✅ LINK付き行だけ少し明るくする */
+    .has-link{
+      color: rgba(203,255,92,0.88);
+    }
+
     .dot{
       width: 8px;
       height: 8px;
       margin-top: 7px;
       border-radius: 999px;
       background: rgba(203,255,92,0.95);
+      box-shadow: 0 0 14px rgba(203,255,92,0.20);
       flex: 0 0 auto;
+    }
+
+    /* LINKバッジ（インライン） */
+    .brief-links{
+      display:inline-flex;
+      flex-wrap:wrap;
+      gap: 6px;
+      margin-left: 8px;
+      vertical-align: baseline;
+    }
+
+    .brief-open{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+
+      padding: 2px 8px;
+      border-radius: 999px;
+
+      background: rgba(203,255,92,0.10);
+      border: 1px solid rgba(203,255,92,0.28);
+
+      color: rgba(255,255,255,0.82);
+
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+
+      text-decoration:none;
+      box-shadow: none;
+      white-space: nowrap;
+    }
+
+    .brief-open:hover{
+      background: rgba(203,255,92,0.18);
+      border-color: rgba(203,255,92,0.45);
+      color: rgba(255,255,255,0.95);
+    }
+
+    .brief-open:active{
+      transform: scale(0.98);
     }
 
     /* ===== Main Grid ===== */
@@ -157,6 +254,9 @@
       box-shadow: 0 18px 40px rgba(0,0,0,0.45);
       padding: 14px;
       text-align:left;
+      position: relative;
+      overflow: hidden;
+      min-height: 168px;
     }
 
     .card-inner{
@@ -166,27 +266,59 @@
       padding: 14px;
     }
 
+    .title{
+      margin:0 0 8px;
+      font-size:16px;
+      font-weight:900;
+      letter-spacing: .02em;
+      text-shadow: 0 0 12px rgba(255,61,207,0.18);
+    }
+
+    .desc{
+      margin:0;
+      font-size:13px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.72);
+    }
+
+    .actions{ margin-top: 12px; }
+
     .btn{
       width:100%;
       padding:14px 16px;
       border-radius:14px;
+
       border:1px solid var(--btn-border);
       background: var(--btn-fill);
       color:#fff;
+
+      font-size:14px;
       font-weight:950;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+
       cursor:pointer;
+      user-select:none;
+
       box-shadow: 0 0 22px var(--btn-glow);
-      display:inline-flex;
-      justify-content:center;
       text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
     }
+
+    .btn:hover{ transform: translateY(-1px); }
+    .btn:active{ transform: scale(0.99); }
 
     .btn-sub{
       margin-top: 10px;
       background: rgba(255,255,255,0.06);
       border-color: rgba(255,255,255,0.18);
+      box-shadow: 0 0 16px rgba(255,61,207,0.10);
+      letter-spacing: 0.06em;
     }
 
+    /* ===== Flash menu ===== */
     .menu{
       margin-top: 12px;
       display:grid;
@@ -198,17 +330,66 @@
       padding: 12px;
       background: rgba(255,255,255,0.04);
       border: 1px solid rgba(203,255,92,0.12);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
     }
 
+    .menu-item h3{
+      margin: 0 0 6px;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .menu-item p{
+      margin: 0;
+      font-size: 12.5px;
+      line-height: 1.55;
+      color: rgba(255,255,255,0.70);
+    }
+
+    /* ✅ 追加：メニュー内STARTを「右寄せ」 */
     .menu-item .actions{
       display:flex;
       justify-content:flex-end;
     }
 
-    /* ✅右カラム専用：青サイバーSTART */
+    /* ✅ 追加：メニュー内STARTの幅を少し広げる（全幅にはしない） */
+    .menu-item .btn{
+      width: 190px;
+      max-width: 100%;
+    }
+
+    /* ✅ 追加：右カラムの特定STARTのみ青サイバー */
     .btn-cyber{
-      border-color: rgba(120,200,255,0.65);
-      box-shadow: 0 0 22px rgba(120,200,255,0.42);
+      border-color: rgba(120,200,255,0.70);
+      box-shadow: 0 0 22px rgba(120,200,255,0.45);
+    }
+    .btn-cyber:hover{
+      background: rgba(120,200,255,0.10);
+    }
+
+    .notice{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,110,110,0.22);
+      background: rgba(255,110,110,0.06);
+      color: rgba(255,255,255,0.86);
+      font-size: 13px;
+    }
+
+    .foot{
+      margin: 14px auto 0;
+      font-size: 12px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.62);
+      text-align:center;
+    }
+    .foot code{
+      color: rgba(255,255,255,0.90);
+      background: rgba(255,255,255,0.06);
+      padding: 1px 6px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.10);
     }
   </style>
 </head>
@@ -220,7 +401,7 @@
 
   <div class="wrap">
 
-    <!-- ✅MISSION BRIEF 復活 -->
+    <!-- ===== MISSION BRIEF (自動更新) ===== -->
     <section class="board" aria-label="MISSION BRIEF">
       <div class="board-inner">
         <div class="board-head">
@@ -232,7 +413,7 @@
         </div>
 
         <ul class="board-list" id="briefList">
-          <li><span class="dot"></span><span>読み込み中…</span></li>
+          <li><span class="dot"></span><span class="brief-text">読み込み中…</span></li>
         </ul>
       </div>
     </section>
@@ -240,19 +421,40 @@
     <!-- ===== Main ===== -->
     <div class="grid">
 
-      <!-- 左カラム FLASH CARD -->
-      <section class="card">
+      <!-- FLASH CARD -->
+      <section class="card" aria-label="FLASH CARD">
         <div class="card-inner">
-          <h2>FLASH CARD</h2>
+          <h2 class="title">FLASH CARD</h2>
+          <p class="desc">今日やるものを1つ選ぶ。</p>
 
-          <button class="btn" id="btnFlash">START</button>
+          <div class="actions">
+            <button class="btn" id="btnFlash">START</button>
+          </div>
 
+          <!-- 展開メニュー（初期は非表示） -->
           <div class="menu" id="flashMenu" style="display:none;">
+
             <div class="menu-item">
               <h3>古文単語</h3>
               <p>読解の土台となる基礎語彙。</p>
               <div class="actions">
-                <a class="btn" href="https://naoki496.github.io/flashcards/" target="_blank">START</a>
+                <a class="btn" href="https://naoki496.github.io/flashcards/" target="_blank" rel="noopener noreferrer">START</a>
+              </div>
+            </div>
+
+            <div class="menu-item">
+              <h3>助動詞</h3>
+              <p>意味・用法・活用形の判断。</p>
+              <div class="actions">
+                <a class="btn" href="https://naoki496.github.io/hatto-kobun-jodoushi/" target="_blank" rel="noopener noreferrer">START</a>
+              </div>
+            </div>
+
+            <div class="menu-item">
+              <h3>文学知識総合</h3>
+              <p>作者・作品・時代背景を整理。</p>
+              <div class="actions">
+                <a class="btn" href="https://naoki496.github.io/bungaku/" target="_blank" rel="noopener noreferrer">START</a>
               </div>
             </div>
 
@@ -261,23 +463,24 @@
         </div>
       </section>
 
-      <!-- 右カラム BLITZ QUEST -->
-      <section class="card">
+      <!-- BLITZ QUEST -->
+      <section class="card" aria-label="BLITZ QUEST">
         <div class="card-inner">
-          <h2>BLITZ QUEST</h2>
+          <h2 class="title">BLITZ QUEST</h2>
+          <p class="desc">問題実践で思考を高める。</p>
 
-          <button class="btn" id="btnDojo">START</button>
+          <div class="actions">
+            <button class="btn" id="btnDojo">START</button>
+          </div>
 
+          <!-- ✅展開メニュー（初期は非表示） -->
           <div class="menu" id="dojoMenu" style="display:none;">
+
             <div class="menu-item">
               <h3>古文単語330マスター</h3>
               <p>先ずはここから制覇しよう</p>
               <div class="actions">
-                <a class="btn btn-cyber"
-                   href="https://naoki496.github.io/kobun-quiz/"
-                   target="_blank">
-                  START
-                </a>
+                <a class="btn btn-cyber" href="https://naoki496.github.io/kobun-quiz/" target="_blank" rel="noopener noreferrer">START</a>
               </div>
             </div>
 
@@ -289,10 +492,14 @@
 
     </div>
 
+    <div class="foot">
+      更新が反映されない場合は、URL末尾に <code>?v=2</code> を付けてください。
+    </div>
+
   </div>
 
   <script>
-    // ===== FLASH 展開 =====
+    // ===== FLASH CARD 展開 =====
     const btnFlash  = document.getElementById("btnFlash");
     const flashMenu = document.getElementById("flashMenu");
     const btnBack   = document.getElementById("btnBack");
@@ -304,10 +511,10 @@
 
     btnBack.addEventListener("click", () => {
       flashMenu.style.display = "none";
-      btnFlash.style.display = "inline-flex";
+      btnFlash.style.display = "block";
     });
 
-    // ===== DOJO 展開 =====
+    // ===== BLITZ QUEST 展開 =====
     const btnDojo     = document.getElementById("btnDojo");
     const dojoMenu    = document.getElementById("dojoMenu");
     const btnDojoBack = document.getElementById("btnDojoBack");
@@ -319,39 +526,116 @@
 
     btnDojoBack.addEventListener("click", () => {
       dojoMenu.style.display = "none";
-      btnDojo.style.display = "inline-flex";
+      btnDojo.style.display = "block";
     });
 
-    // ===== ✅MISSION BRIEF 読み込み復活 =====
-    async function loadMissionBrief(){
-      const briefList = document.getElementById("briefList");
-      const briefTag  = document.getElementById("briefTag");
-      const briefDate = document.getElementById("briefDate");
+    // ===== MISSION BRIEF auto load =====
+    const briefList = document.getElementById("briefList");
+    const briefTag  = document.getElementById("briefTag");
+    const briefDate = document.getElementById("briefDate");
 
+    function setDateBadge(){
       const d = new Date();
       briefDate.textContent =
         d.getFullYear() + "-" +
         String(d.getMonth()+1).padStart(2,"0") + "-" +
         String(d.getDate()).padStart(2,"0");
+    }
+
+    function escapeHtml(str){
+      return str
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#39;");
+    }
+
+    function extractUrls(line){
+      const urlRe = /(https?:\/\/[^\s]+)/g;
+      const urls = [];
+      let m;
+      while((m = urlRe.exec(line)) !== null){
+        urls.push(m[1]);
+      }
+      const textOnly = line.replace(urlRe, "").replace(/\s{2,}/g, " ").trim();
+      return { textOnly, urls };
+    }
+
+    function hostnameOf(url){
+      try{ return new URL(url).hostname; }catch{ return ""; }
+    }
+
+    function renderBriefLine(line){
+      const { textOnly, urls } = extractUrls(line);
+      const displayText = (textOnly && textOnly.length) ? textOnly : "LINK";
+
+      let linksHtml = "";
+      if(urls.length > 0){
+        linksHtml = `<span class="brief-links">` + urls.map((u, i) => {
+          const host = hostnameOf(u);
+          const label = (urls.length === 1) ? "LINK" : `LINK ${i+1}`;
+          const title = host ? `${host} — ${u}` : u;
+          return `<a class="brief-open" href="${escapeHtml(u)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(title)}">${escapeHtml(label)}</a>`;
+        }).join("") + `</span>`;
+      }
+
+      const liClass = urls.length ? "has-link" : "";
+
+      return `
+        <li class="${liClass}">
+          <span class="dot"></span>
+          <span class="brief-text">${escapeHtml(displayText)}${linksHtml}</span>
+        </li>
+      `;
+    }
+
+    async function loadMissionBrief(){
+      setDateBadge();
 
       try{
-        const res = await fetch("mission-brief.txt?t=" + Date.now());
+        const url = "mission-brief.txt?t=" + Date.now();
+        const res = await fetch(url, { cache: "no-store" });
+        if(!res.ok) throw new Error("HTTP " + res.status);
         const text = await res.text();
 
-        const lines = text.split(/\r?\n/)
+        let lines = text
+          .split(/\r?\n/)
           .map(s => s.trim())
-          .filter(Boolean)
-          .slice(0, 10);
+          .filter(s => s.length > 0)
+          .slice(0, 12);
 
-        briefList.innerHTML =
-          lines.map(line =>
-            `<li><span class="dot"></span><span>${line}</span></li>`
-          ).join("");
+        let hasNew = false;
+        lines = lines.map(line => {
+          if(/^NEW\s*:/i.test(line)){
+            hasNew = true;
+            return line.replace(/^NEW\s*:\s*/i, "");
+          }
+          return line;
+        });
 
-      }catch{
-        briefList.innerHTML =
-          `<li><span class="dot"></span><span>（通信エラー）</span></li>`;
+        if(lines.length === 0){
+          briefList.innerHTML = renderBriefLine("（指令なし）");
+          briefTag.textContent = "EMPTY";
+          briefTag.classList.remove("is-new");
+          return;
+        }
+
+        briefList.innerHTML = lines.map(renderBriefLine).join("");
+
+        if(hasNew){
+          briefTag.textContent = "NEW";
+          briefTag.classList.add("is-new");
+        }else{
+          briefTag.textContent = "LIVE";
+          briefTag.classList.remove("is-new");
+        }
+
+      }catch(err){
+        briefList.innerHTML = renderBriefLine("（通信エラー：後で再読込してください）");
         briefTag.textContent = "OFFLINE";
+        briefTag.classList.remove("is-new");
+        setDateBadge();
       }
     }
 
