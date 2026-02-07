@@ -683,6 +683,8 @@
       const detailLinks   = document.getElementById("detailLinks");
 
       function openDetailModal(titleText, detailText){
+        const raw = String(detailText ?? "").replaceAll("\\n", "\n");
+
         // タイトルは現状固定でもOKだが、拡張余地を残す
         detailTitle.textContent = titleText || "DETAIL";
 
