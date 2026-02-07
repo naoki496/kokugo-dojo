@@ -391,100 +391,101 @@
       border-radius: 8px;
       border: 1px solid rgba(255,255,255,0.10);
     }
+
     /* ===== MISSION BRIEF: 詳細モーダル ===== */
-.brief-detail-btn{
-  margin-left: 8px;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding: 2px 10px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.16);
-  color: rgba(255,255,255,0.86);
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: .06em;
-  text-decoration:none;
-  cursor:pointer;
-  user-select:none;
-}
+    .brief-detail-btn{
+      margin-left: 8px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 2px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.16);
+      color: rgba(255,255,255,0.86);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .06em;
+      text-decoration:none;
+      cursor:pointer;
+      user-select:none;
+    }
 
-.brief-detail-btn:hover{
-  background: rgba(255,255,255,0.10);
-  border-color: rgba(203,255,92,0.35);
-}
+    .brief-detail-btn:hover{
+      background: rgba(255,255,255,0.10);
+      border-color: rgba(203,255,92,0.35);
+    }
 
-.modal-overlay{
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.20); /* ←「2割程度透過」相当 */
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 14px;
-  z-index: 9999;
-}
+    .modal-overlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.20); /* 2割程度透過 */
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+      z-index: 9999;
+    }
 
-.modal{
-  width: min(760px, 92vw);
-  border-radius: 18px;
-  background: rgba(0,0,0,0.72);
-  border: 1px solid rgba(255,255,255,0.10);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.65);
-  overflow: hidden;
-}
+    .modal{
+      width: min(760px, 92vw);
+      border-radius: 18px;
+      background: rgba(0,0,0,0.72);
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.65);
+      overflow: hidden;
+    }
 
-.modal-head{
-  display:flex;
-  align-items:center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 12px 14px;
-  background: rgba(255,255,255,0.06);
-  border-bottom: 1px solid rgba(255,255,255,0.10);
-}
+    .modal-head{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+    }
 
-.modal-title{
-  margin:0;
-  font-size: 13px;
-  font-weight: 950;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.92);
-}
+    .modal-title{
+      margin:0;
+      font-size: 13px;
+      font-weight: 950;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.92);
+    }
 
-.modal-close{
-  border: 1px solid rgba(255,255,255,0.18);
-  background: rgba(255,255,255,0.06);
-  color: rgba(255,255,255,0.90);
-  border-radius: 12px;
-  padding: 8px 10px;
-  font-weight: 950;
-  cursor:pointer;
-}
+    .modal-close{
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.90);
+      border-radius: 12px;
+      padding: 8px 10px;
+      font-weight: 950;
+      cursor:pointer;
+    }
 
-.modal-close:hover{
-  background: rgba(255,255,255,0.10);
-}
+    .modal-close:hover{
+      background: rgba(255,255,255,0.10);
+    }
 
-.modal-body{
-  padding: 14px;
-  color: rgba(255,255,255,0.86);
-  font-size: 13px;
-  line-height: 1.75;
-  word-break: break-word;
-  white-space: pre-wrap;
-}
+    .modal-body{
+      padding: 14px;
+      color: rgba(255,255,255,0.86);
+      font-size: 13px;
+      line-height: 1.75;
+      word-break: break-word;
+      white-space: pre-wrap;
+    }
 
-.modal-links{
-  margin-top: 10px;
-  display:flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
+    .modal-links{
+      margin-top: 10px;
+      display:flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
   </style>
 </head>
 
@@ -664,7 +665,6 @@
         try{ return new URL(url).hostname; }catch{ return ""; }
       }
 
-      // ========= 3)JS変更 (a) ここから =========
       // "表示||詳細" 形式をパース（詳細がなければ null）
       function splitDetail(line){
         const s = String(line ?? "");
@@ -683,35 +683,32 @@
       const detailLinks   = document.getElementById("detailLinks");
 
       function openDetailModal(titleText, detailText){
-        // タイトルは現状固定でもOKだが、拡張余地を残す
-        function openDetailModal(titleText, detailText){
-          detailTitle.textContent = titleText || "DETAIL";
-        
-          // ✅ mission-brief.txt 内で "\n" と書いたものを改行として表示する
-          const raw = String(detailText ?? "").replaceAll("\\n", "\n");
-        
-          const { textOnly, urls } = extractUrls(raw);
-        
-          // 詳細本文：URL以外
-          detailBody.textContent = (textOnly && textOnly.length) ? textOnly : raw;
-        
-          // 詳細内リンクボタン
-          detailLinks.innerHTML = "";
-          if(urls.length){
-            detailLinks.innerHTML = urls.map((u, i) => {
-              const host = hostnameOf(u);
-              const label = (urls.length === 1) ? "LINK" : `LINK ${i+1}`;
-              const title = host ? `${host} — ${u}` : u;
-              return `<a class="brief-open" href="${escapeHtml(u)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(title)}">${escapeHtml(label)}</a>`;
-            }).join("");
-          }
-        
-          detailOverlay.style.display = "flex";
-          detailOverlay.setAttribute("aria-hidden", "false");
-          document.body.style.overflow = "hidden";
-          detailClose.focus();
+        detailTitle.textContent = titleText || "DETAIL";
+
+        // ✅ mission-brief.txt 内で "\n" と書いたものを改行として表示する
+        const raw = String(detailText ?? "").replaceAll("\\n", "\n");
+
+        const { textOnly, urls } = extractUrls(raw);
+
+        // 詳細本文：URL以外
+        detailBody.textContent = (textOnly && textOnly.length) ? textOnly : raw;
+
+        // 詳細内リンクボタン
+        detailLinks.innerHTML = "";
+        if(urls.length){
+          detailLinks.innerHTML = urls.map((u, i) => {
+            const host = hostnameOf(u);
+            const label = (urls.length === 1) ? "LINK" : `LINK ${i+1}`;
+            const title = host ? `${host} — ${u}` : u;
+            return `<a class="brief-open" href="${escapeHtml(u)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(title)}">${escapeHtml(label)}</a>`;
+          }).join("");
         }
 
+        detailOverlay.style.display = "flex";
+        detailOverlay.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+        detailClose.focus();
+      }
 
       function closeDetailModal(){
         detailOverlay.style.display = "none";
@@ -726,14 +723,10 @@
       document.addEventListener("keydown", (e) => {
         if(e.key === "Escape" && detailOverlay.style.display === "flex") closeDetailModal();
       });
-      // ========= 3)JS変更 (a) ここまで =========
 
-      // ========= 3)JS変更 (b) renderBriefLine 差し替え =========
       function renderBriefLine(line){
-        // "表示||詳細" 形式に対応
         const { main, detail } = splitDetail(line);
 
-        // 表示側(main)のURLは従来どおりLINK化
         const { textOnly, urls } = extractUrls(main);
         const displayText = (textOnly && textOnly.length) ? textOnly : "LINK";
 
@@ -747,7 +740,6 @@
           }).join("") + `</span>`;
         }
 
-        // 詳細があるときだけ「詳細」ボタンを出す
         const detailBtn = detail
           ? `<button class="brief-detail-btn" type="button" data-detail="${escapeHtml(detail)}">詳細</button>`
           : "";
@@ -761,7 +753,6 @@
           </li>
         `;
       }
-      // ========= 3)JS変更 (b) ここまで =========
 
       async function loadMissionBrief(){
         setDateBadge();
@@ -796,14 +787,13 @@
 
           briefList.innerHTML = lines.map(renderBriefLine).join("");
 
-          // ========= 3)JS変更 (c) イベント付与 =========
+          // 「詳細」ボタンにイベント付与
           briefList.querySelectorAll(".brief-detail-btn").forEach(btn => {
             btn.addEventListener("click", () => {
               const detail = btn.getAttribute("data-detail") || "";
               openDetailModal("DETAIL", detail);
             });
           });
-          // ========= 3)JS変更 (c) ここまで =========
 
           if(hasNew){
             briefTag.textContent = "NEW";
