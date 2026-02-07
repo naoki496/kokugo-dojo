@@ -391,6 +391,102 @@
       border-radius: 8px;
       border: 1px solid rgba(255,255,255,0.10);
     }
+    /* ===== MISSION BRIEF: 詳細モーダル ===== */
+.brief-detail-btn{
+  margin-left: 8px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.16);
+  color: rgba(255,255,255,0.86);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .06em;
+  text-decoration:none;
+  cursor:pointer;
+  user-select:none;
+}
+
+.brief-detail-btn:hover{
+  background: rgba(255,255,255,0.10);
+  border-color: rgba(203,255,92,0.35);
+}
+
+.modal-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.20); /* ←「2割程度透過」相当 */
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  z-index: 9999;
+}
+
+.modal{
+  width: min(760px, 92vw);
+  border-radius: 18px;
+  background: rgba(0,0,0,0.72);
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.65);
+  overflow: hidden;
+}
+
+.modal-head{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  background: rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+}
+
+.modal-title{
+  margin:0;
+  font-size: 13px;
+  font-weight: 950;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.92);
+}
+
+.modal-close{
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.90);
+  border-radius: 12px;
+  padding: 8px 10px;
+  font-weight: 950;
+  cursor:pointer;
+}
+
+.modal-close:hover{
+  background: rgba(255,255,255,0.10);
+}
+
+.modal-body{
+  padding: 14px;
+  color: rgba(255,255,255,0.86);
+  font-size: 13px;
+  line-height: 1.75;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.modal-links{
+  margin-top: 10px;
+  display:flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+    
   </style>
 </head>
 
@@ -642,5 +738,20 @@
     loadMissionBrief();
   </script>
 
+  <!-- ===== MISSION BRIEF: 詳細モーダル ===== -->
+  <div class="modal-overlay" id="detailOverlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal" role="document">
+      <div class="modal-head">
+        <h3 class="modal-title" id="detailTitle">DETAIL</h3>
+        <button class="modal-close" id="detailClose" type="button">閉じる</button>
+      </div>
+      <div class="modal-body" id="detailBody"></div>
+      <div class="modal-body" style="padding-top:0;">
+        <div class="modal-links" id="detailLinks"></div>
+      </div>
+    </div>
+  </div>
+
+  
 </body>
 </html>
