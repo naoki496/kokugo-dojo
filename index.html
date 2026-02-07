@@ -684,30 +684,34 @@
 
       function openDetailModal(titleText, detailText){
         // タイトルは現状固定でもOKだが、拡張余地を残す
-        detailTitle.textContent = titleText || "DETAIL";
-        const raw = String(detailText ?? "").replaceAll("\\n", "\n");
-        const raw = String(detailText ?? "");
-        const { textOnly, urls } = extractUrls(raw);
-
-        // 詳細本文：URL以外
-        detailBody.textContent = (textOnly && textOnly.length) ? textOnly : raw;
-
-        // 詳細内リンクボタン
-        detailLinks.innerHTML = "";
-        if(urls.length){
-          detailLinks.innerHTML = urls.map((u, i) => {
-            const host = hostnameOf(u);
-            const label = (urls.length === 1) ? "LINK" : `LINK ${i+1}`;
-            const title = host ? `${host} — ${u}` : u;
-            return `<a class="brief-open" href="${escapeHtml(u)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(title)}">${escapeHtml(label)}</a>`;
-          }).join("");
+        function openDetailModal(titleText, detailText){
+          detailTitle.textContent = titleText || "DETAIL";
+        
+          // ✅ mission-brief.txt 内で "\n" と書いたものを改行として表示する
+          const raw = String(detailText ?? "").replaceAll("\\n", "\n");
+        
+          const { textOnly, urls } = extractUrls(raw);
+        
+          // 詳細本文：URL以外
+          detailBody.textContent = (textOnly && textOnly.length) ? textOnly : raw;
+        
+          // 詳細内リンクボタン
+          detailLinks.innerHTML = "";
+          if(urls.length){
+            detailLinks.innerHTML = urls.map((u, i) => {
+              const host = hostnameOf(u);
+              const label = (urls.length === 1) ? "LINK" : `LINK ${i+1}`;
+              const title = host ? `${host} — ${u}` : u;
+              return `<a class="brief-open" href="${escapeHtml(u)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(title)}">${escapeHtml(label)}</a>`;
+            }).join("");
+          }
+        
+          detailOverlay.style.display = "flex";
+          detailOverlay.setAttribute("aria-hidden", "false");
+          document.body.style.overflow = "hidden";
+          detailClose.focus();
         }
 
-        detailOverlay.style.display = "flex";
-        detailOverlay.setAttribute("aria-hidden", "false");
-        document.body.style.overflow = "hidden";
-        detailClose.focus();
-      }
 
       function closeDetailModal(){
         detailOverlay.style.display = "none";
