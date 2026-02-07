@@ -485,8 +485,6 @@
   flex-wrap: wrap;
   gap: 8px;
 }
-
-    
   </style>
 </head>
 
@@ -595,147 +593,232 @@
   </div>
 
   <script>
-    // ===== FLASH CARD 展開 =====
-    const btnFlash  = document.getElementById("btnFlash");
-    const flashMenu = document.getElementById("flashMenu");
-    const btnBack   = document.getElementById("btnBack");
+    // DOM構築後に初期化（モーダル要素が <script> の後ろにあるため安全化）
+    window.addEventListener("DOMContentLoaded", () => {
 
-    btnFlash.addEventListener("click", () => {
-      flashMenu.style.display = "grid";
-      btnFlash.style.display = "none";
-    });
+      // ===== FLASH CARD 展開 =====
+      const btnFlash  = document.getElementById("btnFlash");
+      const flashMenu = document.getElementById("flashMenu");
+      const btnBack   = document.getElementById("btnBack");
 
-    btnBack.addEventListener("click", () => {
-      flashMenu.style.display = "none";
-      btnFlash.style.display = "block";
-    });
+      btnFlash.addEventListener("click", () => {
+        flashMenu.style.display = "grid";
+        btnFlash.style.display = "none";
+      });
 
-    // ===== BLITZ QUEST 展開 =====
-    const btnDojo     = document.getElementById("btnDojo");
-    const dojoMenu    = document.getElementById("dojoMenu");
-    const btnDojoBack = document.getElementById("btnDojoBack");
+      btnBack.addEventListener("click", () => {
+        flashMenu.style.display = "none";
+        btnFlash.style.display = "block";
+      });
 
-    btnDojo.addEventListener("click", () => {
-      dojoMenu.style.display = "grid";
-      btnDojo.style.display = "none";
-    });
+      // ===== BLITZ QUEST 展開 =====
+      const btnDojo     = document.getElementById("btnDojo");
+      const dojoMenu    = document.getElementById("dojoMenu");
+      const btnDojoBack = document.getElementById("btnDojoBack");
 
-    btnDojoBack.addEventListener("click", () => {
-      dojoMenu.style.display = "none";
-      btnDojo.style.display = "block";
-    });
+      btnDojo.addEventListener("click", () => {
+        dojoMenu.style.display = "grid";
+        btnDojo.style.display = "none";
+      });
 
-    // ===== MISSION BRIEF auto load =====
-    const briefList = document.getElementById("briefList");
-    const briefTag  = document.getElementById("briefTag");
-    const briefDate = document.getElementById("briefDate");
+      btnDojoBack.addEventListener("click", () => {
+        dojoMenu.style.display = "none";
+        btnDojo.style.display = "block";
+      });
 
-    function setDateBadge(){
-      const d = new Date();
-      briefDate.textContent =
-        d.getFullYear() + "-" +
-        String(d.getMonth()+1).padStart(2,"0") + "-" +
-        String(d.getDate()).padStart(2,"0");
-    }
+      // ===== MISSION BRIEF auto load =====
+      const briefList = document.getElementById("briefList");
+      const briefTag  = document.getElementById("briefTag");
+      const briefDate = document.getElementById("briefDate");
 
-    function escapeHtml(str){
-      return str
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#39;");
-    }
-
-    function extractUrls(line){
-      const urlRe = /(https?:\/\/[^\s]+)/g;
-      const urls = [];
-      let m;
-      while((m = urlRe.exec(line)) !== null){
-        urls.push(m[1]);
-      }
-      const textOnly = line.replace(urlRe, "").replace(/\s{2,}/g, " ").trim();
-      return { textOnly, urls };
-    }
-
-    function hostnameOf(url){
-      try{ return new URL(url).hostname; }catch{ return ""; }
-    }
-
-    function renderBriefLine(line){
-      const { textOnly, urls } = extractUrls(line);
-      const displayText = (textOnly && textOnly.length) ? textOnly : "LINK";
-
-      let linksHtml = "";
-      if(urls.length > 0){
-        linksHtml = `<span class="brief-links">` + urls.map((u, i) => {
-          const host = hostnameOf(u);
-          const label = (urls.length === 1) ? "LINK" : `LINK ${i+1}`;
-          const title = host ? `${host} — ${u}` : u;
-          return `<a class="brief-open" href="${escapeHtml(u)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(title)}">${escapeHtml(label)}</a>`;
-        }).join("") + `</span>`;
+      function setDateBadge(){
+        const d = new Date();
+        briefDate.textContent =
+          d.getFullYear() + "-" +
+          String(d.getMonth()+1).padStart(2,"0") + "-" +
+          String(d.getDate()).padStart(2,"0");
       }
 
-      const liClass = urls.length ? "has-link" : "";
+      function escapeHtml(str){
+        return String(str ?? "")
+          .replaceAll("&","&amp;")
+          .replaceAll("<","&lt;")
+          .replaceAll(">","&gt;")
+          .replaceAll('"',"&quot;")
+          .replaceAll("'","&#39;");
+      }
 
-      return `
-        <li class="${liClass}">
-          <span class="dot"></span>
-          <span class="brief-text">${escapeHtml(displayText)}${linksHtml}</span>
-        </li>
-      `;
-    }
+      function extractUrls(line){
+        const s = String(line ?? "");
+        const urlRe = /(https?:\/\/[^\s]+)/g;
+        const urls = [];
+        let m;
+        while((m = urlRe.exec(s)) !== null){
+          urls.push(m[1]);
+        }
+        const textOnly = s.replace(urlRe, "").replace(/\s{2,}/g, " ").trim();
+        return { textOnly, urls };
+      }
 
-    async function loadMissionBrief(){
-      setDateBadge();
+      function hostnameOf(url){
+        try{ return new URL(url).hostname; }catch{ return ""; }
+      }
 
-      try{
-        const url = "mission-brief.txt?t=" + Date.now();
-        const res = await fetch(url, { cache: "no-store" });
-        if(!res.ok) throw new Error("HTTP " + res.status);
-        const text = await res.text();
+      // ========= 3)JS変更 (a) ここから =========
+      // "表示||詳細" 形式をパース（詳細がなければ null）
+      function splitDetail(line){
+        const s = String(line ?? "");
+        const parts = s.split("||");
+        if(parts.length < 2) return { main: s.trim(), detail: null };
+        const main = parts[0].trim();
+        const detail = parts.slice(1).join("||").trim();
+        return { main, detail: detail.length ? detail : null };
+      }
 
-        let lines = text
-          .split(/\r?\n/)
-          .map(s => s.trim())
-          .filter(s => s.length > 0)
-          .slice(0, 12);
+      // ===== モーダル制御 =====
+      const detailOverlay = document.getElementById("detailOverlay");
+      const detailClose   = document.getElementById("detailClose");
+      const detailTitle   = document.getElementById("detailTitle");
+      const detailBody    = document.getElementById("detailBody");
+      const detailLinks   = document.getElementById("detailLinks");
 
-        let hasNew = false;
-        lines = lines.map(line => {
-          if(/^NEW\s*:/i.test(line)){
-            hasNew = true;
-            return line.replace(/^NEW\s*:\s*/i, "");
-          }
-          return line;
-        });
+      function openDetailModal(titleText, detailText){
+        // タイトルは現状固定でもOKだが、拡張余地を残す
+        detailTitle.textContent = titleText || "DETAIL";
 
-        if(lines.length === 0){
-          briefList.innerHTML = renderBriefLine("（指令なし）");
-          briefTag.textContent = "EMPTY";
-          briefTag.classList.remove("is-new");
-          return;
+        const raw = String(detailText ?? "");
+        const { textOnly, urls } = extractUrls(raw);
+
+        // 詳細本文：URL以外
+        detailBody.textContent = (textOnly && textOnly.length) ? textOnly : raw;
+
+        // 詳細内リンクボタン
+        detailLinks.innerHTML = "";
+        if(urls.length){
+          detailLinks.innerHTML = urls.map((u, i) => {
+            const host = hostnameOf(u);
+            const label = (urls.length === 1) ? "LINK" : `LINK ${i+1}`;
+            const title = host ? `${host} — ${u}` : u;
+            return `<a class="brief-open" href="${escapeHtml(u)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(title)}">${escapeHtml(label)}</a>`;
+          }).join("");
         }
 
-        briefList.innerHTML = lines.map(renderBriefLine).join("");
+        detailOverlay.style.display = "flex";
+        detailOverlay.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+        detailClose.focus();
+      }
 
-        if(hasNew){
-          briefTag.textContent = "NEW";
-          briefTag.classList.add("is-new");
-        }else{
-          briefTag.textContent = "LIVE";
-          briefTag.classList.remove("is-new");
+      function closeDetailModal(){
+        detailOverlay.style.display = "none";
+        detailOverlay.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+      }
+
+      detailClose.addEventListener("click", closeDetailModal);
+      detailOverlay.addEventListener("click", (e) => {
+        if(e.target === detailOverlay) closeDetailModal();
+      });
+      document.addEventListener("keydown", (e) => {
+        if(e.key === "Escape" && detailOverlay.style.display === "flex") closeDetailModal();
+      });
+      // ========= 3)JS変更 (a) ここまで =========
+
+      // ========= 3)JS変更 (b) renderBriefLine 差し替え =========
+      function renderBriefLine(line){
+        // "表示||詳細" 形式に対応
+        const { main, detail } = splitDetail(line);
+
+        // 表示側(main)のURLは従来どおりLINK化
+        const { textOnly, urls } = extractUrls(main);
+        const displayText = (textOnly && textOnly.length) ? textOnly : "LINK";
+
+        let linksHtml = "";
+        if(urls.length > 0){
+          linksHtml = `<span class="brief-links">` + urls.map((u, i) => {
+            const host = hostnameOf(u);
+            const label = (urls.length === 1) ? "LINK" : `LINK ${i+1}`;
+            const title = host ? `${host} — ${u}` : u;
+            return `<a class="brief-open" href="${escapeHtml(u)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(title)}">${escapeHtml(label)}</a>`;
+          }).join("") + `</span>`;
         }
 
-      }catch(err){
-        briefList.innerHTML = renderBriefLine("（通信エラー：後で再読込してください）");
-        briefTag.textContent = "OFFLINE";
-        briefTag.classList.remove("is-new");
+        // 詳細があるときだけ「詳細」ボタンを出す
+        const detailBtn = detail
+          ? `<button class="brief-detail-btn" type="button" data-detail="${escapeHtml(detail)}">詳細</button>`
+          : "";
+
+        const liClass = (urls.length || detail) ? "has-link" : "";
+
+        return `
+          <li class="${liClass}">
+            <span class="dot"></span>
+            <span class="brief-text">${escapeHtml(displayText)}${linksHtml}${detailBtn}</span>
+          </li>
+        `;
+      }
+      // ========= 3)JS変更 (b) ここまで =========
+
+      async function loadMissionBrief(){
         setDateBadge();
-      }
-    }
 
-    loadMissionBrief();
+        try{
+          const url = "mission-brief.txt?t=" + Date.now();
+          const res = await fetch(url, { cache: "no-store" });
+          if(!res.ok) throw new Error("HTTP " + res.status);
+          const text = await res.text();
+
+          let lines = text
+            .split(/\r?\n/)
+            .map(s => s.trim())
+            .filter(s => s.length > 0)
+            .slice(0, 12);
+
+          let hasNew = false;
+          lines = lines.map(line => {
+            if(/^NEW\s*:/i.test(line)){
+              hasNew = true;
+              return line.replace(/^NEW\s*:\s*/i, "");
+            }
+            return line;
+          });
+
+          if(lines.length === 0){
+            briefList.innerHTML = renderBriefLine("（指令なし）");
+            briefTag.textContent = "EMPTY";
+            briefTag.classList.remove("is-new");
+            return;
+          }
+
+          briefList.innerHTML = lines.map(renderBriefLine).join("");
+
+          // ========= 3)JS変更 (c) イベント付与 =========
+          briefList.querySelectorAll(".brief-detail-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+              const detail = btn.getAttribute("data-detail") || "";
+              openDetailModal("DETAIL", detail);
+            });
+          });
+          // ========= 3)JS変更 (c) ここまで =========
+
+          if(hasNew){
+            briefTag.textContent = "NEW";
+            briefTag.classList.add("is-new");
+          }else{
+            briefTag.textContent = "LIVE";
+            briefTag.classList.remove("is-new");
+          }
+
+        }catch(err){
+          briefList.innerHTML = renderBriefLine("（通信エラー：後で再読込してください）");
+          briefTag.textContent = "OFFLINE";
+          briefTag.classList.remove("is-new");
+          setDateBadge();
+        }
+      }
+
+      loadMissionBrief();
+    });
   </script>
 
   <!-- ===== MISSION BRIEF: 詳細モーダル ===== -->
@@ -752,6 +835,5 @@
     </div>
   </div>
 
-  
 </body>
 </html>
