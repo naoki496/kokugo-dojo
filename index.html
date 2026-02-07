@@ -222,6 +222,8 @@
       text-decoration:none;
       box-shadow: none;
       white-space: nowrap;
+      cursor:pointer;
+      user-select:none;
     }
 
     .brief-open:hover{
@@ -376,44 +378,40 @@
       background: rgba(255,176,0,0.10);
     }
 
-    /* ✅ 追加：紫系グロー + アニメ（カード図鑑用） */
+    /* ✅ 追加：紫系グロー（カード図鑑用） */
     @keyframes glowPulseViolet{
       0%   { box-shadow: 0 0 14px rgba(185,120,255,0.28); transform: translateY(0); }
       50%  { box-shadow: 0 0 28px rgba(185,120,255,0.55); transform: translateY(-1px); }
       100% { box-shadow: 0 0 14px rgba(185,120,255,0.28); transform: translateY(0); }
     }
 
-    /* 通常の紫ボタン（カード図鑑以外に使ってもOK） */
     .btn-violet{
       border-color: rgba(185,120,255,0.78);
       box-shadow: 0 0 18px rgba(185,120,255,0.40);
-      animation: glowPulseViolet 1.6s ease-in-out infinite;
     }
     .btn-violet:hover{
       background: rgba(185,120,255,0.10);
     }
 
-    /* ====== ✅ 案1：カード図鑑を「ゲート」扱いにする ====== */
-    .menu-item-gate{
+    /* ✅ 脈動を後付けするためのクラス（BLITZ開いた瞬間→1拍遅れ開始） */
+    .is-pulsing{
+      animation: glowPulseViolet 1.6s ease-in-out infinite;
+    }
+
+    /* ✅ 案1：カード図鑑だけ“フル幅＆囲み無し”にする */
+    .menu-hero{
       padding: 0;
-      background: none;
+      background: transparent;
       border: none;
       box-shadow: none;
     }
-    .btn-gate{
-      width: 100%;                 /* フル幅 */
-      height: 56px;                /* 少し背を高く */
-      font-size: 15px;
-      letter-spacing: .18em;
-      justify-content: center;
+    .menu-hero .actions{
+      margin-top: 0;
+      display:flex;
+      justify-content: stretch;
     }
-
-    /* ✅ BLITZ QUEST開いた瞬間は「脈動開始を遅らせる」ためのクラス */
-    .btn-violet.is-delay-start{
-      animation: none;             /* 一旦止める */
-    }
-    .btn-violet.is-delay-start.is-pulsing{
-      animation: glowPulseViolet 1.6s ease-in-out infinite; /* 後から開始 */
+    .menu-hero .btn{
+      width: 100% !important; /* menu-itemの190px指定に勝つ */
     }
 
     .notice{
@@ -480,7 +478,7 @@
 
     .modal{
       width: min(760px, 92vw);
-      max-height: 88vh;              /* 画面に対して少し余裕 */
+      max-height: 88vh;         /* 画面に対して少し余裕 */
       display: flex;
       flex-direction: column;
 
@@ -525,19 +523,18 @@
     }
 
     .modal-body{
-      padding: 18px 18px 22px;   /* 上下に少し多めの余白 */
+      padding: 18px 18px 22px;  /* 上下に少し多めの余白 */
       color: rgba(255,255,255,0.86);
       font-size: 13px;
-      line-height: 1.8;          /* 読みやすさ向上 */
+      line-height: 1.8;
       word-break: break-word;
       white-space: pre-wrap;
-
       overflow-y: auto;
     }
 
     .modal-links{
       margin-top: 12px;
-      padding-bottom: 14px;   /* 終端の空気感 */
+      padding-bottom: 14px;
       display:flex;
       flex-wrap: wrap;
       gap: 8px;
@@ -627,14 +624,12 @@
           <!-- ✅展開メニュー（初期は非表示） -->
           <div class="menu" id="dojoMenu" style="display:none;">
 
-            <!-- ✅ カード図鑑：案1（ゲート表現）＋ 1拍遅れ脈動 -->
-            <div class="menu-item menu-item-gate">
-              <a class="btn btn-violet btn-gate is-delay-start"
-                 id="btnCardHub"
-                 href="https://naoki496.github.io/cards-hub/"
-                 target="_blank" rel="noopener noreferrer">
-                 カード図鑑
-              </a>
+            <!-- ✅ 案1：カード図鑑（フル幅＆囲み無し） -->
+            <div class="menu-hero">
+              <div class="actions">
+                <!-- 初期は is-pulsing を付けない（＝1拍遅れで付与） -->
+                <a class="btn btn-violet" id="btnCardHub" href="https://naoki496.github.io/cards-hub/" target="_blank" rel="noopener noreferrer">カード図鑑</a>
+              </div>
             </div>
 
             <div class="menu-item">
@@ -655,6 +650,7 @@
 
             <button class="btn btn-sub" id="btnDojoBack">戻る</button>
           </div>
+
         </div>
       </section>
 
@@ -667,7 +663,6 @@
   </div>
 
   <script>
-    // DOM構築後に初期化（モーダル要素が <script> の後ろにあるため安全化）
     window.addEventListener("DOMContentLoaded", () => {
 
       // ===== FLASH CARD 展開 =====
@@ -689,41 +684,28 @@
       const btnDojo     = document.getElementById("btnDojo");
       const dojoMenu    = document.getElementById("dojoMenu");
       const btnDojoBack = document.getElementById("btnDojoBack");
-
-      // ✅ カード図鑑（ゲート）の1拍遅れ脈動開始
       const btnCardHub  = document.getElementById("btnCardHub");
-      let cardPulseTimer = null;
 
-      function scheduleCardPulse(){
-        if(!btnCardHub) return;
-
-        // いったん停止状態に戻す
+      function startCardHubPulseDelayed(){
+        // いったん停止（開き直しでも同じ挙動にする）
         btnCardHub.classList.remove("is-pulsing");
-
-        // 既存タイマーがあればクリア
-        if(cardPulseTimer) clearTimeout(cardPulseTimer);
-
-        // 1拍遅れ（約350ms〜450msが気持ちいい。今回は400ms）
-        cardPulseTimer = setTimeout(() => {
+        // 1拍遅れ（お好みで 400〜700ms に調整OK）
+        window.setTimeout(() => {
           btnCardHub.classList.add("is-pulsing");
-        }, 400);
+        }, 520);
       }
 
       btnDojo.addEventListener("click", () => {
         dojoMenu.style.display = "grid";
         btnDojo.style.display = "none";
-
-        // BLITZ QUESTを開いた瞬間だけカード図鑑の脈動を遅らせて開始
-        scheduleCardPulse();
+        startCardHubPulseDelayed();
       });
 
       btnDojoBack.addEventListener("click", () => {
         dojoMenu.style.display = "none";
         btnDojo.style.display = "block";
-
-        // 閉じたら脈動を止める（次に開いた時にまた遅延開始）
-        if(btnCardHub) btnCardHub.classList.remove("is-pulsing");
-        if(cardPulseTimer) { clearTimeout(cardPulseTimer); cardPulseTimer = null; }
+        // 閉じたら脈動は止める（再オープン時にまた1拍遅れ）
+        btnCardHub.classList.remove("is-pulsing");
       });
 
       // ===== MISSION BRIEF auto load =====
@@ -775,11 +757,12 @@
       }
 
       // ===== モーダル制御 =====
-      const detailOverlay = document.getElementById("detailOverlay");
-      const detailClose   = document.getElementById("detailClose");
-      const detailTitle   = document.getElementById("detailTitle");
-      const detailBody    = document.getElementById("detailBody");
-      const detailLinks   = document.getElementById("detailLinks");
+      const detailOverlay   = document.getElementById("detailOverlay");
+      const detailClose     = document.getElementById("detailClose");
+      const detailTitle     = document.getElementById("detailTitle");
+      const detailBody      = document.getElementById("detailBody");
+      const detailLinks     = document.getElementById("detailLinks");
+      const detailLinksWrap = document.getElementById("detailLinksWrap"); // ✅ 追加：リンク領域ごと出し分け
 
       function openDetailModal(titleText, detailText){
         detailTitle.textContent = titleText || "DETAIL";
@@ -794,12 +777,12 @@
         // ✅ 本文はURLだけ除去。改行は保持（\s を使わない）
         const bodyText = raw
           .replace(urlRe, "")
-          .replace(/[ \t]{2,}/g, " ")  // 空白/タブだけ整形。改行は維持
+          .replace(/[ \t]{2,}/g, " ")
           .trim();
 
         detailBody.textContent = bodyText.length ? bodyText : raw;
 
-        // 詳細内リンクボタン
+        // ✅ 詳細内リンクボタン（URLが無いなら“領域ごと”消す＝下の大空欄が消える）
         detailLinks.innerHTML = "";
         if(urls.length){
           detailLinks.innerHTML = urls.map((u, i) => {
@@ -808,6 +791,9 @@
             const title = host ? `${host} — ${u}` : u;
             return `<a class="brief-open" href="${escapeHtml(u)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(title)}">${escapeHtml(label)}</a>`;
           }).join("");
+          detailLinksWrap.style.display = "block";
+        }else{
+          detailLinksWrap.style.display = "none";
         }
 
         detailOverlay.style.display = "flex";
@@ -928,8 +914,11 @@
         <h3 class="modal-title" id="detailTitle">DETAIL</h3>
         <button class="modal-close" id="detailClose" type="button">閉じる</button>
       </div>
+
       <div class="modal-body" id="detailBody"></div>
-      <div class="modal-body" style="padding-top:0;">
+
+      <!-- ✅ ここを“URLが無いときはJSで非表示”にする＝空欄が消える -->
+      <div class="modal-body" id="detailLinksWrap" style="padding-top:0;">
         <div class="modal-links" id="detailLinks"></div>
       </div>
     </div>
