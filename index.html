@@ -367,6 +367,33 @@
       background: rgba(120,200,255,0.10);
     }
 
+    /* ✅ 追加：アンバー発光（文学史知識マスター用） */
+    .btn-amber{
+      border-color: rgba(255,176,0,0.75);
+      box-shadow: 0 0 22px rgba(255,176,0,0.40);
+    }
+    .btn-amber:hover{
+      background: rgba(255,176,0,0.10);
+    }
+    
+    /* ✅ 追加：紫系グロー + アニメ（カード図鑑用） */
+    @keyframes glowPulseViolet{
+      0%   { box-shadow: 0 0 14px rgba(185,120,255,0.28); transform: translateY(0); }
+      50%  { box-shadow: 0 0 28px rgba(185,120,255,0.55); transform: translateY(-1px); }
+      100% { box-shadow: 0 0 14px rgba(185,120,255,0.28); transform: translateY(0); }
+    }
+    
+    .btn-violet{
+      border-color: rgba(185,120,255,0.78);
+      box-shadow: 0 0 18px rgba(185,120,255,0.40);
+      animation: glowPulseViolet 1.6s ease-in-out infinite;
+    }
+    .btn-violet:hover{
+      background: rgba(185,120,255,0.10);
+    }
+
+
+    
     .notice{
       margin-top:10px;
       padding:10px 12px;
@@ -571,6 +598,13 @@
           <!-- ✅展開メニュー（初期は非表示） -->
           <div class="menu" id="dojoMenu" style="display:none;">
 
+            <!-- ✅ 追加：カード図鑑（紫系＋グローアニメ） -->
+            <div class="menu-item">
+              <div class="actions">
+                <a class="btn btn-violet" href="https://naoki496.github.io/cards-hub/" target="_blank" rel="noopener noreferrer">カード図鑑</a>
+              </div>
+            </div>
+          
             <div class="menu-item">
               <h3>古文単語330マスター</h3>
               <p>先ずはここから制覇しよう</p>
@@ -578,9 +612,19 @@
                 <a class="btn btn-cyber" href="https://naoki496.github.io/kobun-quiz/" target="_blank" rel="noopener noreferrer">START</a>
               </div>
             </div>
-
+          
+            <!-- ✅ 追加：文学史知識マスター（アンバー発光） -->
+            <div class="menu-item">
+              <h3>文学史知識マスター</h3>
+              <p>作者・作品・時代の基礎を即断で固める。</p>
+              <div class="actions">
+                <a class="btn btn-amber" href="https://naoki496.github.io/bungakusi-quiz/" target="_blank" rel="noopener noreferrer">START</a>
+              </div>
+            </div>
+          
             <button class="btn btn-sub" id="btnDojoBack">戻る</button>
           </div>
+
 
         </div>
       </section>
