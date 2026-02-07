@@ -375,14 +375,15 @@
     .btn-amber:hover{
       background: rgba(255,176,0,0.10);
     }
-    
+
     /* ✅ 追加：紫系グロー + アニメ（カード図鑑用） */
     @keyframes glowPulseViolet{
       0%   { box-shadow: 0 0 14px rgba(185,120,255,0.28); transform: translateY(0); }
       50%  { box-shadow: 0 0 28px rgba(185,120,255,0.55); transform: translateY(-1px); }
       100% { box-shadow: 0 0 14px rgba(185,120,255,0.28); transform: translateY(0); }
     }
-    
+
+    /* 通常の紫ボタン（カード図鑑以外に使ってもOK） */
     .btn-violet{
       border-color: rgba(185,120,255,0.78);
       box-shadow: 0 0 18px rgba(185,120,255,0.40);
@@ -392,8 +393,29 @@
       background: rgba(185,120,255,0.10);
     }
 
+    /* ====== ✅ 案1：カード図鑑を「ゲート」扱いにする ====== */
+    .menu-item-gate{
+      padding: 0;
+      background: none;
+      border: none;
+      box-shadow: none;
+    }
+    .btn-gate{
+      width: 100%;                 /* フル幅 */
+      height: 56px;                /* 少し背を高く */
+      font-size: 15px;
+      letter-spacing: .18em;
+      justify-content: center;
+    }
 
-    
+    /* ✅ BLITZ QUEST開いた瞬間は「脈動開始を遅らせる」ためのクラス */
+    .btn-violet.is-delay-start{
+      animation: none;             /* 一旦止める */
+    }
+    .btn-violet.is-delay-start.is-pulsing{
+      animation: glowPulseViolet 1.6s ease-in-out infinite; /* 後から開始 */
+    }
+
     .notice{
       margin-top:10px;
       padding:10px 12px;
@@ -461,14 +483,13 @@
       max-height: 88vh;              /* 画面に対して少し余裕 */
       display: flex;
       flex-direction: column;
-    
+
       border-radius: 18px;
       background: rgba(0,0,0,0.72);
       border: 1px solid rgba(255,255,255,0.10);
       box-shadow: 0 20px 60px rgba(0,0,0,0.65);
       overflow: hidden;
     }
-
 
     .modal-head{
       display:flex;
@@ -504,25 +525,23 @@
     }
 
     .modal-body{
-      padding: 18px 18px 22px;   /* ← 上下に少し多めの余白 */
+      padding: 18px 18px 22px;   /* 上下に少し多めの余白 */
       color: rgba(255,255,255,0.86);
       font-size: 13px;
       line-height: 1.8;          /* 読みやすさ向上 */
       word-break: break-word;
       white-space: pre-wrap;
-    
+
       overflow-y: auto;
     }
 
-
     .modal-links{
       margin-top: 12px;
-      padding-bottom: 14px;   /* ← 終端の空気感 */
+      padding-bottom: 14px;   /* 終端の空気感 */
       display:flex;
       flex-wrap: wrap;
       gap: 8px;
     }
-
   </style>
 </head>
 
@@ -608,13 +627,16 @@
           <!-- ✅展開メニュー（初期は非表示） -->
           <div class="menu" id="dojoMenu" style="display:none;">
 
-            <!-- ✅ 追加：カード図鑑（紫系＋グローアニメ） -->
-            <div class="menu-item">
-              <div class="actions">
-                <a class="btn btn-violet" href="https://naoki496.github.io/cards-hub/" target="_blank" rel="noopener noreferrer">カード図鑑</a>
-              </div>
+            <!-- ✅ カード図鑑：案1（ゲート表現）＋ 1拍遅れ脈動 -->
+            <div class="menu-item menu-item-gate">
+              <a class="btn btn-violet btn-gate is-delay-start"
+                 id="btnCardHub"
+                 href="https://naoki496.github.io/cards-hub/"
+                 target="_blank" rel="noopener noreferrer">
+                 カード図鑑
+              </a>
             </div>
-          
+
             <div class="menu-item">
               <h3>古文単語330マスター</h3>
               <p>先ずはここから制覇しよう</p>
@@ -622,8 +644,7 @@
                 <a class="btn btn-cyber" href="https://naoki496.github.io/kobun-quiz/" target="_blank" rel="noopener noreferrer">START</a>
               </div>
             </div>
-          
-            <!-- ✅ 追加：文学史知識マスター（アンバー発光） -->
+
             <div class="menu-item">
               <h3>文学史知識マスター</h3>
               <p>作者・作品・時代の基礎を即断で固める。</p>
@@ -631,11 +652,9 @@
                 <a class="btn btn-amber" href="https://naoki496.github.io/bungakusi-quiz/" target="_blank" rel="noopener noreferrer">START</a>
               </div>
             </div>
-          
+
             <button class="btn btn-sub" id="btnDojoBack">戻る</button>
           </div>
-
-
         </div>
       </section>
 
@@ -671,14 +690,40 @@
       const dojoMenu    = document.getElementById("dojoMenu");
       const btnDojoBack = document.getElementById("btnDojoBack");
 
+      // ✅ カード図鑑（ゲート）の1拍遅れ脈動開始
+      const btnCardHub  = document.getElementById("btnCardHub");
+      let cardPulseTimer = null;
+
+      function scheduleCardPulse(){
+        if(!btnCardHub) return;
+
+        // いったん停止状態に戻す
+        btnCardHub.classList.remove("is-pulsing");
+
+        // 既存タイマーがあればクリア
+        if(cardPulseTimer) clearTimeout(cardPulseTimer);
+
+        // 1拍遅れ（約350ms〜450msが気持ちいい。今回は400ms）
+        cardPulseTimer = setTimeout(() => {
+          btnCardHub.classList.add("is-pulsing");
+        }, 400);
+      }
+
       btnDojo.addEventListener("click", () => {
         dojoMenu.style.display = "grid";
         btnDojo.style.display = "none";
+
+        // BLITZ QUESTを開いた瞬間だけカード図鑑の脈動を遅らせて開始
+        scheduleCardPulse();
       });
 
       btnDojoBack.addEventListener("click", () => {
         dojoMenu.style.display = "none";
         btnDojo.style.display = "block";
+
+        // 閉じたら脈動を止める（次に開いた時にまた遅延開始）
+        if(btnCardHub) btnCardHub.classList.remove("is-pulsing");
+        if(cardPulseTimer) { clearTimeout(cardPulseTimer); cardPulseTimer = null; }
       });
 
       // ===== MISSION BRIEF auto load =====
@@ -737,40 +782,39 @@
       const detailLinks   = document.getElementById("detailLinks");
 
       function openDetailModal(titleText, detailText){
-      detailTitle.textContent = titleText || "DETAIL";
-    
-      // ✅ mission-brief.txt 内で "\n" と書いたものを改行として表示する
-      const raw = String(detailText ?? "").replaceAll("\\n", "\n");
-    
-      // ✅ URL抽出（改行は保持したまま）
-      const urlRe = /(https?:\/\/[^\s]+)/g;
-      const urls = raw.match(urlRe) ?? [];
-    
-      // ✅ 本文はURLだけ除去。改行は保持（\s を使わない）
-      const bodyText = raw
-        .replace(urlRe, "")
-        .replace(/[ \t]{2,}/g, " ")  // ← 空白/タブだけ整形。改行は維持
-        .trim();
-    
-      detailBody.textContent = bodyText.length ? bodyText : raw;
-    
-      // 詳細内リンクボタン
-      detailLinks.innerHTML = "";
-      if(urls.length){
-        detailLinks.innerHTML = urls.map((u, i) => {
-          const host = hostnameOf(u);
-          const label = (urls.length === 1) ? "LINK" : `LINK ${i+1}`;
-          const title = host ? `${host} — ${u}` : u;
-          return `<a class="brief-open" href="${escapeHtml(u)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(title)}">${escapeHtml(label)}</a>`;
-        }).join("");
-      }
-    
-      detailOverlay.style.display = "flex";
-      detailOverlay.setAttribute("aria-hidden", "false");
-      document.body.style.overflow = "hidden";
-      detailClose.focus();
-    }
+        detailTitle.textContent = titleText || "DETAIL";
 
+        // ✅ mission-brief.txt 内で "\n" と書いたものを改行として表示する
+        const raw = String(detailText ?? "").replaceAll("\\n", "\n");
+
+        // ✅ URL抽出（改行は保持したまま）
+        const urlRe = /(https?:\/\/[^\s]+)/g;
+        const urls = raw.match(urlRe) ?? [];
+
+        // ✅ 本文はURLだけ除去。改行は保持（\s を使わない）
+        const bodyText = raw
+          .replace(urlRe, "")
+          .replace(/[ \t]{2,}/g, " ")  // 空白/タブだけ整形。改行は維持
+          .trim();
+
+        detailBody.textContent = bodyText.length ? bodyText : raw;
+
+        // 詳細内リンクボタン
+        detailLinks.innerHTML = "";
+        if(urls.length){
+          detailLinks.innerHTML = urls.map((u, i) => {
+            const host = hostnameOf(u);
+            const label = (urls.length === 1) ? "LINK" : `LINK ${i+1}`;
+            const title = host ? `${host} — ${u}` : u;
+            return `<a class="brief-open" href="${escapeHtml(u)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(title)}">${escapeHtml(label)}</a>`;
+          }).join("");
+        }
+
+        detailOverlay.style.display = "flex";
+        detailOverlay.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+        detailClose.focus();
+      }
 
       function closeDetailModal(){
         detailOverlay.style.display = "none";
