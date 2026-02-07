@@ -1,4 +1,5 @@
-NEW:BLITZ QUEST 1st stage 解放 || 古文単語マスター330が解放されました。\★BGMが自動で流れる仕様です、環境に注意してください。\n\n操作中のバグや内容についての問い合わせは国語科まで\n
+NEW:BLITZ QUEST 1st stage 解放 || 古文単語マスター330が解放されました。\n ★BGMが自動で流れる仕様です、環境に注意してください。\\n 操作中のバグや内容についての問い合わせは国語科まで
 迷ったらコレMission 古単FLASH CARD https://naoki496.github.io/flashcards/
 現在、文学史知識マスターを作成中
+
 
