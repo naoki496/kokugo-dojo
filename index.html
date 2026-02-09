@@ -541,17 +541,16 @@
     }
 
     .status-embed{
-  margin-top: 12px;
-}
-.status-frame{
-  width: 100%;
-  height: 86px;          /* コンパクト固定（スクロール不要） */
-  border: 0;
-  border-radius: 16px;
-  overflow: hidden;
-  display: block;
-}
-    
+      margin-top: 12px;
+    }
+    .status-frame{
+      width: 100%;
+      height: 86px;          /* コンパクト固定（スクロール不要） */
+      border: 0;
+      border-radius: 16px;
+      overflow: hidden;
+      display: block;
+    }
   </style>
 </head>
 
@@ -560,16 +559,16 @@
     <img src="H.K.LOBBY.png" class="logo" alt="八東国語LOBBY">
   </div>
 
-<section class="status-embed" aria-label="学習ステータス">
-  <iframe
-    class="status-frame"
-    src="https://naoki496.github.io/cards-hub/status.html?v=1"
-    title="HK STATUS"
-    loading="eager"
-    referrerpolicy="no-referrer"
-  ></iframe>
-</section>
-  
+  <section class="status-embed" aria-label="学習ステータス">
+    <iframe
+      class="status-frame"
+      src="https://naoki496.github.io/cards-hub/status.html?v=1"
+      title="HK STATUS"
+      loading="eager"
+      referrerpolicy="no-referrer"
+    ></iframe>
+  </section>
+
   <div class="wrap">
 
     <!-- ===== MISSION BRIEF (自動更新) ===== -->
@@ -685,250 +684,8 @@
 
   </div>
 
-  <script>
-    window.addEventListener("DOMContentLoaded", () => {
-
-      // ===== FLASH CARD 展開 =====
-      const btnFlash  = document.getElementById("btnFlash");
-      const flashMenu = document.getElementById("flashMenu");
-      const btnBack   = document.getElementById("btnBack");
-
-      btnFlash.addEventListener("click", () => {
-        flashMenu.style.display = "grid";
-        btnFlash.style.display = "none";
-      });
-
-      btnBack.addEventListener("click", () => {
-        flashMenu.style.display = "none";
-        btnFlash.style.display = "block";
-      });
-
-      // ===== BLITZ QUEST 展開 =====
-      const btnDojo     = document.getElementById("btnDojo");
-      const dojoMenu    = document.getElementById("dojoMenu");
-      const btnDojoBack = document.getElementById("btnDojoBack");
-      const btnCardHub  = document.getElementById("btnCardHub");
-
-      function startCardHubPulseDelayed(){
-        // いったん停止（開き直しでも同じ挙動にする）
-        btnCardHub.classList.remove("is-pulsing");
-        // 1拍遅れ（お好みで 400〜700ms に調整OK）
-        window.setTimeout(() => {
-          btnCardHub.classList.add("is-pulsing");
-        }, 520);
-      }
-
-      btnDojo.addEventListener("click", () => {
-        dojoMenu.style.display = "grid";
-        btnDojo.style.display = "none";
-        startCardHubPulseDelayed();
-      });
-
-      btnDojoBack.addEventListener("click", () => {
-        dojoMenu.style.display = "none";
-        btnDojo.style.display = "block";
-        // 閉じたら脈動は止める（再オープン時にまた1拍遅れ）
-        btnCardHub.classList.remove("is-pulsing");
-      });
-
-      // ===== MISSION BRIEF auto load =====
-      const briefList = document.getElementById("briefList");
-      const briefTag  = document.getElementById("briefTag");
-      const briefDate = document.getElementById("briefDate");
-
-      function setDateBadge(){
-        const d = new Date();
-        briefDate.textContent =
-          d.getFullYear() + "-" +
-          String(d.getMonth()+1).padStart(2,"0") + "-" +
-          String(d.getDate()).padStart(2,"0");
-      }
-
-      function escapeHtml(str){
-        return String(str ?? "")
-          .replaceAll("&","&amp;")
-          .replaceAll("<","&lt;")
-          .replaceAll(">","&gt;")
-          .replaceAll('"',"&quot;")
-          .replaceAll("'","&#39;");
-      }
-
-      function extractUrls(line){
-        const s = String(line ?? "");
-        const urlRe = /(https?:\/\/[^\s]+)/g;
-        const urls = [];
-        let m;
-        while((m = urlRe.exec(s)) !== null){
-          urls.push(m[1]);
-        }
-        const textOnly = s.replace(urlRe, "").replace(/\s{2,}/g, " ").trim();
-        return { textOnly, urls };
-      }
-
-      function hostnameOf(url){
-        try{ return new URL(url).hostname; }catch{ return ""; }
-      }
-
-      // "表示||詳細" 形式をパース（詳細がなければ null）
-      function splitDetail(line){
-        const s = String(line ?? "");
-        const parts = s.split("||");
-        if(parts.length < 2) return { main: s.trim(), detail: null };
-        const main = parts[0].trim();
-        const detail = parts.slice(1).join("||").trim();
-        return { main, detail: detail.length ? detail : null };
-      }
-
-      // ===== モーダル制御 =====
-      const detailOverlay   = document.getElementById("detailOverlay");
-      const detailClose     = document.getElementById("detailClose");
-      const detailTitle     = document.getElementById("detailTitle");
-      const detailBody      = document.getElementById("detailBody");
-      const detailLinks     = document.getElementById("detailLinks");
-      const detailLinksWrap = document.getElementById("detailLinksWrap"); // ✅ 追加：リンク領域ごと出し分け
-
-      function openDetailModal(titleText, detailText){
-        detailTitle.textContent = titleText || "DETAIL";
-
-        // ✅ mission-brief.txt 内で "\n" と書いたものを改行として表示する
-        const raw = String(detailText ?? "").replaceAll("\\n", "\n");
-
-        // ✅ URL抽出（改行は保持したまま）
-        const urlRe = /(https?:\/\/[^\s]+)/g;
-        const urls = raw.match(urlRe) ?? [];
-
-        // ✅ 本文はURLだけ除去。改行は保持（\s を使わない）
-        const bodyText = raw
-          .replace(urlRe, "")
-          .replace(/[ \t]{2,}/g, " ")
-          .trim();
-
-        detailBody.textContent = bodyText.length ? bodyText : raw;
-
-        // ✅ 詳細内リンクボタン（URLが無いなら“領域ごと”消す＝下の大空欄が消える）
-        detailLinks.innerHTML = "";
-        if(urls.length){
-          detailLinks.innerHTML = urls.map((u, i) => {
-            const host = hostnameOf(u);
-            const label = (urls.length === 1) ? "LINK" : `LINK ${i+1}`;
-            const title = host ? `${host} — ${u}` : u;
-            return `<a class="brief-open" href="${escapeHtml(u)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(title)}">${escapeHtml(label)}</a>`;
-          }).join("");
-          detailLinksWrap.style.display = "block";
-        }else{
-          detailLinksWrap.style.display = "none";
-        }
-
-        detailOverlay.style.display = "flex";
-        detailOverlay.setAttribute("aria-hidden", "false");
-        document.body.style.overflow = "hidden";
-        detailClose.focus();
-      }
-
-      function closeDetailModal(){
-        detailOverlay.style.display = "none";
-        detailOverlay.setAttribute("aria-hidden", "true");
-        document.body.style.overflow = "";
-      }
-
-      detailClose.addEventListener("click", closeDetailModal);
-      detailOverlay.addEventListener("click", (e) => {
-        if(e.target === detailOverlay) closeDetailModal();
-      });
-      document.addEventListener("keydown", (e) => {
-        if(e.key === "Escape" && detailOverlay.style.display === "flex") closeDetailModal();
-      });
-
-      function renderBriefLine(line){
-        const { main, detail } = splitDetail(line);
-
-        const { textOnly, urls } = extractUrls(main);
-        const displayText = (textOnly && textOnly.length) ? textOnly : "LINK";
-
-        let linksHtml = "";
-        if(urls.length > 0){
-          linksHtml = `<span class="brief-links">` + urls.map((u, i) => {
-            const host = hostnameOf(u);
-            const label = (urls.length === 1) ? "LINK" : `LINK ${i+1}`;
-            const title = host ? `${host} — ${u}` : u;
-            return `<a class="brief-open" href="${escapeHtml(u)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(title)}">${escapeHtml(label)}</a>`;
-          }).join("") + `</span>`;
-        }
-
-        const detailBtn = detail
-          ? `<button class="brief-detail-btn" type="button" data-detail="${escapeHtml(detail)}">詳細</button>`
-          : "";
-
-        const liClass = (urls.length || detail) ? "has-link" : "";
-
-        return `
-          <li class="${liClass}">
-            <span class="dot"></span>
-            <span class="brief-text">${escapeHtml(displayText)}${linksHtml}${detailBtn}</span>
-          </li>
-        `;
-      }
-
-      async function loadMissionBrief(){
-        setDateBadge();
-
-        try{
-          const url = "mission-brief.txt?t=" + Date.now();
-          const res = await fetch(url, { cache: "no-store" });
-          if(!res.ok) throw new Error("HTTP " + res.status);
-          const text = await res.text();
-
-          let lines = text
-            .split(/\r?\n/)
-            .map(s => s.trim())
-            .filter(s => s.length > 0)
-            .slice(0, 12);
-
-          let hasNew = false;
-          lines = lines.map(line => {
-            if(/^NEW\s*:/i.test(line)){
-              hasNew = true;
-              return line.replace(/^NEW\s*:\s*/i, "");
-            }
-            return line;
-          });
-
-          if(lines.length === 0){
-            briefList.innerHTML = renderBriefLine("（指令なし）");
-            briefTag.textContent = "EMPTY";
-            briefTag.classList.remove("is-new");
-            return;
-          }
-
-          briefList.innerHTML = lines.map(renderBriefLine).join("");
-
-          // 「詳細」ボタンにイベント付与
-          briefList.querySelectorAll(".brief-detail-btn").forEach(btn => {
-            btn.addEventListener("click", () => {
-              const detail = btn.getAttribute("data-detail") || "";
-              openDetailModal("DETAIL", detail);
-            });
-          });
-
-          if(hasNew){
-            briefTag.textContent = "NEW";
-            briefTag.classList.add("is-new");
-          }else{
-            briefTag.textContent = "LIVE";
-            briefTag.classList.remove("is-new");
-          }
-
-        }catch(err){
-          briefList.innerHTML = renderBriefLine("（通信エラー：後で再読込してください）");
-          briefTag.textContent = "OFFLINE";
-          briefTag.classList.remove("is-new");
-          setDateBadge();
-        }
-      }
-
-      loadMissionBrief();
-    });
-  </script>
+  <!-- ✅ ここが追加：inline script をやめて home.js に分離 -->
+  <script src="./home.js" defer></script>
 
   <!-- ===== MISSION BRIEF: 詳細モーダル ===== -->
   <div class="modal-overlay" id="detailOverlay" role="dialog" aria-modal="true" aria-hidden="true">
