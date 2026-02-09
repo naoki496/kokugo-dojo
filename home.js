@@ -1,27 +1,25 @@
 /* home.js (kokugo-dojo)
- * for provided index.html:
  * - FLASH/BLITZ menu toggle
  * - Card Hub pulse delayed
  * - MISSION BRIEF loader (mission-brief.txt)
  * - Detail modal (line syntax: "表示||詳細", NEW: prefix)
  */
-
 (() => {
   "use strict";
 
   // -------------------------
-  // DOM helpers
+  // helpers
   // -------------------------
   const $ = (id) => document.getElementById(id);
-  const on = (el, ev, fn, opt) => el && el.addEventListener(ev, fn, opt);
+  const on = (node, ev, fn, opt) => node && node.addEventListener(ev, fn, opt);
 
   function escapeHtml(str) {
     return String(str ?? "")
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#39;");
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
   }
 
   function hostnameOf(url) {
@@ -52,13 +50,14 @@
   // UI: menus
   // -------------------------
   function initMenus() {
-    const btnFlash  = $("btnFlash");
+    // FLASH
+    const btnFlash = $("btnFlash");
     const flashMenu = $("flashMenu");
-    const btnBack   = $("btnBack");
+    const btnBack = $("btnBack");
 
     on(btnFlash, "click", () => {
       if (flashMenu) flashMenu.style.display = "grid";
-      btnFlash.style.display = "none";
+      if (btnFlash) btnFlash.style.display = "none";
     });
 
     on(btnBack, "click", () => {
@@ -66,22 +65,21 @@
       if (btnFlash) btnFlash.style.display = "block";
     });
 
-    const btnDojo     = $("btnDojo");
-    const dojoMenu    = $("dojoMenu");
+    // BLITZ
+    const btnDojo = $("btnDojo");
+    const dojoMenu = $("dojoMenu");
     const btnDojoBack = $("btnDojoBack");
-    const btnCardHub  = $("btnCardHub");
+    const btnCardHub = $("btnCardHub");
 
     function startCardHubPulseDelayed() {
       if (!btnCardHub) return;
       btnCardHub.classList.remove("is-pulsing");
-      window.setTimeout(() => {
-        btnCardHub.classList.add("is-pulsing");
-      }, 520);
+      window.setTimeout(() => btnCardHub.classList.add("is-pulsing"), 520);
     }
 
     on(btnDojo, "click", () => {
       if (dojoMenu) dojoMenu.style.display = "grid";
-      btnDojo.style.display = "none";
+      if (btnDojo) btnDojo.style.display = "none";
       startCardHubPulseDelayed();
     });
 
@@ -103,13 +101,9 @@
     const linksWrap = $("detailLinksWrap");
     const linksEl = $("detailLinks");
 
+    // モーダルDOMが無い場合でも落とさない
     if (!overlay || !btnClose || !titleEl || !bodyEl || !linksWrap || !linksEl) {
-      // モーダルDOMが無いなら何もしない（落とさない）
-      return {
-        open: () => {},
-        close: () => {},
-        bindButtons: () => {},
-      };
+      return { bindButtons: () => {} };
     }
 
     function open(titleText, detailText) {
@@ -122,7 +116,7 @@
       const urlRe = /(https?:\/\/[^\s]+)/g;
       const urls = raw.match(urlRe) ?? [];
 
-      // 本文はURLだけ除去
+      // 本文はURLだけ除去（改行保持）
       const bodyText = raw
         .replace(urlRe, "")
         .replace(/[ \t]{2,}/g, " ")
@@ -130,7 +124,7 @@
 
       bodyEl.textContent = bodyText.length ? bodyText : raw;
 
-      // リンク領域（URL無なら領域ごと消す）
+      // リンク領域（URL無なら領域ごと消す＝空欄が消える）
       linksEl.innerHTML = "";
       if (urls.length) {
         linksEl.innerHTML = urls.map((u, i) => {
@@ -172,7 +166,7 @@
       });
     }
 
-    return { open, close, bindButtons };
+    return { bindButtons };
   }
 
   // -------------------------
@@ -180,9 +174,8 @@
   // -------------------------
   function initMissionBrief(modalApi) {
     const briefList = $("briefList");
-    const briefTag  = $("briefTag");
+    const briefTag = $("briefTag");
     const briefDate = $("briefDate");
-
     if (!briefList || !briefTag || !briefDate) return;
 
     function setDateBadge() {
@@ -196,19 +189,17 @@
     function renderBriefLine(line) {
       const { main, detail } = splitDetail(line);
       const { textOnly, urls } = extractUrls(main);
+
       const displayText = (textOnly && textOnly.length) ? textOnly : "LINK";
 
       let linksHtml = "";
       if (urls.length > 0) {
-        linksHtml =
-          `<span class="brief-links">` +
-          urls.map((u, i) => {
-            const host = hostnameOf(u);
-            const label = (urls.length === 1) ? "LINK" : `LINK ${i + 1}`;
-            const tip = host ? `${host} — ${u}` : u;
-            return `<a class="brief-open" href="${escapeHtml(u)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(tip)}">${escapeHtml(label)}</a>`;
-          }).join("") +
-          `</span>`;
+        linksHtml = `<span class="brief-links">` + urls.map((u, i) => {
+          const host = hostnameOf(u);
+          const label = (urls.length === 1) ? "LINK" : `LINK ${i + 1}`;
+          const tip = host ? `${host} — ${u}` : u;
+          return `<a class="brief-open" href="${escapeHtml(u)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(tip)}">${escapeHtml(label)}</a>`;
+        }).join("") + `</span>`;
       }
 
       const detailBtn = detail
@@ -227,13 +218,10 @@
 
     async function loadMissionBrief() {
       setDateBadge();
-
       try {
-        // キャッシュを避ける
         const url = "mission-brief.txt?t=" + Date.now();
         const res = await fetch(url, { cache: "no-store" });
         if (!res.ok) throw new Error("HTTP " + res.status);
-
         const text = await res.text();
 
         let lines = text
@@ -259,8 +247,6 @@
         }
 
         briefList.innerHTML = lines.map(renderBriefLine).join("");
-
-        // 「詳細」ボタンをバインド
         modalApi?.bindButtons?.(briefList);
 
         if (hasNew) {
@@ -270,9 +256,7 @@
           briefTag.textContent = "LIVE";
           briefTag.classList.remove("is-new");
         }
-
-      } catch (err) {
-        // 通信失敗時もUIは維持
+      } catch {
         briefList.innerHTML = renderBriefLine("（通信エラー：後で再読込してください）");
         briefTag.textContent = "OFFLINE";
         briefTag.classList.remove("is-new");
@@ -291,5 +275,4 @@
     const modalApi = initDetailModal();
     initMissionBrief(modalApi);
   });
-
 })();
