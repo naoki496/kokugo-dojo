@@ -281,44 +281,44 @@
     });
   }
 
-  // -------------------------
-  // PWA: install prompt button (Android向け：ショートカット化を回避)
-  //  - index.html に #btnInstall がある前提
-  // -------------------------
-  let deferredInstallPrompt = null;
+function initInstallPrompt() {
+  const box = document.getElementById("installBox");
+  const btn = document.getElementById("installBtn");
+  if (!box || !btn) return;
 
-  function initInstallButton() {
-    const btn = $("btnInstall");
-    if (!btn) return;
+  // 既にPWA起動なら出さない
+  const isStandalone =
+    window.matchMedia("(display-mode: standalone)").matches ||
+    window.navigator.standalone === true; // iOS向け（基本falseになる）
 
-    // インストール可能判定が来たらボタンを表示
-    window.addEventListener("beforeinstallprompt", (e) => {
-      e.preventDefault();
-      deferredInstallPrompt = e;
-      btn.style.display = "inline-flex";
-    });
-
-    // クリックで prompt()
-    on(btn, "click", async () => {
-      if (!deferredInstallPrompt) return;
-
-      deferredInstallPrompt.prompt();
-      try {
-        const choice = await deferredInstallPrompt.userChoice;
-        console.log("[PWA] install choice:", choice?.outcome);
-      } catch {}
-
-      deferredInstallPrompt = null;
-      btn.style.display = "none";
-    });
-
-    // インストール完了イベント
-    window.addEventListener("appinstalled", () => {
-      deferredInstallPrompt = null;
-      btn.style.display = "none";
-      console.log("[PWA] appinstalled");
-    });
+  if (isStandalone) {
+    box.style.display = "none";
+    return;
   }
+
+  let deferred = null;
+
+  // Android Chrome が「今なら入れられる」と判断した時だけ発火
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();          // 自前ボタン運用
+    deferred = e;
+    box.style.display = "block"; // ✅ 出せる時だけ出す
+  });
+
+  btn.addEventListener("click", async () => {
+    if (!deferred) return;
+    box.style.display = "none";  // 押したら一旦隠す（UX）
+    deferred.prompt();
+    try { await deferred.userChoice; } catch {}
+    deferred = null;
+  });
+
+  // インストール完了したら消す
+  window.addEventListener("appinstalled", () => {
+    box.style.display = "none";
+    deferred = null;
+  });
+}
 
   // -------------------------
   // boot
