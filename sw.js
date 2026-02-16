@@ -1,4 +1,4 @@
-const CACHE_NAME = "hatto-top-v1";
+const CACHE_NAME = "hatto-top-v2"; // ※更新したらここを上げる
 const ASSETS = [
   "./",
   "./index.html",
@@ -32,21 +32,14 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   const req = event.request;
 
+  // ページ遷移はネット優先、ダメならindex.html
   if (req.mode === "navigate") {
     event.respondWith(fetch(req).catch(() => caches.match("./index.html")));
     return;
   }
 
+  // 静的資産はキャッシュ優先（プリキャッシュ対象のみ）
   event.respondWith(
-    caches.match(req).then((cached) => cached || fetch(req).then((res) => {
-      try {
-        const url = new URL(req.url);
-        if (url.origin === self.location.origin && req.method === "GET") {
-          const copy = res.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(req, copy));
-        }
-      } catch (e) {}
-      return res;
-    }))
+    caches.match(req).then((cached) => cached || fetch(req))
   );
 });
