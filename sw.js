@@ -1,8 +1,9 @@
-const CACHE_NAME = "hatto-top-v2.1.2.2"; // ※更新したらここを上げる
+const CACHE_NAME = "hatto-top-v2.1.2.3"; // ※更新したらここを上げる
+
 const ASSETS = [
   "./",
   "./index.html",
-  "./manifest.json",
+  // "./manifest.json",  // ✅ precache から除外（PWA判定の不安定化を防ぐ）
   "./H.K.LOBBY.png",
   "./kobun.png",
   "./jodou.png",
@@ -23,14 +24,23 @@ self.addEventListener("install", (event) => {
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.map((k) => (k === CACHE_NAME ? null : caches.delete(k))))
-    ).then(() => self.clients.claim())
+    caches.keys()
+      .then((keys) =>
+        Promise.all(keys.map((k) => (k === CACHE_NAME ? null : caches.delete(k))))
+      )
+      .then(() => self.clients.claim())
   );
 });
 
 self.addEventListener("fetch", (event) => {
   const req = event.request;
+  const url = new URL(req.url);
+
+  // ✅ manifest は常にネット取得（SWキャッシュの誤爆を防ぐ）
+  if (url.pathname.endsWith("/manifest.json") || url.pathname.endsWith("manifest.json")) {
+    event.respondWith(fetch(req));
+    return;
+  }
 
   // ページ遷移はネット優先、ダメならindex.html
   if (req.mode === "navigate") {
