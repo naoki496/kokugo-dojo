@@ -3,6 +3,7 @@
  * - Card Hub pulse delayed
  * - MISSION BRIEF loader (mission-brief.txt)
  * - Detail modal (line syntax: "表示||詳細", NEW: prefix)
+ * - PWA: SW register (absolute path) + Install prompt button
  */
 (() => {
   "use strict";
@@ -267,14 +268,55 @@
     loadMissionBrief();
   }
 
-    // -------------------------
-  // PWA: minimal SW register (Androidの「アプリ扱い」判定用)
+  // -------------------------
+  // PWA: minimal SW register (absolute path for GitHub Pages subdir)
   // -------------------------
   function registerServiceWorker() {
     if (!("serviceWorker" in navigator)) return;
-  
+
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/kokugo-dojo/sw.js").catch(() => {});
+      navigator.serviceWorker.register("/kokugo-dojo/sw.js").catch(() => {
+        // fail silently (do not break UI)
+      });
+    });
+  }
+
+  // -------------------------
+  // PWA: install prompt button (Android向け：ショートカット化を回避)
+  //  - index.html に #btnInstall がある前提
+  // -------------------------
+  let deferredInstallPrompt = null;
+
+  function initInstallButton() {
+    const btn = $("btnInstall");
+    if (!btn) return;
+
+    // インストール可能判定が来たらボタンを表示
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      btn.style.display = "inline-flex";
+    });
+
+    // クリックで prompt()
+    on(btn, "click", async () => {
+      if (!deferredInstallPrompt) return;
+
+      deferredInstallPrompt.prompt();
+      try {
+        const choice = await deferredInstallPrompt.userChoice;
+        console.log("[PWA] install choice:", choice?.outcome);
+      } catch {}
+
+      deferredInstallPrompt = null;
+      btn.style.display = "none";
+    });
+
+    // インストール完了イベント
+    window.addEventListener("appinstalled", () => {
+      deferredInstallPrompt = null;
+      btn.style.display = "none";
+      console.log("[PWA] appinstalled");
     });
   }
 
@@ -283,9 +325,10 @@
   // -------------------------
   document.addEventListener("DOMContentLoaded", () => {
     registerServiceWorker();
+    initInstallButton();
+
     initMenus();
     const modalApi = initDetailModal();
     initMissionBrief(modalApi);
   });
 })();
-
