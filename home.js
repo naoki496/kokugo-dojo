@@ -272,11 +272,9 @@
   // -------------------------
   function registerServiceWorker() {
     if (!("serviceWorker" in navigator)) return;
-
+  
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("./sw.js").catch(() => {
-        // 失敗してもUIは壊さない（最小PWAなので黙って無視）
-      });
+      navigator.serviceWorker.register("/kokugo-dojo/sw.js").catch(() => {});
     });
   }
 
