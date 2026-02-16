@@ -1,14 +1,14 @@
-const CACHE_NAME = "hatto-top-v2.1.2"; // ※更新したらここを上げる
+const CACHE_NAME = "hatto-top-v2.1.2.1"; // ※更新したらここを上げる
 const ASSETS = [
   "./",
   "./index.html",
   "./manifest.json",
-  "./header.png",
+  "./H.K.LOBBY.png",
   "./kobun.png",
   "./jodou.png",
   "./bunn.png",
-  "./icons/icon-192.png",
-  "./icons/icon-512.png",
+  "./icons/icon-192HKL.png",
+  "./icons/icon-512HKL.png",
   "./icons/icon-maskable-192.png",
   "./icons/icon-maskable-512.png"
 ];
