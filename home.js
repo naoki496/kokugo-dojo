@@ -267,6 +267,19 @@
     loadMissionBrief();
   }
 
+    // -------------------------
+  // PWA: minimal SW register (Androidの「アプリ扱い」判定用)
+  // -------------------------
+  function registerServiceWorker() {
+    if (!("serviceWorker" in navigator)) return;
+
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./sw.js").catch(() => {
+        // 失敗してもUIは壊さない（最小PWAなので黙って無視）
+      });
+    });
+  }
+
   // -------------------------
   // boot
   // -------------------------
@@ -274,5 +287,12 @@
     initMenus();
     const modalApi = initDetailModal();
     initMissionBrief(modalApi);
+
+    document.addEventListener("DOMContentLoaded", () => {
+      registerServiceWorker();
+      initMenus();
+      const modalApi = initDetailModal();
+      initMissionBrief(modalApi);
   });
+
 })();
