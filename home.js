@@ -284,15 +284,10 @@
   // boot
   // -------------------------
   document.addEventListener("DOMContentLoaded", () => {
+    registerServiceWorker();
     initMenus();
     const modalApi = initDetailModal();
     initMissionBrief(modalApi);
-
-    document.addEventListener("DOMContentLoaded", () => {
-      registerServiceWorker();
-      initMenus();
-      const modalApi = initDetailModal();
-      initMissionBrief(modalApi);
   });
-
 })();
+
