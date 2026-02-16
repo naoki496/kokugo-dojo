@@ -10,14 +10,13 @@
   "description": "八王子東 国語道場",
   "icons": [
     {
-      "src": "/kokugo-dojo/icons/icon-192.png",
+      "src": "/kokugo-dojo/icons/icon-192HKL.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/kokugo-dojo/icons/icon-512.png",
+      "src": "/kokugo-dojo/icons/icon-512HKL.png",
       "sizes": "512x512",
       "type": "image/png"
     }
   ]
-}
