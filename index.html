@@ -687,8 +687,19 @@
       #statusBar .sb-kpis{ gap: 8px; }
       #statusBar .sb-kpi-value{ font-size: 13px; }
     }
-    
 
+    /* 漢字読解マスター：STARTだけピンク発光（他のSTARTには影響させない） */
+    . /* ✅ 追加：アンバー発光（文学史知識マスター用） */
+    .btn-pink{
+      border-color: rgba(255,61,207,.45);
+      box-shadow: 0 0 22px rgba(255,61,207,.65);
+    }
+    .btn-amber:hover{
+      background: rgba(255,176,0,0.10);
+    }
+
+
+    
   </style>
 </head>
 
@@ -814,7 +825,7 @@
             
               <a class="btn-start btn-start--pink"
                   <div class="actions">
-                <a class="btn btn-amber" href="https://naoki496.github.io/kanji-y-quiz/" target="_blank" rel="noopener noreferrer">START</a>
+                <a class="btn btn-pink" href="https://naoki496.github.io/kanji-y-quiz/" target="_blank" rel="noopener noreferrer">START</a>
               </div>
             </div>
 
