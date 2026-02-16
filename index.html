@@ -684,12 +684,12 @@
     </section>
 
    
-    <!-- ✅ Android向け：PWA“インストール”導線（beforeinstallpromptが来た時だけ表示） -->
-    <div style="margin-top:14px;">
-      <button id="btnInstall" class="btn btn-sub btn-install" type="button" style="display:none;">
-        アプリをインストール
-      </button>
-    </div>
+<!-- ✅ Install (Android Chrome only: shown when eligible) -->
+<div id="installBox" class="install-box" style="display:none;">
+  <button id="installBtn" class="btn btn-sub" type="button">
+    アプリとしてインストール
+  </button>
+</div>
 
     <div class="foot">
       更新が反映されない場合は、URL末尾に <code>?v=2</code> を付けてください。
