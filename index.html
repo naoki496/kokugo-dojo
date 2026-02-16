@@ -1,14 +1,17 @@
 <!doctype html>
 <html lang="ja">
-<head>  
+<head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#241612" />
   <title>八東国語LOBBY</title>
 
-  <!-- PWA -->
-  <link rel="manifest" href="/kokugo-dojo/manifest.json">
-  <link rel="apple-touch-icon" href="/kokugo-dojo/icons/icon-180.png">
+  <!-- ✅ PWA: Android判定に必須 -->
+  <link rel="manifest" href="/kokugo-dojo/manifest.json" />
+  <link rel="apple-touch-icon" href="/kokugo-dojo/icons/icon-180.png" />
+
+  <!-- （任意）favicon 404を消したいなら配置してください -->
+  <!-- <link rel="icon" href="/kokugo-dojo/favicon.ico" /> -->
 
   <style>
     :root{
@@ -181,10 +184,7 @@
       color: rgba(255,255,255,0.92);
     }
 
-    /* ✅ LINK付き行だけ少し明るくする */
-    .has-link{
-      color: rgba(203,255,92,0.88);
-    }
+    .has-link{ color: rgba(203,255,92,0.88); }
 
     .dot{
       width: 8px;
@@ -196,7 +196,6 @@
       flex: 0 0 auto;
     }
 
-    /* LINKバッジ（インライン） */
     .brief-links{
       display:inline-flex;
       flex-wrap:wrap;
@@ -209,13 +208,11 @@
       display:inline-flex;
       align-items:center;
       justify-content:center;
-
       padding: 2px 8px;
       border-radius: 999px;
 
       background: rgba(203,255,92,0.10);
       border: 1px solid rgba(203,255,92,0.28);
-
       color: rgba(255,255,255,0.82);
 
       font-size: 11px;
@@ -236,9 +233,7 @@
       color: rgba(255,255,255,0.95);
     }
 
-    .brief-open:active{
-      transform: scale(0.98);
-    }
+    .brief-open:active{ transform: scale(0.98); }
 
     /* ===== Main Grid ===== */
     .grid{
@@ -247,7 +242,6 @@
       gap:14px;
       align-items: start;
     }
-
     @media (max-width:720px){
       .grid{ grid-template-columns:1fr; }
     }
@@ -352,19 +346,16 @@
       color: rgba(255,255,255,0.70);
     }
 
-    /* ✅ 追加：メニュー内STARTを「右寄せ」 */
     .menu-item .actions{
       display:flex;
       justify-content:flex-end;
     }
 
-    /* ✅ 追加：メニュー内STARTの幅を少し広げる（全幅にはしない） */
     .menu-item .btn{
       width: 190px;
       max-width: 100%;
     }
 
-    /* ✅ 追加：右カラムの特定STARTのみ青サイバー */
     .btn-cyber{
       border-color: rgba(120,200,255,0.70);
       box-shadow: 0 0 22px rgba(120,200,255,0.45);
@@ -373,7 +364,6 @@
       background: rgba(120,200,255,0.10);
     }
 
-    /* ✅ 追加：アンバー発光（文学史知識マスター用） */
     .btn-amber{
       border-color: rgba(255,176,0,0.75);
       box-shadow: 0 0 22px rgba(255,176,0,0.40);
@@ -382,7 +372,6 @@
       background: rgba(255,176,0,0.10);
     }
 
-    /* ✅ 追加：紫系グロー（カード図鑑用） */
     @keyframes glowPulseViolet{
       0%   { box-shadow: 0 0 14px rgba(185,120,255,0.28); transform: translateY(0); }
       50%  { box-shadow: 0 0 28px rgba(185,120,255,0.55); transform: translateY(-1px); }
@@ -397,12 +386,10 @@
       background: rgba(185,120,255,0.10);
     }
 
-    /* ✅ 脈動を後付けするためのクラス（BLITZ開いた瞬間→1拍遅れ開始） */
     .is-pulsing{
       animation: glowPulseViolet 1.6s ease-in-out infinite;
     }
 
-    /* ✅ 案1：カード図鑑だけ“フル幅＆囲み無し”にする */
     .menu-hero{
       padding: 0;
       background: transparent;
@@ -415,17 +402,7 @@
       justify-content: stretch;
     }
     .menu-hero .btn{
-      width: 100% !important; /* menu-itemの190px指定に勝つ */
-    }
-
-    .notice{
-      margin-top:10px;
-      padding:10px 12px;
-      border-radius:14px;
-      border:1px solid rgba(255,110,110,0.22);
-      background: rgba(255,110,110,0.06);
-      color: rgba(255,255,255,0.86);
-      font-size: 13px;
+      width: 100% !important;
     }
 
     .foot{
@@ -470,7 +447,7 @@
     .modal-overlay{
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.20); /* 2割程度透過 */
+      background: rgba(0,0,0,0.20);
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
       display: none;
@@ -482,7 +459,7 @@
 
     .modal{
       width: min(760px, 92vw);
-      max-height: 88vh;         /* 画面に対して少し余裕 */
+      max-height: 88vh;
       display: flex;
       flex-direction: column;
 
@@ -522,12 +499,10 @@
       cursor:pointer;
     }
 
-    .modal-close:hover{
-      background: rgba(255,255,255,0.10);
-    }
+    .modal-close:hover{ background: rgba(255,255,255,0.10); }
 
     .modal-body{
-      padding: 18px 18px 22px;  /* 上下に少し多めの余白 */
+      padding: 18px 18px 22px;
       color: rgba(255,255,255,0.86);
       font-size: 13px;
       line-height: 1.8;
@@ -544,191 +519,39 @@
       gap: 8px;
     }
 
-   .status-embed{
-      margin: 12px 0 14px;
-    }
-    .status-frame{
-      width:100%;
-      height:86px;         /* status.htmlと一致 */
-      border:0;
-      border-radius:16px;
-      overflow:hidden;
-      display:block;
-    }
-
-
-    /* ===== STATUS EMBED: wrapと同幅に揃える ===== */
-    .status-embed{
-      width: 92%;
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 0;
-    }
-
-    /* =========================
-   STATUS BAR (white-cyber)
-   ========================= */
-    #statusBar{
-      margin: 12px 0 14px;
-      border-radius: 18px;
-      overflow: hidden;
-    
-      /* 白基調 + サイバー差別化 */
-      background:
-        radial-gradient(700px 220px at 20% 0%,
-          rgba(120,200,255,0.35) 0%,
-          rgba(255,255,255,0.90) 35%,
-          rgba(255,255,255,0.72) 60%,
-          rgba(255,255,255,0.00) 100%),
-        linear-gradient(180deg,
-          rgba(255,255,255,0.92),
-          rgba(245,248,255,0.86));
-      border: 1px solid rgba(120,200,255,0.55);
+    /* ✅ 漢字読解マスター：STARTだけピンク発光 */
+    .btn-pink{
+      border-color: rgba(255,61,207,.65);
       box-shadow:
-        0 18px 40px rgba(0,0,0,0.45),
-        0 0 26px rgba(120,200,255,0.22);
-      color: rgba(10,12,18,0.92);
-      text-align: left;
+        0 0 12px rgba(255,61,207,.55),
+        0 0 28px rgba(255,61,207,.35);
     }
-    
-    /* inner */
-    #statusBar .sb-inner{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 10px;
-      padding: 12px 12px 10px;
-    }
-    
-    /* 左側 */
-    #statusBar .sb-title{
-      font-weight: 1000;
-      letter-spacing: .14em;
-      font-size: 12px;
-      color: rgba(10,12,18,0.78);
-    }
-    
-    /* KPI */
-    #statusBar .sb-kpis{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top: 8px;
-    }
-    
-    #statusBar .sb-kpi{
-      min-width: 120px;
-      padding: 8px 10px;
-      border-radius: 14px;
-      background: rgba(10,12,18,0.06);
-      border: 1px solid rgba(10,12,18,0.10);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.45);
-    }
-    
-    #statusBar .sb-kpi-label{
-      font-size: 10px;
-      letter-spacing: .18em;
-      font-weight: 950;
-      color: rgba(10,12,18,0.60);
-    }
-    
-    #statusBar .sb-kpi-value{
-      margin-top: 4px;
-      font-size: 14px;
-      font-weight: 1000;
-      letter-spacing: .06em;
-      color: rgba(10,12,18,0.92);
-    }
-    
-    /* ヒント：自動更新表示だけを小さく・サイバー色 */
-    #statusBar .sb-hint{
-      margin-top: 8px;
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: .06em;
-      color: rgba(10,12,18,0.62);
-    }
-    #statusBar .sb-hint::before{
-      content:"●";
-      margin-right: 6px;
-      color: rgba(120,200,255,0.95);
-      text-shadow: 0 0 10px rgba(120,200,255,0.55);
-    }
-    
-    /* 詳細（chips） */
-    #statusBar .sb-detail{
-      padding: 0 12px 12px;
-    }
-    
-    #statusBar .sb-detail-head{
-      font-size: 11px;
-      font-weight: 1000;
-      letter-spacing: .10em;
-      color: rgba(10,12,18,0.70);
-      margin: 6px 0 8px;
-    }
-    
-    #statusBar .sb-chips{
-      display:flex;
-      flex-wrap:wrap;
-      gap: 8px;
-    }
-    
-    #statusBar .sb-chip{
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: rgba(120,200,255,0.14);
-      border: 1px solid rgba(120,200,255,0.40);
-      color: rgba(10,12,18,0.78);
-      font-weight: 950;
-      font-size: 11px;
-      letter-spacing: .02em;
-    }
-    
-    /* モバイル最適化：詰める */
-    @media (max-width: 520px){
-      #statusBar .sb-kpi{ min-width: 0; }
-      #statusBar .sb-kpis{ gap: 8px; }
-      #statusBar .sb-kpi-value{ font-size: 13px; }
+    .btn-pink:hover{
+      background: rgba(255,61,207,.12);
+      box-shadow:
+        0 0 16px rgba(255,61,207,.75),
+        0 0 36px rgba(255,61,207,.45);
     }
 
-    /* 漢字読解マスター：STARTだけピンク発光（他のSTARTには影響させない） */
-      .btn.btn-pink{
-        border: 1px solid rgba(255,61,207,.65);
-        box-shadow:
-          0 0 12px rgba(255,61,207,.55),
-          0 0 28px rgba(255,61,207,.35);
-      }
-      .btn.btn-pink:hover{
-        background: rgba(255,61,207,.12);
-        box-shadow:
-          0 0 16px rgba(255,61,207,.75),
-          0 0 36px rgba(255,61,207,.45);
-      }
-
-
-    
+    /* ✅ インストールボタン（出たときだけ“控えめに目立つ”） */
+    .btn-install{
+      border-color: rgba(255,255,255,0.22);
+      box-shadow: 0 0 18px rgba(255,61,207,0.18);
+    }
+    .btn-install:hover{
+      background: rgba(255,61,207,0.10);
+    }
   </style>
 </head>
 
 <body>
-  <div class="header">
-    <img src="H.K.LOBBY.png" class="logo" alt="八東国語LOBBY">
-  </div>
+  <header class="header">
+    <img class="logo" src="./header.png" alt="八東国語LOBBY" />
+  </header>
 
-  <section class="status-embed" aria-label="学習ステータス">
-    <iframe
-      class="status-frame"
-      src="https://naoki496.github.io/cards-hub/status.html?v=1"
-      title="HK STATUS"
-      loading="eager"
-      referrerpolicy="no-referrer"
-    ></iframe>
-  </section>
+  <main class="wrap">
 
-  <div class="wrap">
-
-    <!-- ===== MISSION BRIEF (自動更新) ===== -->
+    <!-- ===== MISSION BRIEF ===== -->
     <section class="board" aria-label="MISSION BRIEF">
       <div class="board-inner">
         <div class="board-head">
@@ -745,27 +568,24 @@
       </div>
     </section>
 
-    <!-- ===== Main ===== -->
-    <div class="grid">
-
-      <!-- FLASH CARD -->
-      <section class="card" aria-label="FLASH CARD">
+    <!-- ===== Main Grid ===== -->
+    <section class="grid" aria-label="MAIN">
+      <!-- LEFT: FLASH -->
+      <article class="card">
         <div class="card-inner">
           <h2 class="title">FLASH CARD</h2>
           <p class="desc">今日やるものを1つ選ぶ。</p>
 
           <div class="actions">
-            <button class="btn" id="btnFlash">START</button>
+            <button class="btn" id="btnFlash" type="button">START</button>
           </div>
 
-          <!-- 展開メニュー（初期は非表示） -->
           <div class="menu" id="flashMenu" style="display:none;">
-
             <div class="menu-item">
               <h3>古文単語</h3>
               <p>読解の土台となる基礎語彙。</p>
               <div class="actions">
-                <a class="btn" href="https://naoki496.github.io/flashcards/" target="_blank" rel="noopener noreferrer">START</a>
+                <a class="btn" href="https://naoki496.github.io/hatto-kobun-tango/" target="_blank" rel="noopener noreferrer">START</a>
               </div>
             </div>
 
@@ -781,32 +601,28 @@
               <h3>文学知識総合</h3>
               <p>作者・作品・時代背景を整理。</p>
               <div class="actions">
-                <a class="btn" href="https://naoki496.github.io/bungaku/" target="_blank" rel="noopener noreferrer">START</a>
+                <a class="btn" href="https://naoki496.github.io/flashcards/" target="_blank" rel="noopener noreferrer">START</a>
               </div>
             </div>
 
-            <button class="btn btn-sub" id="btnBack">戻る</button>
+            <button class="btn btn-sub" id="btnBack" type="button">戻る</button>
           </div>
         </div>
-      </section>
+      </article>
 
-      <!-- BLITZ QUEST -->
-      <section class="card" aria-label="BLITZ QUEST">
+      <!-- RIGHT: BLITZ -->
+      <article class="card">
         <div class="card-inner">
           <h2 class="title">BLITZ QUEST</h2>
           <p class="desc">問題実践で思考を高める。</p>
 
           <div class="actions">
-            <button class="btn" id="btnDojo">START</button>
+            <button class="btn btn-cyber" id="btnDojo" type="button">START</button>
           </div>
 
-          <!-- ✅展開メニュー（初期は非表示） -->
           <div class="menu" id="dojoMenu" style="display:none;">
-
-            <!-- ✅ 案1：カード図鑑（フル幅＆囲み無し） -->
-            <div class="menu-hero">
+            <div class="menu-item menu-hero">
               <div class="actions">
-                <!-- 初期は is-pulsing を付けない（＝1拍遅れで付与） -->
                 <a class="btn btn-violet" id="btnCardHub" href="https://naoki496.github.io/cards-hub/" target="_blank" rel="noopener noreferrer">カード図鑑</a>
               </div>
             </div>
@@ -815,7 +631,7 @@
               <h3>古文単語330マスター</h3>
               <p>先ずはここから制覇しよう</p>
               <div class="actions">
-                <a class="btn btn-cyber" href="https://naoki496.github.io/kobun-quiz/" target="_blank" rel="noopener noreferrer">START</a>
+                <a class="btn" href="https://naoki496.github.io/kobun-quiz/" target="_blank" rel="noopener noreferrer">START</a>
               </div>
             </div>
 
@@ -835,22 +651,23 @@
               </div>
             </div>
 
-            <button class="btn btn-sub" id="btnDojoBack">戻る</button>
+            <button class="btn btn-sub" id="btnDojoBack" type="button">戻る</button>
           </div>
-
         </div>
-      </section>
+      </article>
+    </section>
 
+    <!-- ✅ Android向け：PWA“インストール”導線（beforeinstallpromptが来た時だけ表示） -->
+    <div style="margin-top:14px;">
+      <button id="btnInstall" class="btn btn-sub btn-install" type="button" style="display:none;">
+        アプリをインストール
+      </button>
     </div>
 
     <div class="foot">
       更新が反映されない場合は、URL末尾に <code>?v=2</code> を付けてください。
     </div>
-
-  </div>
-
-  <!-- ✅ ここが追加：inline script をやめて home.js に分離 -->
-  <script src="./home.js" defer></script>
+  </main>
 
   <!-- ===== MISSION BRIEF: 詳細モーダル ===== -->
   <div class="modal-overlay" id="detailOverlay" role="dialog" aria-modal="true" aria-hidden="true">
@@ -862,12 +679,14 @@
 
       <div class="modal-body" id="detailBody"></div>
 
-      <!-- ✅ ここを“URLが無いときはJSで非表示”にする＝空欄が消える -->
+      <!-- URLが無いときはJSで非表示（空欄が消える） -->
       <div class="modal-body" id="detailLinksWrap" style="padding-top:0;">
         <div class="modal-links" id="detailLinks"></div>
       </div>
     </div>
   </div>
 
+  <!-- ✅ inline script をやめて home.js に分離 -->
+  <script src="./home.js" defer></script>
 </body>
 </html>
