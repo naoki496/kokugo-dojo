@@ -705,13 +705,13 @@
       </article>
     </section>
 
-    <section class="install-guide">
-      <p class="install-title">📱 アプリとして使うには</p>
-      <ul class="install-steps">
-        <li><strong>Android：</strong>右上メニュー →「アプリをインストール」</li>
-        <li><strong>iPhone：</strong>共有 →「ホーム画面に追加」</li>
-      </ul>
-    </section>
+   
+    <!-- ✅ Android向け：PWA“インストール”導線（beforeinstallpromptが来た時だけ表示） -->
+    <div style="margin-top:14px;">
+      <button id="btnInstall" class="btn btn-sub btn-install" type="button" style="display:none;">
+        アプリをインストール
+      </button>
+    </div>
 
     <div class="foot">
       更新が反映されない場合は、URL末尾に <code>?v=2</code> を付けてください。
