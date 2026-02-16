@@ -1,4 +1,4 @@
-const CACHE_NAME = "hatto-top-v2.1.1"; // ※更新したらここを上げる
+const CACHE_NAME = "hatto-top-v2.1.2"; // ※更新したらここを上げる
 const ASSETS = [
   "./",
   "./index.html",
