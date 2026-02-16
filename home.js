@@ -325,8 +325,7 @@ function initInstallPrompt() {
   // -------------------------
   document.addEventListener("DOMContentLoaded", () => {
     registerServiceWorker();
-    initInstallButton();
-
+    initInstallPrompt()
     initMenus();
     const modalApi = initDetailModal();
     initMissionBrief(modalApi);
