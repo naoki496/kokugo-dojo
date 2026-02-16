@@ -1,9 +1,8 @@
 {
-  "name": "H.K.LOBBY",
+  "name": "H.K.Lobby",
   "short_name": "H.K.L",
-  "start_url": "./index.html",
-  "display": "standalone"
-  "scope": "./",
+  "start_url": "/kokugo-dojo/",
+  "scope": "/kokugo-dojo/",
   "display": "standalone",
   "background_color": "#241612",
   "theme_color": "#241612",
