@@ -97,7 +97,45 @@
     const btn = $("btnHigacha");
     if (!vEl || !btn) return;
 
-    function render() {
+    
+    const helpBtn = $("btnHkpHelp");
+    const helpOverlay = $("hkpHelpOverlay");
+    const helpClose = $("hkpHelpClose");
+    const helpBody = $("hkpHelpBody");
+    let helpLastFocus = null;
+
+    const HKP_HELP_TEXT =
+`★HKPとは？
+Higashi Kokugo Pointの略称。
+BLITZ QUESTの通常10問モードを学習時、
+一定条件でHKPを入手できます。
+
+また、TOPページの「HIGACHA」を回すことでも
+1HKPを入手できます。
+時々2HKP入手できることも…？
+※HIGACHAは1日1回まで回せます
+
+HKPを消費することで、今後実装予定の
+「EXPERT MODE」への挑戦や、その他の機能を
+使用できるようになる、かもしれません。`;
+
+    function openHelpModal() {
+      helpLastFocus = document.activeElement;
+      if (!helpOverlay || !helpClose || !helpBody) return;
+      helpBody.textContent = HKP_HELP_TEXT;
+      helpOverlay.style.display = "flex";
+      helpOverlay.setAttribute("aria-hidden", "false");
+      helpClose.focus();
+    }
+
+    function closeHelpModal() {
+      if (!helpOverlay) return;
+      // avoid aria-hidden focus warning
+      (helpBtn || helpLastFocus)?.focus?.();
+      helpOverlay.style.display = "none";
+      helpOverlay.setAttribute("aria-hidden", "true");
+    }
+function render() {
       vEl.textContent = String(getHKP());
       const ok = canHigachaToday();
       btn.disabled = !ok;
