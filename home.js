@@ -98,7 +98,7 @@
     function render() {
       vEl.textContent = String(getHKP());
       const ok = canHigachaToday();
-      subEl.textContent = ok ? "本日1回：ヒガチャ可" : "本日分は使用済み";
+      subEl.textContent = ok ? "本日1回：HIGACHA可" : "本日分は使用済み";
     }
 
     const overlay = $("higachaOverlay");
@@ -107,7 +107,10 @@
     const drawBtn = $("higachaDraw");
     const msgEl = $("higachaMsg");
 
+    let lastFocus = null;
+
     function openModal() {
+      lastFocus = document.activeElement;
       if (!overlay || !closeBtn || !cancelBtn || !drawBtn || !msgEl) return;
       const ok = canHigachaToday();
       if (ok) {
@@ -127,6 +130,10 @@
 
     function closeModal() {
       if (!overlay) return;
+      // move focus OUT of the modal before hiding / aria-hidden
+      try {
+        (lastFocus && typeof lastFocus.focus === "function") ? lastFocus.focus() : (btn && btn.focus());
+      } catch {}
       overlay.style.display = "none";
       overlay.setAttribute("aria-hidden", "true");
       document.body.style.overflow = "";
