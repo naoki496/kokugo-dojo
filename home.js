@@ -8,7 +8,11 @@
 (() => {
   "use strict";
 
-  // -------------------------
+  
+  // ===== HIGACHA settings =====
+  const HIGACHA_PROB_1 = 0.70; // 70% -> +1 HKP, else +2
+  const HIGACHA_KEY_LAST = HIGACHA_KEY_LAST;
+// -------------------------
   // helpers
   // -------------------------
   const $ = (id) => document.getElementById(id);
@@ -55,7 +59,7 @@
   // HKP + Higacha (daily)
   // -------------------------
   const HKP_KEY = "hklobby.v1.hkp";
-  const HIGACHA_LAST_KEY = "hklobby.v1.higacha.lastDate";
+  const HIGACHA_LAST_KEY = HIGACHA_KEY_LAST;
 
   function todayYMD() {
     const d = new Date();
