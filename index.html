@@ -567,6 +567,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 12px;
       padding: 12px 14px;
       background: rgba(11,6,16,0.85);
       border: 1px solid rgba(255,255,255,0.16);
@@ -575,24 +576,39 @@
     .hkp-left{
       display:flex;
       flex-direction:column;
-      gap:4px;
+      justify-content:center;
+      gap:6px;
+      min-width:0;
+      flex:1;
+    }
+    .hkp-row{
+      display:flex;
+      align-items:center;
+      gap:10px;
       min-width:0;
     }
-    .hkp-left{flex:1;}
-    .hkp-title{
-      font-weight: 800;
-      letter-spacing: .06em;
+    .hkp-label{
+      font-weight: 900;
+      letter-spacing: .08em;
       font-size: 12px;
       color: rgba(255,255,255,0.78);
+      flex:0 0 auto;
     }
-    .hkp-value{
+    .hkp-pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: 0 0 10px rgba(255,61,207,0.10);
       font-weight: 900;
-      letter-spacing: .04em;
-      font-size: 18px;
-      line-height: 1.1;
+      font-size: 14px;
+      line-height: 1;
       white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      color: rgba(255,255,255,0.92);
+      flex:0 0 auto;
     }
     .hkp-sub{
       font-size: 11px;
@@ -601,12 +617,65 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
+    /* keep .btn base styles but prevent full-width behavior inside flex */
     .btn-higacha{
+      width: auto !important;
       min-width: 96px;
-      padding: 8px 10px;
+      padding: 6px 10px;
+      font-size: 11px;
+      line-height: 1;
+      flex: 0 0 auto;
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+    }
+
+    /* ✅ Higacha modal result (minimal CSS) */
+    .higacha-msg{
+      margin-top: 6px;
+    }
+    .higacha-lead{
+      font-weight: 800;
+      letter-spacing: .02em;
+      margin-bottom: 6px;
+    }
+    .higacha-note{
       font-size: 12px;
-      line-height: 1.1;
-      flex-shrink: 0;
+      color: rgba(255,255,255,0.72);
+    }
+    .higacha-result{
+      margin-top: 6px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 0 14px rgba(255,61,207,0.12);
+      text-align: center;
+    }
+    .higacha-result-title{
+      font-size: 11px;
+      letter-spacing: .12em;
+      color: rgba(255,255,255,0.62);
+      margin-bottom: 6px;
+    }
+    .higacha-result-gain{
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: .02em;
+      line-height: 1;
+      margin: 2px 0 8px;
+    }
+    .higacha-result-unit{
+      font-size: 12px;
+      font-weight: 800;
+      margin-left: 6px;
+      color: rgba(255,255,255,0.72);
+      vertical-align: middle;
+    }
+    .higacha-result-total{
+      font-size: 12px;
+      color: rgba(255,255,255,0.72);
     }
 
     .higacha-illust-wrap{
@@ -651,11 +720,13 @@
   <section class="status-embed" aria-label="HKP">
     <div class="hkp-frame" id="hkpFrame">
       <div class="hkp-left">
-        <div class="hkp-title">HKP</div>
-        <div class="hkp-value"><span id="hkpValue">0</span></div>
+        <div class="hkp-row">
+          <div class="hkp-label">HKP</div>
+          <div class="hkp-pill"><span id="hkpValue">0</span></div>
+        </div>
         <div class="hkp-sub" id="hkpSub">読み込み中…</div>
       </div>
-      <button class="btn btn-pink btn-higacha" id="btnHigacha" type="button">HIGACHA</button>
+      <button class="btn btn-pink btn-higacha" id="btnHigacha" type="button" aria-haspopup="dialog">HIGACHA</button>
     </div>
   </section>
 
@@ -813,7 +884,7 @@
       <div class="modal-body">
         <div class="higacha-illust-wrap"><img src="./higacha.png" alt="HIGACHA" class="higacha-illust"></div>
         
-        <div id="higachaMsg" style="white-space:pre-wrap;"></div>
+        <div id="higachaMsg" class="higacha-msg"></div>
         <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
           <button class="btn btn-pink" id="higachaDraw" type="button">引く</button>
           <button class="btn" id="higachaCancel" type="button">やめる</button>

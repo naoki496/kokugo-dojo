@@ -114,11 +114,11 @@
       if (!overlay || !closeBtn || !cancelBtn || !drawBtn || !msgEl) return;
       const ok = canHigachaToday();
       if (ok) {
-        msgEl.textContent = "本日のヒガチャを実行します。\n結果により 1HKP または 2HKP を獲得します。";
+        msgEl.innerHTML = `<div class="higacha-lead">本日のHIGACHAを実行します。</div><div class="higacha-note">結果により <b>+1</b> または <b>+2</b> HKP を獲得します。</div>`;
         drawBtn.disabled = false;
         drawBtn.style.opacity = "";
       } else {
-        msgEl.textContent = "本日のヒガチャは既に使用済みです。\nまた明日、試せます。";
+        msgEl.innerHTML = `<div class="higacha-lead">本日のHIGACHAは使用済みです。</div><div class="higacha-note">また明日、試せます。</div>`;
         drawBtn.disabled = true;
         drawBtn.style.opacity = "0.45";
       }
@@ -150,10 +150,10 @@
 
     on(drawBtn, "click", () => {
       if (!canHigachaToday()) { render(); return; }
-      const gain = (Math.random() < 0.80) ? 1 : 2;
+      const gain = (Math.random() < 0.70) ? 1 : 2;
       addHKP(gain);
       markHigachaDoneToday();
-      if (msgEl) msgEl.textContent = `結果：+${gain} HKP\n現在のHKP：${getHKP()}`;
+      if (msgEl) msgEl.innerHTML = `<div class="higacha-result"><div class="higacha-result-title">RESULT</div><div class="higacha-result-gain">+${gain}<span class="higacha-result-unit">HKP</span></div><div class="higacha-result-total">TOTAL ${getHKP()} HKP</div></div>`;
       if (drawBtn) { drawBtn.disabled = true; drawBtn.style.opacity = "0.45"; }
       render();
     });
