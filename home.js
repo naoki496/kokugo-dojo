@@ -91,14 +91,14 @@
 
   function initHKPPanel() {
     const vEl = $("hkpValue");
-    const subEl = $("hkpSub");
     const btn = $("btnHigacha");
-    if (!vEl || !subEl || !btn) return;
+    if (!vEl || !btn) return;
 
     function render() {
       vEl.textContent = String(getHKP());
       const ok = canHigachaToday();
-      subEl.textContent = ok ? "本日1回：HIGACHA可" : "本日分は使用済み";
+      btn.disabled = !ok;
+      btn.setAttribute("aria-disabled", String(!ok));
     }
 
     const overlay = $("higachaOverlay");
