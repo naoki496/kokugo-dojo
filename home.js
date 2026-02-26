@@ -135,6 +135,19 @@ HKPを消費することで、今後実装予定の
       helpOverlay.style.display = "none";
       helpOverlay.setAttribute("aria-hidden", "true");
     }
+
+    // ---- HKP help events ----
+    if (helpBtn) helpBtn.addEventListener("click", openHelpModal);
+    if (helpClose) helpClose.addEventListener("click", closeHelpModal);
+    if (helpOverlay) helpOverlay.addEventListener("click", (e) => {
+      if (e.target === helpOverlay) closeHelpModal();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && helpOverlay && helpOverlay.style.display !== "none") {
+        closeHelpModal();
+      }
+    });
+
 function render() {
       vEl.textContent = String(getHKP());
       const ok = canHigachaToday();
