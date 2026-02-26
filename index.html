@@ -558,6 +558,54 @@
       display: block;
     }
 
+
+    /* ✅ HKP block (same vibe as STATUS) */
+    .hkp-frame{
+      height: 86px;
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      background: rgba(11,6,16,0.85);
+      border: 1px solid rgba(255,255,255,0.16);
+      box-shadow: 0 0 18px rgba(255,61,207,0.14);
+    }
+    .hkp-left{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      min-width:0;
+    }
+    .hkp-title{
+      font-weight: 800;
+      letter-spacing: .06em;
+      font-size: 12px;
+      color: rgba(255,255,255,0.78);
+    }
+    .hkp-value{
+      font-weight: 900;
+      letter-spacing: .04em;
+      font-size: 18px;
+      line-height: 1.1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .hkp-sub{
+      font-size: 11px;
+      color: rgba(255,255,255,0.55);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .btn-higacha{
+      min-width: 122px;
+      padding: 10px 12px;
+    }
+
+
     .install-box{
   margin-top: 14px;
 }
@@ -579,6 +627,21 @@
       title="STATUS"
     ></iframe>
   </section>
+
+
+  <!-- ✅ HKP（八東国語ポイント） -->
+  <section class="status-embed" aria-label="HKP">
+    <div class="hkp-frame" id="hkpFrame">
+      <div class="hkp-left">
+        <div class="hkp-title">HKP</div>
+        <div class="hkp-value"><span id="hkpValue">0</span></div>
+        <div class="hkp-sub" id="hkpSub">読み込み中…</div>
+      </div>
+      <button class="btn btn-pink btn-higacha" id="btnHigacha" type="button">ヒガチャ</button>
+    </div>
+  </section>
+
+
 
     <!-- ===== MISSION BRIEF ===== -->
     <section class="board" aria-label="MISSION BRIEF">
@@ -718,5 +781,30 @@
 
   <!-- ✅ inline script をやめて home.js に分離 -->
   <script src="./home.js" defer></script>
+
+
+
+  <!-- ===== ヒガチャ（1日1回）モーダル ===== -->
+  <div class="modal-overlay" id="higachaOverlay" role="dialog" aria-modal="true" aria-hidden="true" style="display:none;">
+    <div class="modal" role="document">
+      <div class="modal-head">
+        <h3 class="modal-title" id="higachaTitle">ヒガチャ</h3>
+        <button class="modal-close" id="higachaClose" type="button">閉じる</button>
+      </div>
+
+      <div class="modal-body">
+        <div id="higachaMsg" style="white-space:pre-wrap;"></div>
+        <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn btn-pink" id="higachaDraw" type="button">引く</button>
+          <button class="btn" id="higachaCancel" type="button">やめる</button>
+        </div>
+        <div style="margin-top:10px; font-size:11px; color:rgba(255,255,255,0.55);">
+          ※ 1日1回まで。結果はHKPに加算されます。
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 </body>
 </html>

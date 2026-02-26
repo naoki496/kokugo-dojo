@@ -50,6 +50,111 @@
   // -------------------------
   // UI: menus
   // -------------------------
+  
+  // -------------------------
+  // HKP + Higacha (daily)
+  // -------------------------
+  const HKP_KEY = "hklobby.v1.hkp";
+  const HIGACHA_LAST_KEY = "hklobby.v1.higacha.lastDate";
+
+  function todayYMD() {
+    const d = new Date();
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+  }
+
+  function getHKP() {
+    const n = Number(localStorage.getItem(HKP_KEY));
+    return Number.isFinite(n) ? Math.max(0, Math.trunc(n)) : 0;
+  }
+
+  function setHKP(n) {
+    const v = Math.max(0, Math.trunc(Number(n) || 0));
+    localStorage.setItem(HKP_KEY, String(v));
+    return v;
+  }
+
+  function addHKP(delta) {
+    return setHKP(getHKP() + (Number(delta) || 0));
+  }
+
+  function canHigachaToday() {
+    const last = String(localStorage.getItem(HIGACHA_LAST_KEY) || "");
+    return last !== todayYMD();
+  }
+
+  function markHigachaDoneToday() {
+    localStorage.setItem(HIGACHA_LAST_KEY, todayYMD());
+  }
+
+  function initHKPPanel() {
+    const vEl = $("hkpValue");
+    const subEl = $("hkpSub");
+    const btn = $("btnHigacha");
+    if (!vEl || !subEl || !btn) return;
+
+    function render() {
+      vEl.textContent = String(getHKP());
+      const ok = canHigachaToday();
+      subEl.textContent = ok ? "本日1回：ヒガチャ可" : "本日分は使用済み";
+    }
+
+    const overlay = $("higachaOverlay");
+    const closeBtn = $("higachaClose");
+    const cancelBtn = $("higachaCancel");
+    const drawBtn = $("higachaDraw");
+    const msgEl = $("higachaMsg");
+
+    function openModal() {
+      if (!overlay || !closeBtn || !cancelBtn || !drawBtn || !msgEl) return;
+      const ok = canHigachaToday();
+      if (ok) {
+        msgEl.textContent = "本日のヒガチャを実行します。\n結果により 1HKP または 2HKP を獲得します。";
+        drawBtn.disabled = false;
+        drawBtn.style.opacity = "";
+      } else {
+        msgEl.textContent = "本日のヒガチャは既に使用済みです。\nまた明日、試せます。";
+        drawBtn.disabled = true;
+        drawBtn.style.opacity = "0.45";
+      }
+      overlay.style.display = "flex";
+      overlay.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+      closeBtn.focus();
+    }
+
+    function closeModal() {
+      if (!overlay) return;
+      overlay.style.display = "none";
+      overlay.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+      render();
+    }
+
+    on(btn, "click", openModal);
+    on(closeBtn, "click", closeModal);
+    on(cancelBtn, "click", closeModal);
+    on(overlay, "click", (e) => { if (e.target === overlay) closeModal(); });
+    on(document, "keydown", (e) => {
+      if (e.key === "Escape" && overlay && overlay.style.display === "flex") closeModal();
+    });
+
+    on(drawBtn, "click", () => {
+      if (!canHigachaToday()) { render(); return; }
+      const gain = (Math.random() < 0.80) ? 1 : 2;
+      addHKP(gain);
+      markHigachaDoneToday();
+      if (msgEl) msgEl.textContent = `結果：+${gain} HKP\n現在のHKP：${getHKP()}`;
+      if (drawBtn) { drawBtn.disabled = true; drawBtn.style.opacity = "0.45"; }
+      render();
+    });
+
+    render();
+  }
+
+
   function initMenus() {
     // FLASH
     const btnFlash = $("btnFlash");
@@ -327,7 +432,8 @@ function initInstallPrompt() {
     registerServiceWorker();
     initInstallPrompt()
     initMenus();
-    const modalApi = initDetailModal();
+        initHKPPanel();
+const modalApi = initDetailModal();
     initMissionBrief(modalApi);
   });
 })();
