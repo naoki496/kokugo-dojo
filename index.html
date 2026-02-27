@@ -904,6 +904,74 @@
   }
 }
 
+
+/* ===== HKP panel compact tuning v12 (tighter + clearer effects) ===== */
+.hkp-inner{
+  padding: 8px 12px 8px;  /* tighter */
+  gap: 5px 10px;
+}
+.hkp-num{ font-size: 19px; }
+.hkp-unit{ font-size: 11px; }
+
+/* panel brightness: closer to STATUS */
+.hkp-console{
+  background: rgba(11,6,16,0.68);
+  border-color: rgba(255,255,255,0.18);
+}
+
+/* stronger but still subtle cyan-green layer */
+.hkp-console::before{
+  opacity: 0.85;
+  background:
+    radial-gradient(900px 120px at 18% 0%, rgba(0,229,255,0.12), transparent 60%),
+    radial-gradient(900px 140px at 82% 100%, rgba(203,255,92,0.12), transparent 62%),
+    linear-gradient(120deg, rgba(0,229,255,0.06), rgba(203,255,92,0.08), rgba(0,229,255,0.05));
+}
+.hkp-console::after{
+  opacity: 0.72;
+  background:
+    linear-gradient(120deg,
+      transparent 40%,
+      rgba(0,229,255,0.22),
+      rgba(203,255,92,0.20),
+      transparent 60%);
+  animation-duration: 6.4s; /* slightly faster */
+}
+
+/* help button slightly smaller */
+.hkp-help{
+  width: 21px;
+  height: 21px;
+  font-size: 13px;
+}
+
+/* HKP help modal padding (PC) */
+#hkpHelpBody{
+  padding: 10px 12px;
+}
+@media (min-width: 760px){
+  #hkpHelpBody{
+    padding: 16px 20px;
+    font-size: 14px;
+  }
+}
+
+/* HIGACHA button: blue glow only when available */
+.btn-higacha.is-ready{
+  box-shadow: 0 0 12px rgba(0,229,255,0.42);
+  border-color: rgba(0,229,255,0.35);
+}
+.btn-higacha.is-ready:hover{
+  box-shadow: 0 0 18px rgba(0,229,255,0.58);
+  border-color: rgba(0,229,255,0.50);
+}
+.btn-higacha.is-disabled{
+  box-shadow: none !important;
+  border-color: rgba(255,255,255,0.14);
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 </style>
 </head>
 
