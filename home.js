@@ -163,6 +163,8 @@ function render() {
       vEl.textContent = String(getHKP());
       const ok = canHigachaToday();
       btn.disabled = !ok;
+      btn.classList.toggle("is-ready", ok);
+      btn.classList.toggle("is-disabled", !ok);
       btn.setAttribute("aria-disabled", String(!ok));
     }
 
@@ -218,6 +220,7 @@ function render() {
       const gain = (Math.random() < 0.70) ? 1 : 2;
       addHKP(gain);
       markHigachaDoneToday();
+      render();
       if (msgEl) msgEl.innerHTML = `<div class="higacha-result"><div class="higacha-result-title">RESULT</div><div class="higacha-result-gain">+${gain}<span class="higacha-result-unit">HKP</span></div><div class="higacha-result-total">TOTAL ${getHKP()} HKP</div></div>`;
       if (drawBtn) { drawBtn.disabled = true; drawBtn.style.opacity = "0.45"; }
       render();
