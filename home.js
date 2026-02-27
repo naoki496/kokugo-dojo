@@ -126,9 +126,8 @@ BLITZ QUESTの通常10問モードを学習時、
 時々2HKP入手できることも…？
 ※HIGACHAは1日1回まで回せます
 
-HKPを消費することで、今後実装予定の
-「EXPERT MODE」への挑戦や、その他の機能を
-使用できるようになる、かもしれません。`;
+HKPを消費することで「EXPERT MODE」への挑戦や、
+その他の機能を使用できるようになるかも。`;
 
     function openHelpModal() {
       helpLastFocus = document.activeElement;
