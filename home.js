@@ -9,7 +9,18 @@
   "use strict";
 
   
-  // ===== HIGACHA settings =====
+  
+function updateHigachaButtonState(){
+  const btn = document.getElementById("btnHigacha");
+  if (!btn) return;
+  const today = new Date().toISOString().slice(0,10);
+  const last = localStorage.getItem(HIGACHA_LAST_KEY);
+  const used = last === today;
+  btn.classList.toggle("is-ready", !used);
+  btn.classList.toggle("is-disabled", used);
+  btn.disabled = used;
+}
+// ===== HIGACHA settings =====
   const HIGACHA_PROB_1 = 0.70; // 70% -> +1 HKP, else +2
   const HIGACHA_LAST_KEY = "hklobby.v1.higacha.lastDate";
 // -------------------------
@@ -18,127 +29,6 @@
   const $ = (id) => document.getElementById(id);
   const on = (node, ev, fn, opt) => node && node.addEventListener(ev, fn, opt);
 
-  // ===== EXPERT button injection (kokugo-dojo) =====
-function ensureExpertButtonStyle() {
-  // 二重注入防止
-  if (document.getElementById("expertBtnStyle")) return;
-
-  const style = document.createElement("style");
-  style.id = "expertBtnStyle";
-  style.textContent = `
-    /* EXPERTボタン：形状は触らず、見た目だけ差別化（青系グロー＋斜線） */
-    a.btn-expert{
-      /* サイズ/形状に関わるもの（padding, border-radius, font-size等）は触らない */
-      color: rgba(225, 250, 255, 0.98) !important;
-      border-color: rgba(0, 229, 255, 0.55) !important;
-
-      /* “特別挑戦”の雰囲気：薄い斜線＋発光 */
-      background-image:
-        linear-gradient(180deg, rgba(0, 229, 255, 0.18), rgba(0, 0, 0, 0.10)),
-        repeating-linear-gradient(
-          135deg,
-          rgba(0, 229, 255, 0.12) 0px,
-          rgba(0, 229, 255, 0.12) 6px,
-          rgba(0, 0, 0, 0.0) 6px,
-          rgba(0, 0, 0, 0.0) 12px
-        ) !important;
-
-      box-shadow:
-        0 0 0 1px rgba(0, 229, 255, 0.18) inset,
-        0 0 18px rgba(0, 229, 255, 0.18) !important;
-
-      text-shadow: 0 0 10px rgba(0, 229, 255, 0.25);
-      position: relative;
-      overflow: hidden;
-      isolation: isolate;
-    }
-
-    /* ホバー時だけ少し強く（形状変更なし） */
-    a.btn-expert:hover{
-      box-shadow:
-        0 0 0 1px rgba(0, 229, 255, 0.22) inset,
-        0 0 26px rgba(0, 229, 255, 0.26) !important;
-      filter: brightness(1.03);
-    }
-
-    /* “脈動”は控えめに（チカチカ禁止） */
-    @keyframes expertPulse{
-      0%   { box-shadow: 0 0 0 1px rgba(0,229,255,.16) inset, 0 0 16px rgba(0,229,255,.14); }
-      50%  { box-shadow: 0 0 0 1px rgba(0,229,255,.22) inset, 0 0 26px rgba(0,229,255,.22); }
-      100% { box-shadow: 0 0 0 1px rgba(0,229,255,.16) inset, 0 0 16px rgba(0,229,255,.14); }
-    }
-    a.btn-expert{ animation: expertPulse 3.2s ease-in-out infinite; }
-
-    /* 左上に小さく “EX” バッジ（レイアウトに影響しない absolute） */
-    a.btn-expert::after{
-      content: "EX";
-      position: absolute;
-      top: -6px;
-      left: -6px;
-      z-index: 1;
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: .06em;
-      padding: 6px 7px;
-      border-radius: 999px;
-      background: rgba(0, 229, 255, 0.22);
-      border: 1px solid rgba(0, 229, 255, 0.40);
-      box-shadow: 0 0 12px rgba(0, 229, 255, 0.18);
-      color: rgba(240, 255, 255, 0.98);
-      pointer-events: none;
-    }
-  `;
-
-  document.head.appendChild(style);
-}
-
-function injectExpertButtonForKobun330() {
-  ensureExpertButtonStyle();
-
-  // 「古文単語330マスター」を含むブロックを探す（HTML変更に強い）
-  const roots = Array.from(document.querySelectorAll("section, article, div, li"))
-    .filter((el) => (el.textContent || "").includes("古文単語330マスター"));
-
-  if (!roots.length) return;
-
-  for (const root of roots) {
-    // STARTリンク（kobun-quiz本体）を探す
-    const startLink =
-      root.querySelector('a[href="https://naoki496.github.io/kobun-quiz/"]') ||
-      root.querySelector('a[href^="https://naoki496.github.io/kobun-quiz/"]');
-
-    if (!startLink) continue;
-
-    // 二重追加防止
-    if (root.querySelector('a[href*="kobun-quiz/expert.html"]')) return;
-
-    // STARTをクローンして見た目・サイズを完全一致させる（形状維持）
-    const expertLink = startLink.cloneNode(true);
-    expertLink.textContent = "EXPERT";
-    expertLink.setAttribute("href", "https://naoki496.github.io/kobun-quiz/expert.html");
-
-    // 差別化はクラスで（padding等には触らない）
-    expertLink.classList.add("btn-expert");
-
-    // 左に置くため、2つを横並びにする
-    const row = document.createElement("div");
-    row.style.display = "flex";
-    row.style.gap = "10px";
-    row.style.alignItems = "center";
-    row.style.justifyContent = "flex-start";
-    row.style.flexWrap = "wrap";
-
-    const parent = startLink.parentElement;
-    if (!parent) return;
-
-    parent.insertBefore(row, startLink);
-    row.appendChild(expertLink);
-    row.appendChild(startLink);
-
-    return;
-  }
-}
-  
   function escapeHtml(str) {
     return String(str ?? "")
       .replace(/&/g, "&amp;")
@@ -615,10 +505,7 @@ function initInstallPrompt() {
     initInstallPrompt()
     initMenus();
         initHKPPanel();
-
-    injectExpertButtonForKobun330(); // 
-    
-    const modalApi = initDetailModal();
+const modalApi = initDetailModal();
     initMissionBrief(modalApi);
   });
 })();
