@@ -534,6 +534,51 @@
         0 0 36px rgba(255,61,207,.45);
     }
 
+
+    /* ✅ 古文単語330：EXPERTボタン（青緑ストライプ＋威圧感） */
+    .btn-expert{
+      position: relative;
+      border-color: rgba(0,229,255,0.42);
+      background:
+        linear-gradient(135deg, rgba(0,229,255,0.12), rgba(0,0,0,0.55) 40%, rgba(203,255,92,0.08)),
+        repeating-linear-gradient(135deg,
+          rgba(0,229,255,0.18) 0px,
+          rgba(0,229,255,0.18) 10px,
+          rgba(0,0,0,0.00) 10px,
+          rgba(0,0,0,0.00) 20px);
+      box-shadow:
+        0 0 14px rgba(0,229,255,0.18),
+        0 0 28px rgba(0,229,255,0.12);
+      overflow: hidden;
+    }
+    .btn-expert::after{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background: linear-gradient(115deg, transparent 40%, rgba(0,229,255,0.22), rgba(203,255,92,0.18), transparent 60%);
+      transform: translateX(-55%);
+      opacity: 0.55;
+      animation: expertSweep 6.8s linear infinite;
+      pointer-events:none;
+    }
+    @keyframes expertSweep{
+      0%{ transform: translateX(-55%); }
+      100%{ transform: translateX(55%); }
+    }
+    .btn-expert:hover{
+      background:
+        linear-gradient(135deg, rgba(0,229,255,0.16), rgba(0,0,0,0.55) 40%, rgba(203,255,92,0.10)),
+        repeating-linear-gradient(135deg,
+          rgba(0,229,255,0.22) 0px,
+          rgba(0,229,255,0.22) 10px,
+          rgba(0,0,0,0.00) 10px,
+          rgba(0,0,0,0.00) 20px);
+      box-shadow:
+        0 0 18px rgba(0,229,255,0.28),
+        0 0 34px rgba(0,229,255,0.18);
+    }
+    .btn-expert:active{ transform: translateY(1px); }
+
     /* ✅ インストールボタン（出たときだけ“控えめに目立つ”） */
     .btn-install{
       border-color: rgba(255,255,255,0.22);
@@ -660,15 +705,16 @@
     }
     .hkp-inner{
       height: 100%;
-      padding: 8px 14px;
-      display: flex;
+      padding: 10px 14px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      grid-template-rows: auto auto;
+      gap: 6px 12px;
       align-items: center;
-      justify-content: space-between;
-      gap: 10px;
     }
     .hkp-head{
       display:flex;
-      align-items:center;
+      align-items: baseline;
       gap: 10px;
       min-width: 0;
     }
@@ -974,6 +1020,50 @@
 
 /* ===== HKP bar height v13 ===== */
 .hkp-console{ height: 76px; }
+
+
+/* ===== Menu item right-side info layer (Flash/Blitz) ===== */
+.menu-item{
+  position: relative;
+  overflow: hidden;
+}
+/* subtle right-side texture + chevron */
+.menu-item::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(180px 140px at 92% 50%, rgba(0,229,255,0.12), transparent 60%),
+    radial-gradient(220px 160px at 86% 120%, rgba(203,255,92,0.10), transparent 62%),
+    repeating-linear-gradient(90deg,
+      transparent 0 10px,
+      rgba(255,255,255,0.03) 10px 11px);
+  opacity: 0.9;
+  transform: translateZ(0);
+}
+.menu-item::before{
+  content:"›";
+  position:absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-weight: 900;
+  font-size: 22px;
+  color: rgba(255,255,255,0.22);
+  text-shadow: 0 0 16px rgba(0,229,255,0.12);
+  pointer-events:none;
+}
+/* keep content above the layer */
+.menu-item > *{ position: relative; z-index: 1; }
+
+/* slightly tighten empty space feeling: anchor the actions to left but give a visual "lane" */
+.menu-item .actions{
+  max-width: 220px; /* leaves some right lane */
+}
+@media (max-width: 520px){
+  .menu-item .actions{ max-width: 200px; }
+}
 
 </style>
 </head>
