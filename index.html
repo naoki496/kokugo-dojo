@@ -660,16 +660,15 @@
     }
     .hkp-inner{
       height: 100%;
-      padding: 10px 14px;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      grid-template-rows: auto auto;
-      gap: 6px 12px;
+      padding: 8px 14px;
+      display: flex;
       align-items: center;
+      justify-content: space-between;
+      gap: 10px;
     }
     .hkp-head{
       display:flex;
-      align-items: baseline;
+      align-items:center;
       gap: 10px;
       min-width: 0;
     }
@@ -976,77 +975,6 @@
 /* ===== HKP bar height v13 ===== */
 .hkp-console{ height: 76px; }
 
-
-/* ===== BLITZ QUEST actions responsive (PC: row / Mobile: column) ===== */
-.bq-actions{
-  display: flex;
-  gap: 10px;
-  align-items: stretch;
-}
-.bq-actions > a,
-.bq-actions > button{
-  flex: 1 1 0;
-}
-
-/* Mobile: stack */
-@media (max-width: 520px){
-  .bq-actions{
-    flex-direction: column;
-  }
-}
-
-/* ===== EXPERT button special treatment (same size, more "special") ===== */
-.btn-expert{
-  position: relative;
-  overflow: hidden;
-  border-color: rgba(0,229,255,0.35);
-  box-shadow:
-    0 0 18px rgba(0,229,255,0.14),
-    inset 0 0 0 1px rgba(255,255,255,0.06);
-  background:
-    linear-gradient(135deg, rgba(0,229,255,0.12), rgba(203,255,92,0.10));
-}
-
-.btn-expert::after{
-  content:"";
-  position:absolute;
-  inset:-40%;
-  background: repeating-linear-gradient(
-    135deg,
-    rgba(0,0,0,0.0) 0px,
-    rgba(0,0,0,0.0) 10px,
-    rgba(0,229,255,0.10) 10px,
-    rgba(0,229,255,0.10) 18px
-  );
-  transform: translateX(-25%);
-  opacity: 0.55;
-  pointer-events:none;
-}
-
-.btn-expert::before{
-  content:"EX";
-  position:absolute;
-  top: 8px;
-  left: 10px;
-  font-weight: 900;
-  font-size: 11px;
-  letter-spacing: 0.10em;
-  padding: 3px 6px;
-  border-radius: 999px;
-  background: rgba(0,0,0,0.55);
-  border: 1px solid rgba(0,229,255,0.35);
-  color: rgba(255,255,255,0.92);
-  box-shadow: 0 0 10px rgba(0,229,255,0.20);
-  pointer-events:none;
-}
-
-.btn-expert:hover{
-  box-shadow:
-    0 0 22px rgba(0,229,255,0.22),
-    inset 0 0 0 1px rgba(255,255,255,0.08);
-  transform: translateY(-1px);
-}
-
 </style>
 </head>
 
@@ -1110,7 +1038,7 @@
           <h2 class="title">FLASH CARD</h2>
           <p class="desc">今日やるものを1つ選ぶ。</p>
 
-          <div class="actions bq-actions"">
+          <div class="actions">
             <button class="btn" id="btnFlash" type="button">START</button>
           </div>
 
@@ -1165,7 +1093,7 @@
               <h3>古文単語330マスター</h3>
               <p>先ずはここから制覇しよう</p>
               <div class="actions">
-                <a class="btn btn-expert btn-expert" href="https://naoki496.github.io/kobun-quiz/expert.html" target="_blank" rel="noopener noreferrer">EXPERT</a>
+                <a class="btn btn-expert" href="https://naoki496.github.io/kobun-quiz/expert.html" target="_blank" rel="noopener noreferrer">EXPERT</a>
                 <a class="btn" href="https://naoki496.github.io/kobun-quiz/" target="_blank" rel="noopener noreferrer">START</a>
               </div>
             </div>
