@@ -309,7 +309,7 @@ HKPを入手できます。
   }
 
   // =========================
-  // Daily50 Help  ※仕様変更反映
+  // Daily Help  ※仕様変更反映
   // =========================
   function initDailyHelp() {
     const btn = $("btnDailyHelp");
@@ -318,7 +318,7 @@ HKPを入手できます。
 
     const { open } = bindOverlayClose("dailyHelpOverlay", "dailyHelpClose");
     const text =
-`FLASH DAILY 50 とは？
+`FLASH DAILY とは？
 
 FLASHCARDで「本日見たカード合計」が
 一定枚数に到達すると、その日に限り
