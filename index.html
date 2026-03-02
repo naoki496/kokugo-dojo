@@ -3,1293 +3,211 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#241612" />
+  <meta name="theme-color" content="#140817" />
   <title>八東国語LOBBY</title>
-
-  <!-- ✅ PWA: Android判定に必須 -->
-  <link rel="manifest" href="/kokugo-dojo/manifest.json" />
-  <link rel="apple-touch-icon" href="/kokugo-dojo/icons/icon-180HKL.png" />
-
-  <!-- （任意）favicon 404を消したいなら配置してください -->
-  <!-- <link rel="icon" href="/kokugo-dojo/favicon.ico" /> -->
-
-  <style>
-
-    :root{
-      --bg0:#050307;
-      --bg1:#0b0610;
-
-      --accent1:#ff3dcf;
-      --accent2:#cbff5c;
-
-      --text:#ffffff;
-
-      --btn-fill: rgba(10, 10, 10, 0.92);
-      --btn-border: rgba(203,255,92,0.55);
-      --btn-glow: rgba(203,255,92,0.28);
-    }
-
-    *{ box-sizing:border-box; }
-    body{
-      margin:0;
-      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-      color: var(--text);
-      text-align:center;
-      -webkit-tap-highlight-color: transparent;
-
-      background:
-        radial-gradient(1100px 680px at 50% 0%,
-          rgba(255,61,207,0.20) 0%,
-          rgba(203,255,92,0.10) 22%,
-          rgba(0,0,0,0) 55%),
-        radial-gradient(900px 600px at 10% 90%,
-          rgba(203,255,92,0.14) 0%,
-          rgba(0,0,0,0) 55%),
-        linear-gradient(180deg, var(--bg1), #000 80%);
-    }
-
-    /* ===== Header ===== */
-    .header{ padding: 18px 0 10px; }
-    .logo{
-      width: min(720px, 92vw);
-      height: auto;
-      display:block;
-      margin: 0 auto;
-      filter: drop-shadow(0 0 18px rgba(255,61,207,0.28));
-    }
-
-    .wrap{
-      width: 92%;
-      max-width: 980px;
-      margin: 0 auto 18px;
-    }
-
-    /* ===== Mission Brief ===== */
-    .board{
-      margin: 0 0 14px;
-      border-radius: 18px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.08);
-      box-shadow: 0 18px 40px rgba(0,0,0,0.55);
-      padding: 14px;
-      text-align:left;
-    }
-
-    .board-inner{
-      border-radius: 16px;
-      background: rgba(0,0,0,0.42);
-      border: 1px solid rgba(255,61,207,0.14);
-      padding: 14px;
-    }
-
-    .board-head{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom: 12px;
-
-      padding: 10px 12px;
-      border-radius: 14px;
-      background: rgba(0,0,0,0.55);
-      border: 1px solid rgba(203,255,92,0.28);
-      position: relative;
-    }
-
-    .board-head::before{
-      content:"";
-      width:4px;
-      height:18px;
-      border-radius:999px;
-      background: rgba(203,255,92,0.85);
-      box-shadow: 0 0 14px rgba(203,255,92,0.45);
-      flex: 0 0 auto;
-      margin-right: 8px;
-    }
-
-    .board-title{
-      margin:0;
-      font-size: 16px;
-      font-weight: 1000;
-      letter-spacing: .20em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.95);
-      text-shadow:
-        0 0 12px rgba(255,61,207,0.35),
-        0 0 22px rgba(203,255,92,0.18);
-      flex: 1 1 auto;
-    }
-
-    .board-meta{
-      display:flex;
-      gap:8px;
-      align-items:center;
-      flex: 0 0 auto;
-    }
-
-    .board-date{
-      font-size: 12px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.16);
-      background: rgba(255,255,255,0.06);
-      color: rgba(255,255,255,0.78);
-      white-space: nowrap;
-    }
-
-    .board-tag{
-      font-size: 12px;
-      font-weight: 900;
-      padding: 4px 12px;
-      border-radius: 999px;
-
-      background: rgba(203,255,92,0.18);
-      border: 1px solid rgba(203,255,92,0.45);
-
-      color: rgba(255,255,255,0.92);
-      box-shadow: 0 0 14px rgba(203,255,92,0.22);
-      white-space: nowrap;
-    }
-
-    @keyframes pulseGlow{
-      0%   { box-shadow: 0 0 10px rgba(203,255,92,0.22); transform: translateY(0); }
-      50%  { box-shadow: 0 0 22px rgba(203,255,92,0.42); transform: translateY(-1px); }
-      100% { box-shadow: 0 0 10px rgba(203,255,92,0.22); transform: translateY(0); }
-    }
-
-    .is-new{
-      background: rgba(255,61,207,0.14);
-      border-color: rgba(255,61,207,0.55);
-      animation: pulseGlow 1.6s ease-in-out infinite;
-    }
-
-    .board-list{
-      margin:0;
-      padding:0;
-      list-style:none;
-      display:grid;
-      gap: 8px;
-      font-size: 13px;
-      line-height: 1.6;
-    }
-
-    .board-list li{
-      display:flex;
-      gap:10px;
-      word-break: break-word;
-      color: rgba(255,255,255,0.76);
-    }
-
-    .board-list li:first-child{
-      font-weight: 900;
-      color: rgba(255,255,255,0.92);
-    }
-
-    .has-link{ color: rgba(203,255,92,0.88); }
-
-    .dot{
-      width: 8px;
-      height: 8px;
-      margin-top: 7px;
-      border-radius: 999px;
-      background: rgba(203,255,92,0.95);
-      box-shadow: 0 0 14px rgba(203,255,92,0.20);
-      flex: 0 0 auto;
-    }
-
-    .brief-links{
-      display:inline-flex;
-      flex-wrap:wrap;
-      gap: 6px;
-      margin-left: 8px;
-      vertical-align: baseline;
-    }
-
-    .brief-open{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding: 2px 8px;
-      border-radius: 999px;
-
-      background: rgba(203,255,92,0.10);
-      border: 1px solid rgba(203,255,92,0.28);
-      color: rgba(255,255,255,0.82);
-
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-
-      text-decoration:none;
-      box-shadow: none;
-      white-space: nowrap;
-      cursor:pointer;
-      user-select:none;
-    }
-
-    .brief-open:hover{
-      background: rgba(203,255,92,0.18);
-      border-color: rgba(203,255,92,0.45);
-      color: rgba(255,255,255,0.95);
-    }
-
-    .brief-open:active{ transform: scale(0.98); }
-
-    /* ===== Main Grid ===== */
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(2, minmax(0,1fr));
-      gap:14px;
-      align-items: start;
-    }
-    @media (max-width:720px){
-      .grid{ grid-template-columns:1fr; }
-    }
-
-    /* ===== Cards ===== */
-    .card{
-      border-radius: 18px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.08);
-      box-shadow: 0 18px 40px rgba(0,0,0,0.45);
-      padding: 14px;
-      text-align:left;
-      position: relative;
-      overflow: hidden;
-      min-height: 168px;
-    }
-
-    .card-inner{
-      border-radius: 16px;
-      background: rgba(0,0,0,0.42);
-      border: 1px solid rgba(203,255,92,0.14);
-      padding: 14px;
-    }
-
-    .title{
-      margin:0 0 8px;
-      font-size:16px;
-      font-weight:900;
-      letter-spacing: .02em;
-      text-shadow: 0 0 12px rgba(255,61,207,0.18);
-    }
-
-    .desc{
-      margin:0;
-      font-size:13px;
-      line-height: 1.6;
-      color: rgba(255,255,255,0.72);
-    }
-
-    .actions{ margin-top: 12px; display:flex; flex-direction:column; gap:10px; }
-
-    .btn{
-      width:100%;
-      padding:14px 16px;
-      border-radius:14px;
-
-      border:1px solid var(--btn-border);
-      background: var(--btn-fill);
-      color:#fff;
-
-      font-size:14px;
-      font-weight:950;
-      letter-spacing:.10em;
-      text-transform:uppercase;
-
-      cursor:pointer;
-      user-select:none;
-
-      box-shadow: 0 0 22px var(--btn-glow);
-      text-decoration:none;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-    }
-
-    .btn:hover{ transform: translateY(-1px); }
-    .btn:active{ transform: scale(0.99); }
-
-    .btn-sub{
-      margin-top: 10px;
-      background: rgba(255,255,255,0.06);
-      border-color: rgba(255,255,255,0.18);
-      box-shadow: 0 0 16px rgba(255,61,207,0.10);
-      letter-spacing: 0.06em;
-    }
-
-    /* ===== Flash menu ===== */
-    .menu{
-      margin-top: 12px;
-      display:grid;
-      gap: 10px;
-    }
-
-    .menu-item{
-      border-radius: 14px;
-      padding: 12px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(203,255,92,0.12);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
-    }
-
-    .menu-item h3{
-      margin: 0 0 6px;
-      font-size: 14px;
-      font-weight: 900;
-    }
-
-    .menu-item p{
-      margin: 0;
-      font-size: 12.5px;
-      line-height: 1.55;
-      color: rgba(255,255,255,0.70);
-    }
-
-    .menu-item .actions{
-      display:flex;
-      justify-content:flex-end;
-    }
-
-    .menu-item .btn{
-      width: 190px;
-      max-width: 100%;
-    }
-
-    .btn-cyber{
-      border-color: rgba(120,200,255,0.70);
-      box-shadow: 0 0 22px rgba(120,200,255,0.45);
-    }
-    .btn-cyber:hover{
-      background: rgba(120,200,255,0.10);
-    }
-
-    .btn-amber{
-      border-color: rgba(255,176,0,0.75);
-      box-shadow: 0 0 22px rgba(255,176,0,0.40);
-    }
-    .btn-amber:hover{
-      background: rgba(255,176,0,0.10);
-    }
-
-    @keyframes glowPulseViolet{
-      0%   { box-shadow: 0 0 14px rgba(185,120,255,0.28); transform: translateY(0); }
-      50%  { box-shadow: 0 0 28px rgba(185,120,255,0.55); transform: translateY(-1px); }
-      100% { box-shadow: 0 0 14px rgba(185,120,255,0.28); transform: translateY(0); }
-    }
-
-    .btn-violet{
-      border-color: rgba(185,120,255,0.78);
-      box-shadow: 0 0 18px rgba(185,120,255,0.40);
-    }
-    .btn-violet:hover{
-      background: rgba(185,120,255,0.10);
-    }
-
-    .is-pulsing{
-      animation: glowPulseViolet 1.6s ease-in-out infinite;
-    }
-
-    .menu-hero{
-      padding: 0;
-      background: transparent;
-      border: none;
-      box-shadow: none;
-    }
-    .menu-hero .actions{
-      margin-top: 0;
-      display:flex;
-      justify-content: stretch;
-    }
-    .menu-hero .btn{
-      width: 100% !important;
-    }
-
-    .foot{
-      margin: 14px auto 0;
-      font-size: 12px;
-      line-height: 1.7;
-      color: rgba(255,255,255,0.62);
-      text-align:center;
-    }
-    .foot code{
-      color: rgba(255,255,255,0.90);
-      background: rgba(255,255,255,0.06);
-      padding: 1px 6px;
-      border-radius: 8px;
-      border: 1px solid rgba(255,255,255,0.10);
-    }
-
-    /* ===== MISSION BRIEF: 詳細モーダル ===== */
-    .brief-detail-btn{
-      margin-left: 8px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding: 2px 10px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.16);
-      color: rgba(255,255,255,0.86);
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: .06em;
-      text-decoration:none;
-      cursor:pointer;
-      user-select:none;
-    }
-
-    .brief-detail-btn:hover{
-      background: rgba(255,255,255,0.10);
-      border-color: rgba(203,255,92,0.35);
-    }
-
-    .modal-overlay{
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.20);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 14px;
-      z-index: 9999;
-    }
-
-    .modal{
-      width: min(760px, 92vw);
-      max-height: 88vh;
-      display: flex;
-      flex-direction: column;
-
-      border-radius: 18px;
-      background: rgba(0,0,0,0.72);
-      border: 1px solid rgba(255,255,255,0.10);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.65);
-      overflow: hidden;
-    }
-
-    .modal-head{
-      display:flex;
-      align-items:center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 12px 14px;
-      background: rgba(255,255,255,0.06);
-      border-bottom: 1px solid rgba(255,255,255,0.10);
-    }
-
-    .modal-title{
-      margin:0;
-      font-size: 13px;
-      font-weight: 950;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.92);
-    }
-
-    .modal-close{
-      border: 1px solid rgba(255,255,255,0.18);
-      background: rgba(255,255,255,0.06);
-      color: rgba(255,255,255,0.90);
-      border-radius: 12px;
-      padding: 8px 10px;
-      font-weight: 950;
-      cursor:pointer;
-    }
-
-    .modal-close:hover{ background: rgba(255,255,255,0.10); }
-
-    .modal-body{
-      padding: 18px 18px 22px;
-      color: rgba(255,255,255,0.86);
-      font-size: 13px;
-      line-height: 1.8;
-      word-break: break-word;
-      white-space: pre-wrap;
-      overflow-y: auto;
-    }
-
-    .modal-links{
-      margin-top: 12px;
-      padding-bottom: 14px;
-      display:flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    /* ✅ 漢字読解マスター：STARTだけピンク発光 */
-    .btn-pink{
-      border-color: rgba(255,61,207,.65);
-      box-shadow:
-        0 0 12px rgba(255,61,207,.55),
-        0 0 28px rgba(255,61,207,.35);
-    }
-    .btn-pink:hover{
-      background: rgba(255,61,207,.12);
-      box-shadow:
-        0 0 16px rgba(255,61,207,.75),
-        0 0 36px rgba(255,61,207,.45);
-    }
-
-
-    /* ✅ 古文単語330：EXPERTボタン（青緑ストライプ＋威圧感） */
-    .btn-expert{
-      position: relative;
-      border-color: rgba(0,229,255,0.42);
-      background:
-        linear-gradient(135deg, rgba(0,229,255,0.12), rgba(0,0,0,0.55) 40%, rgba(203,255,92,0.08)),
-        repeating-linear-gradient(135deg,
-          rgba(0,229,255,0.18) 0px,
-          rgba(0,229,255,0.18) 10px,
-          rgba(0,0,0,0.00) 10px,
-          rgba(0,0,0,0.00) 20px);
-      box-shadow:
-        0 0 14px rgba(0,229,255,0.18),
-        0 0 28px rgba(0,229,255,0.12);
-      overflow: hidden;
-    }
-    .btn-expert::after{
-      content:"";
-      position:absolute;
-      inset:-2px;
-      background: linear-gradient(115deg, transparent 40%, rgba(0,229,255,0.22), rgba(203,255,92,0.18), transparent 60%);
-      transform: translateX(-55%);
-      opacity: 0.55;
-      animation: expertSweep 6.8s linear infinite;
-      pointer-events:none;
-    }
-    @keyframes expertSweep{
-      0%{ transform: translateX(-55%); }
-      100%{ transform: translateX(55%); }
-    }
-    .btn-expert:hover{
-      background:
-        linear-gradient(135deg, rgba(0,229,255,0.16), rgba(0,0,0,0.55) 40%, rgba(203,255,92,0.10)),
-        repeating-linear-gradient(135deg,
-          rgba(0,229,255,0.22) 0px,
-          rgba(0,229,255,0.22) 10px,
-          rgba(0,0,0,0.00) 10px,
-          rgba(0,0,0,0.00) 20px);
-      box-shadow:
-        0 0 18px rgba(0,229,255,0.28),
-        0 0 34px rgba(0,229,255,0.18);
-    }
-    .btn-expert:active{ transform: translateY(1px); }
-
-    /* ✅ インストールボタン（出たときだけ“控えめに目立つ”） */
-    .btn-install{
-      border-color: rgba(255,255,255,0.22);
-      box-shadow: 0 0 18px rgba(255,61,207,0.18);
-    }
-    .btn-install:hover{
-      background: rgba(255,61,207,0.10);
-    }
-
-    .status-embed{
-      width: 100%;
-      max-width: none;
-      margin: 0 0 14px;
-      padding: 0;
-    }
-    
-    .status-frame{
-      width: 100%;
-      height: 86px;      /* status.html に合わせる */
-      border: 0;
-      border-radius: 16px;
-      overflow: hidden;
-      display: block;
-    }
-
-
-    
-
-    /* HIGACHA button: not glow, fixed width ratio */
-    .btn-higacha{
-      flex: 0 0 30%;
-      max-width: 30%;
-      width: 100% !important;
-      min-width: 0;
-      padding: 10px 12px;
-      font-size: 12px;
-      line-height: 1;
-      display: inline-flex !important;
-      align-items: center;
-      justify-content: center;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.20);
-      box-shadow: none;
-      letter-spacing: .14em;
-      font-weight: 900;
-      color: rgba(255,255,255,0.88);
-    }
-    .btn-higacha:hover{
-      background: rgba(255,255,255,0.10);
-    }
-    .btn-higacha:disabled{
-      opacity: .45;
-      cursor: not-allowed;
-    }
-
-.higacha-note{
-      font-size: 12px;
-      color: rgba(255,255,255,0.72);
-    }
-    .higacha-result{
-      margin-top: 6px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
-      box-shadow: 0 0 14px rgba(255,61,207,0.12);
-      text-align: center;
-    }
-    .higacha-result-title{
-      font-size: 11px;
-      letter-spacing: .12em;
-      color: rgba(255,255,255,0.62);
-      margin-bottom: 6px;
-    }
-    .higacha-result-gain{
-      font-size: 28px;
-      font-weight: 900;
-      letter-spacing: .02em;
-      line-height: 1;
-      margin: 2px 0 8px;
-    }
-    .higacha-result-unit{
-      font-size: 12px;
-      font-weight: 800;
-      margin-left: 6px;
-      color: rgba(255,255,255,0.72);
-      vertical-align: middle;
-    }
-    .higacha-result-total{
-      font-size: 12px;
-      color: rgba(255,255,255,0.72);
-    }
-
-    .higacha-illust-wrap{
-      width:100%;
-      display:flex;
-      justify-content:center;
-      margin: 4px 0 10px;
-    }
-    .higacha-illust{
-      width: 160px;
-      max-width: 60%;
-      height: auto;
-      filter: drop-shadow(0 0 10px rgba(255,61,207,0.22));
-      opacity: 0.95;
-    }
-
-
-    .install-box{
-  margin-top: 14px;
-}
-  
-  
-    /* ✅ HKP / HIGACHA console (status blend) */
-    .hkp-console{
-      width: 100%;
-      height: 76px;           /* status.html に合わせる */
-      border-radius: 16px;
-      overflow: hidden;
-      display: block;
-      border: 0;
-      background: rgba(11,6,16,0.55); /* statusの雰囲気に寄せる */
-    }
-    .hkp-inner{
-      height: 100%;
-      padding: 10px 14px;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      grid-template-rows: auto auto;
-      gap: 6px 12px;
-      align-items: center;
-    }
-    .hkp-head{
-      display:flex;
-      align-items: baseline;
-      gap: 10px;
-      min-width: 0;
-    }
-    .hkp-label{
-      font-weight: 800;
-      letter-spacing: 0.10em;
-      font-size: 12px;
-      opacity: 0.85;
-      white-space: nowrap;
-    }
-    .hkp-value{
-      display:flex;
-      align-items: baseline;
-      gap: 6px;
-      min-width: 0;
-    }
-    .hkp-num{
-      font-weight: 900;
-      font-size: 22px;
-      letter-spacing: 0.02em;
-    }
-    .hkp-unit{
-      font-size: 12px;
-      opacity: 0.72;
-      letter-spacing: 0.10em;
-      white-space: nowrap;
-    }
-    .hkp-sub{
-      grid-column: 1 / -1;
-      font-size: 12px;
-      opacity: 0.72;
-      letter-spacing: 0.02em;
-      line-height: 1.2;
-    }
-    .hkp-sub strong{ font-weight: 800; opacity: 0.92; }
-
-    /* Button (no glow; compact) */
-    .btn-higacha{
-      width: auto !important;
-      min-width: 120px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.16);
-      background: rgba(255,255,255,0.06);
-      color: rgba(255,255,255,0.92);
-      font-weight: 800;
-      letter-spacing: 0.10em;
-      cursor: pointer;
-      transition: transform .12s ease, background .12s ease, border-color .12s ease;
-    }
-    .btn-higacha:hover{ transform: translateY(-1px); background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.22); }
-    .btn-higacha:active{ transform: translateY(0px); background: rgba(255,255,255,0.07); }
-
-    /* Modal extra: result card */
-
-    .higacha-result{
-      margin-top: 12px;
-      border-radius: 14px;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.16);
-      background: rgba(11,6,16,0.78);
-    }
-    .higacha-result .r-head{
-      display:flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.10);
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      font-size: 12px;
-      opacity: 0.9;
-    }
-    .higacha-result .r-body{
-      padding: 12px;
-      display:flex;
-      align-items: baseline;
-      justify-content: center;
-      gap: 10px;
-    }
-    .higacha-result .r-plus{
-      font-weight: 900;
-      font-size: 28px;
-      letter-spacing: 0.02em;
-      animation: popIn .22s ease-out both;
-    }
-    .higacha-result .r-total{
-      font-size: 12px;
-      opacity: 0.75;
-      letter-spacing: 0.06em;
-    }
-    @keyframes popIn{
-      from{ transform: scale(0.92); opacity: 0.0; }
-      to{ transform: scale(1.0); opacity: 1.0; }
-    }
-
-  
-/* ===== HKP HIGACHA subtle sweep (cyan-green, low contrast) ===== */
-.hkp-console{
-  position: relative;
-}
-
-.hkp-console::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:
-    linear-gradient(120deg,
-      rgba(0,229,255,0.08),
-      rgba(203,255,92,0.10),
-      rgba(0,229,255,0.06));
-  opacity: 0.6;
-  pointer-events:none;
-}
-
-.hkp-console::after{
-  content:"";
-  position:absolute;
-  inset:-40%;
-  background:
-    linear-gradient(120deg,
-      transparent 40%,
-      rgba(0,229,255,0.18),
-      rgba(203,255,92,0.18),
-      transparent 60%);
-  transform: translateX(-120%);
-  animation: hkpSweep 7.5s ease-in-out infinite;
-  pointer-events:none;
-  opacity: 0.5;
-}
-
-@keyframes hkpSweep{
-  0%{ transform: translateX(-120%); }
-  55%{ transform: translateX(120%); }
-  100%{ transform: translateX(120%); }
-}
-
-/* ===== HIGACHA button states ===== */
-.btn-higacha{
-  transition: box-shadow .2s ease, transform .15s ease, opacity .15s ease;
-}
-
-.btn-higacha.is-ready{
-  box-shadow: 0 0 12px rgba(0,229,255,0.45);
-}
-
-.btn-higacha.is-ready:hover{
-  transform: translateY(-1px);
-  box-shadow: 0 0 18px rgba(0,229,255,0.65);
-}
-
-.btn-higacha.is-disabled{
-  box-shadow: none !important;
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-.btn-higacha.is-disabled:hover{
-  transform:none;
-}
-
-
-/* ===== HKP help button (subtle) ===== */
-.hkp-help{
-  width: 24px;
-  height: 24px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.18);
-  background: rgba(255,255,255,0.06);
-  color: rgba(255,255,255,0.92);
-  font-weight: 900;
-  font-size: 14px;
-  line-height: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: transform .12s ease, background .12s ease, border-color .12s ease, box-shadow .2s ease;
-}
-.hkp-help:hover{
-  transform: translateY(-1px);
-  background: rgba(255,255,255,0.09);
-  border-color: rgba(255,255,255,0.24);
-  box-shadow: 0 0 10px rgba(0,229,255,0.22);
-}
-.hkp-help:active{
-  transform: translateY(0px);
-  background: rgba(255,255,255,0.07);
-}
-
-/* ===== HKP help modal text ===== */
-.hkp-help-body{
-  text-align: left;
-  font-size: 13px;
-  line-height: 1.65;
-  opacity: 0.92;
-  white-space: pre-wrap;
-}
-.hkp-help-body .hkp-help-title{
-  font-weight: 900;
-  letter-spacing: 0.06em;
-  margin-bottom: 8px;
-}
-.hkp-help-body .hkp-help-note{
-  opacity: 0.78;
-  font-size: 12px;
-}
-
-
-/* ===== HKP panel compact tuning ===== */
-.hkp-inner{
-  padding: 10px 12px 9px; /* compact */
-  gap: 6px 10px;          /* tighter */
-}
-.hkp-num{ font-size: 20px; }
-.hkp-unit{ font-size: 11px; }
-
-/* help button slightly smaller */
-.hkp-help{
-  width: 22px;
-  height: 22px;
-  font-size: 13px;
-}
-
-/* HKP help modal text padding for readability */
-#hkpHelpBody{
-  padding: 10px 12px;
-}
-@media (min-width: 760px){
-  #hkpHelpBody{
-    padding: 14px 18px;
-    font-size: 14px;
-  }
-}
-
-
-/* ===== HKP panel compact tuning v12 (tighter + clearer effects) ===== */
-.hkp-inner{
-  padding: 8px 12px 8px;  /* tighter */
-  gap: 5px 10px;
-}
-.hkp-num{ font-size: 19px; }
-.hkp-unit{ font-size: 11px; }
-
-/* panel brightness: closer to STATUS */
-.hkp-console{
-  background: rgba(11,6,16,0.68);
-  border-color: rgba(255,255,255,0.18);
-}
-
-/* stronger but still subtle cyan-green layer */
-.hkp-console::before{
-  opacity: 0.85;
-  background:
-    radial-gradient(900px 120px at 18% 0%, rgba(0,229,255,0.12), transparent 60%),
-    radial-gradient(900px 140px at 82% 100%, rgba(203,255,92,0.12), transparent 62%),
-    linear-gradient(120deg, rgba(0,229,255,0.06), rgba(203,255,92,0.08), rgba(0,229,255,0.05));
-}
-.hkp-console::after{
-  opacity: 0.72;
-  background:
-    linear-gradient(120deg,
-      transparent 40%,
-      rgba(0,229,255,0.22),
-      rgba(203,255,92,0.20),
-      transparent 60%);
-  animation-duration: 6.4s; /* slightly faster */
-}
-
-/* help button slightly smaller */
-.hkp-help{
-  width: 21px;
-  height: 21px;
-  font-size: 13px;
-}
-
-/* HKP help modal padding (PC) */
-#hkpHelpBody{
-  padding: 10px 12px;
-}
-@media (min-width: 760px){
-  #hkpHelpBody{
-    padding: 16px 20px;
-    font-size: 14px;
-  }
-}
-
-/* HIGACHA button: blue glow only when available */
-.btn-higacha.is-ready{
-  box-shadow: 0 0 12px rgba(0,229,255,0.42);
-  border-color: rgba(0,229,255,0.35);
-}
-.btn-higacha.is-ready:hover{
-  box-shadow: 0 0 18px rgba(0,229,255,0.58);
-  border-color: rgba(0,229,255,0.50);
-}
-.btn-higacha.is-disabled{
-  box-shadow: none !important;
-  border-color: rgba(255,255,255,0.14);
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-
-
-/* ===== HKP bar height v13 ===== */
-.hkp-console{ height: 76px; }
-
-
-/* ===== Menu item right-side info layer (Flash/Blitz) ===== */
-.menu-item{
-  position: relative;
-  overflow: hidden;
-}
-/* subtle right-side texture + chevron */
-.menu-item::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  background:
-    radial-gradient(180px 140px at 92% 50%, rgba(0,229,255,0.12), transparent 60%),
-    radial-gradient(220px 160px at 86% 120%, rgba(203,255,92,0.10), transparent 62%),
-    repeating-linear-gradient(90deg,
-      transparent 0 10px,
-      rgba(255,255,255,0.03) 10px 11px);
-  opacity: 0.9;
-  transform: translateZ(0);
-}
-.menu-item::before{
-  content:"›";
-  position:absolute;
-  right: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-weight: 900;
-  font-size: 22px;
-  color: rgba(255,255,255,0.22);
-  text-shadow: 0 0 16px rgba(0,229,255,0.12);
-  pointer-events:none;
-}
-/* keep content above the layer */
-.menu-item > *{ position: relative; z-index: 1; }
-
-/* slightly tighten empty space feeling: anchor the actions to left but give a visual "lane" */
-.menu-item .actions{
-  max-width: 220px; /* leaves some right lane */
-}
-@media (max-width: 520px){
-  .menu-item .actions{ max-width: 200px; }
-}
-
-
-/* ===== Stop Card Hub pulse to avoid clipping with info layers ===== */
-#btnCardHub.is-pulsing{
-  animation: none !important;
-  transform: none !important;
-}
-
-</style>
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="stylesheet" href="./style.css" />
 </head>
 
 <body>
-  <header class="header">
-    <img class="logo" src="./H.K.LOBBY.png" alt="八東国語LOBBY" />
+  <div class="bg"></div>
+
+  <header class="top">
+    <div class="logoWrap" aria-label="八東国語LOBBY ロゴ">
+      <img class="logo" id="topLogo" src="./H.K.LOBBY.png" alt="八東国語LOBBY" />
+      <div class="logoFallback" id="logoFallback" hidden>
+        <div class="logoFallbackTitle">八東国語LOBBY</div>
+        <div class="logoFallbackSub">H.K. LOBBY</div>
+      </div>
+    </div>
+
+    <!-- STATUS -->
+    <section class="statusBar" aria-label="STATUS">
+      <div class="statusTitle">STATUS</div>
+
+      <div class="statusGrid">
+        <!-- Rank -->
+        <div class="statusItem">
+          <div class="k">ランク</div>
+          <div class="v" id="rankValue">-</div>
+          <div class="mini">カード総数 <span class="miniNum" id="cardTotalValue">-</span></div>
+        </div>
+
+        <!-- HKP -->
+        <div class="statusItem">
+          <div class="k">
+            HKP
+            <button class="helpBtn" id="btnHkpHelp" type="button" aria-label="HKPの説明">?</button>
+          </div>
+          <div class="v"><span id="hkpValue">0</span></div>
+          <div class="mini">Higashi Kokugo Point</div>
+        </div>
+
+        <!-- DAILY 50 (circular gauge) -->
+        <div class="statusItem statusDaily">
+          <div class="k">
+            <span>FLASH DAILY</span>
+            <button class="helpBtn" id="btnDailyHelp" type="button" aria-label="FLASH DAILYの説明">?</button>
+          </div>
+
+          <!-- 進捗値（表示はしない：JSが更新する） -->
+          <span class="srOnly" id="dailySeen">0</span>
+
+          <div class="dailyBarMini" aria-hidden="true">
+            <i id="dailyBarFill"></i>
+          </div>
+        </div>
+
+        <!-- HIGACHA -->
+        <div class="statusItem statusHigacha">
+          <button class="higachaBtn" id="btnHigacha" type="button" aria-label="HIGACHA">
+            <span class="modeIcon" aria-hidden="true">
+              <img class="higachaIcon" src="./higacha_e.png" alt="" />
+            </span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MISSIONBRIEF -->
+    <section class="briefChip" aria-label="MISSIONBRIEF">
+      <button class="briefChipBtn" id="btnBriefOpen" type="button" aria-haspopup="dialog">
+        <span class="briefChipLeft">
+          <span class="briefChipTitle">MISSION BRIEF【お知らせ】</span>
+          <span class="briefBadge" id="briefBadge" hidden>UPDATE</span>
+        </span>
+        <span class="briefChipText" id="briefOneLine">（未読）</span>
+        <span class="briefChipIcon" aria-hidden="true">▼</span>
+      </button>
+    </section>
   </header>
 
-  <main class="wrap">
-<!-- ✅ STATUS（ランク／カード枚数） -->
-  <section class="status-embed" aria-label="STATUS">
-    <iframe
-      class="status-frame"
-      src="/cards-hub/status.html"
-      loading="lazy"
-      title="STATUS"
-    ></iframe>
-  </section>
+  <main class="wrap" id="app">
+    <!-- Tabs -->
+    <nav class="modeDock" aria-label="mode switch">
+      <button class="modeBtn modeFlash is-on" id="tabFlash" type="button">
+        <span class="modeLeft">
+          <span class="modeIcon" aria-hidden="true">
+            <img src="./flashcard_e.png" alt="">
+          </span>
+          <span class="modeLabel">
+            <span class="modeLine">FLASH</span>
+            <span class="modeLine">CARD</span>
+          </span>
+        </span>
+      </button>
 
+      <button class="modeBtn modeBlitz" id="tabBlitz" type="button">
+        <span class="modeLeft">
+          <span class="modeIcon" aria-hidden="true">
+            <img src="./blitzquest_e.png" alt="">
+          </span>
+          <span class="modeLabel">
+            <span class="modeLine">BLITZ</span>
+            <span class="modeLine">QUEST</span>
+          </span>
+        </span>
+      </button>
+    </nav>
 
-    <!-- ✅ HKP（八東国語ポイント） -->
-  <section class="status-embed" aria-label="HKP">
-    <div class="hkp-console" id="hkpFrame">
-      <div class="hkp-inner">
-        <div class="hkp-head">
-          <div class="hkp-label">HKP</div>
-          <div class="hkp-value" aria-label="所有HKP">
-            <span class="hkp-num" id="hkpValue">0</span>
-            <span class="hkp-unit">POINT</span>
-          </div>
-          <button class="hkp-help" id="btnHkpHelp" type="button" aria-haspopup="dialog" aria-label="HKPとは？">?</button>
-        </div>
-
-        <button class="btn-higacha" id="btnHigacha" type="button" aria-haspopup="dialog">HIGACHA</button>
-      </div>
-    </div>
-  </section>
-
-    <!-- ===== MISSION BRIEF ===== -->
-    <section class="board" aria-label="MISSION BRIEF">
-      <div class="board-inner">
-        <div class="board-head">
-          <h2 class="board-title">MISSION BRIEF</h2>
-          <div class="board-meta">
-            <span class="board-date" id="briefDate">----</span>
-            <span class="board-tag" id="briefTag">LIVE</span>
-          </div>
-        </div>
-
-        <ul class="board-list" id="briefList">
-          <li><span class="dot"></span><span class="brief-text">読み込み中…</span></li>
-        </ul>
-      </div>
+    <!-- FLASH -->
+    <section class="panel" id="panelFlash">
+      <div class="grid" id="flashGrid"></div>
     </section>
 
-    <!-- ===== Main Grid ===== -->
-    <section class="grid" aria-label="MAIN">
-      <!-- LEFT: FLASH -->
-      <article class="card">
-        <div class="card-inner">
-          <h2 class="title">FLASH CARD</h2>
-          <p class="desc">今日やるものを1つ選ぶ。</p>
-
-          <div class="actions">
-            <button class="btn" id="btnFlash" type="button">START</button>
-          </div>
-
-          <div class="menu" id="flashMenu" style="display:none;">
-            <div class="menu-item">
-              <h3>古文単語</h3>
-              <p>読解の土台となる基礎語彙。</p>
-              <div class="actions">
-                <a class="btn" href="https://naoki496.github.io/flashcards/" target="_blank" rel="noopener noreferrer">START</a>
-              </div>
-            </div>
-
-            <div class="menu-item">
-              <h3>助動詞</h3>
-              <p>意味・用法・活用形の判断。</p>
-              <div class="actions">
-                <a class="btn" href="https://naoki496.github.io/hatto-kobun-jodoushi/" target="_blank" rel="noopener noreferrer">START</a>
-              </div>
-            </div>
-
-            <div class="menu-item">
-              <h3>文学知識総合</h3>
-              <p>作者・作品・時代背景を整理。</p>
-              <div class="actions">
-                <a class="btn" href="https://naoki496.github.io/bungaku/" target="_blank" rel="noopener noreferrer">START</a>
-              </div>
-            </div>
-
-            <button class="btn btn-sub" id="btnBack" type="button">戻る</button>
+    <!-- BLITZ -->
+    <section class="panel" id="panelBlitz" hidden>
+      <div class="archiveCard" aria-label="カード図鑑リンク">
+        <div class="archiveLeft">
+          <span class="modeIcon" aria-hidden="true">
+            <img class="miniIcon" src="./zukan_e.png" alt="">
+          </span>
+          <div class="archiveText">
+            <div class="archiveTitle">カード図鑑</div>
+            <div class="archiveSub">CARD ARCHIVE</div>
           </div>
         </div>
-      </article>
 
-      <!-- RIGHT: BLITZ -->
-      <article class="card">
-        <div class="card-inner">
-          <h2 class="title">BLITZ QUEST</h2>
-          <p class="desc">問題実践で思考を高める。</p>
+        <a class="archiveOpen" href="https://naoki496.github.io/cards-hub/">OPEN</a>
+      </div>
 
-          <div class="actions">
-            <button class="btn btn-cyber" id="btnDojo" type="button">START</button>
-          </div>
-
-          <div class="menu" id="dojoMenu" style="display:none;">
-            <div class="menu-item menu-hero">
-              <div class="actions">
-                <a class="btn btn-violet" id="btnCardHub" href="https://naoki496.github.io/cards-hub/" target="_blank" rel="noopener noreferrer">カード図鑑</a>
-              </div>
-            </div>
-
-            <div class="menu-item">
-              <h3>古文単語330マスター</h3>
-              <p>先ずはここから制覇しよう</p>
-              <div class="actions">
-                <a class="btn btn-expert" href="https://naoki496.github.io/kobun-quiz/expert.html" target="_blank" rel="noopener noreferrer">EXPERT</a>
-                <a class="btn" href="https://naoki496.github.io/kobun-quiz/" target="_blank" rel="noopener noreferrer">START</a>
-              </div>
-            </div>
-
-            <div class="menu-item">
-              <h3>文学史知識マスター</h3>
-              <p>作者・作品・時代の基礎を即断で固める。</p>
-              <div class="actions">
-                <a class="btn btn-amber" href="https://naoki496.github.io/bungakusi-quiz/" target="_blank" rel="noopener noreferrer">START</a>
-              </div>
-            </div>
-
-            <div class="menu-item">
-              <h3>漢字読解マスター</h3>
-              <p>読解で差がつく漢字運用を鍛える。</p>
-              <div class="actions">
-                <a class="btn btn-pink" href="https://naoki496.github.io/kanji-y-quiz/" target="_blank" rel="noopener noreferrer">START</a>
-              </div>
-            </div>
-
-            <button class="btn btn-sub" id="btnDojoBack" type="button">戻る</button>
-          </div>
-        </div>
-      </article>
+      <div class="grid" id="blitzGrid"></div>
     </section>
 
-   
-<!-- ✅ Install (Android Chrome only: shown when eligible) -->
-<div id="installBox" class="install-box" style="display:none;">
-  <button id="installBtn" class="btn btn-sub" type="button">
-    アプリとしてインストール
-  </button>
-</div>
-
-    <div class="foot">
-      更新が反映されない場合は、URL末尾に <code>?v=2</code> を付けてください。
-    </div>
+    <footer class="footer">
+      <button class="installBtn" id="btnInstall" type="button">アプリとしてインストール</button>
+      <div class="installHint" id="installHint" hidden></div>
+    </footer>
   </main>
 
-  <!-- ===== MISSION BRIEF: 詳細モーダル ===== -->
-  <div class="modal-overlay" id="detailOverlay" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="modal" role="document">
-      <div class="modal-head">
-        <h3 class="modal-title" id="detailTitle">DETAIL</h3>
-        <button class="modal-close" id="detailClose" type="button">閉じる</button>
+  <div class="fxOverlay" id="fxOverlay" aria-hidden="true" style="display:none">
+    <div class="fxPulse" aria-hidden="true"></div>
+  </div>
+
+  <!-- HKP Help Modal -->
+  <div class="overlay" id="hkpHelpOverlay" style="display:none" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="HKPの説明">
+      <div class="modalHead">
+        <div class="modalTitle">HKP</div>
+        <button class="x" id="hkpHelpClose" type="button" aria-label="閉じる">×</button>
       </div>
-
-      <div class="modal-body" id="detailBody"></div>
-
-      <!-- URLが無いときはJSで非表示（空欄が消える） -->
-      <div class="modal-body" id="detailLinksWrap" style="padding-top:0;">
-        <div class="modal-links" id="detailLinks"></div>
+      <div class="modalBody">
+        <div class="leftPad" id="hkpHelpBody"></div>
       </div>
     </div>
   </div>
 
-  <!-- ✅ inline script をやめて home.js に分離 -->
-  <script src="./home.js" defer></script>
+  <!-- Daily50 Help -->
+  <div class="overlay" id="dailyHelpOverlay" style="display:none" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="FLASH DAILY 50の説明">
+      <div class="modalHead">
+        <div class="modalTitle">FLASH DAILY 50</div>
+        <button class="x" id="dailyHelpClose" type="button" aria-label="閉じる">×</button>
+      </div>
+      <div class="modalBody">
+        <div class="leftPad" id="dailyHelpBody"></div>
+      </div>
+    </div>
+  </div>
 
-
-
-  <!-- ===== ヒガチャ（1日1回）モーダル ===== -->
-  <div class="modal-overlay" id="higachaOverlay" role="dialog" aria-modal="true" aria-hidden="true" style="display:none;">
-    <div class="modal" role="document">
-      <div class="modal-head">
-        <h3 class="modal-title" id="higachaTitle">HIGACHA</h3>
-        <button class="modal-close" id="higachaClose" type="button">閉じる</button>
+  <!-- HIGACHA Modal -->
+  <div class="overlay" id="higachaOverlay" style="display:none" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="HIGACHA">
+      <div class="modalHead">
+        <div class="modalTitle">HIGACHA</div>
+        <button class="x" id="higachaClose" type="button" aria-label="閉じる">×</button>
       </div>
 
-      <div class="modal-body">
-        <div class="higacha-illust-wrap"><img src="./higacha.png" alt="HIGACHA" class="higacha-illust"></div>
-        
-        <div id="higachaMsg" class="modal-text">HIGACHAを回しますか？</div>
-          <div id="higachaResult" class="higacha-result" style="display:none;">
-            <div class="r-head"><span>RESULT</span><span id="higachaDateTag"></span></div>
-            <div class="r-body"><span class="r-plus" id="higachaPlus">+0</span><span class="r-total" id="higachaTotal">TOTAL 0 HKP</span></div>
-          </div>
-        <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-          <button class="btn btn-pink" id="higachaDraw" type="button">引く</button>
-          <button class="btn" id="higachaCancel" type="button">やめる</button>
+      <div class="modalBody">
+        <div class="gachaHero">
+          <img class="gachaImg" src="./higacha_e.png" alt="HIGACHA" />
         </div>
-        <div style="margin-top:10px; font-size:11px; color:rgba(255,255,255,0.55);">
-          ※ 1日1回まで。結果はHKPに加算されます。
+
+        <div class="gachaMsg leftPad" id="higachaMsg"></div>
+
+        <div class="modalActions">
+          <button class="btnPrimary" id="higachaDraw" type="button">DRAW</button>
+          <button class="btnPrimary ghostBtn" id="higachaCancel" type="button">CLOSE</button>
         </div>
+
+        <div class="note">※HIGACHAは1日1回まで</div>
       </div>
     </div>
   </div>
 
-
-
-
-  <!-- ✅ HKP Help Modal -->
-  <div class="modal-overlay" id="hkpHelpOverlay" aria-hidden="true" style="display:none;">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="hkpHelpTitle">
-      <button class="modal-close" id="hkpHelpClose" type="button" aria-label="閉じる">×</button>
-      <div class="modal-title" id="hkpHelpTitle">HKP</div>
-      <div class="hkp-help-body" id="hkpHelpBody"></div>
+  <!-- MISSIONBRIEF Modal -->
+  <div class="overlay" id="briefOverlay" style="display:none" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="MISSIONBRIEF">
+      <div class="modalHead">
+        <div class="modalTitle">MISSION BRIEF【お知らせ】</div>
+        <button class="x" id="briefClose" type="button" aria-label="閉じる">×</button>
+      </div>
+      <div class="modalBody">
+        <ul class="briefList" id="briefList"></ul>
+      </div>
     </div>
   </div>
 
+  <script src="./app.js"></script>
 </body>
 </html>
