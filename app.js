@@ -318,10 +318,10 @@ HKPを入手できます。
 
     const { open } = bindOverlayClose("dailyHelpOverlay", "dailyHelpClose");
     const text =
-`FLASH DAILY とは？
+`FLASH DAILY 50とは？
 
 FLASHCARDで「本日見たカード合計」が
-一定枚数に到達すると、その日に限り
+50枚 に到達すると、その日に限り
  +1HKP を付与（1日1回まで）。
 
 ただし、放置しすぎると逆に
