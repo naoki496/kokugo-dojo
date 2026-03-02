@@ -716,12 +716,51 @@ TOTAL ${getHKP()} HKP`;
   }
 
   // =========================
+  // Rank & Cards (from cards-hub localStorage)
+  // =========================
+  function renderRankAndCards() {
+    // ---- 所持カード数（cards-hub が保存している）----
+    let owned = 0;
+    try {
+      const raw = localStorage.getItem("hklobby.v1.cardCounts");
+      if (raw) {
+        const counts = JSON.parse(raw);
+        owned = Object.values(counts).reduce(
+          (sum, v) => sum + (Number(v) || 0),
+          0
+        );
+      }
+    } catch {}
+  
+    // ---- 総カード数 ----
+    // ※ 以前と同じ挙動。必要になったら fetch に切替可
+    const TOTAL_CARDS = 107;
+  
+    // ---- ランク ----
+    // ※ 旧仕様どおり（cards-hub 側で使われていた値）
+    const rank = "E";
+  
+    const rankEl  = document.getElementById("rankValue");
+    const totalEl = document.getElementById("cardTotalValue");
+  
+    if (rankEl) {
+      rankEl.textContent = rank;
+    }
+    if (totalEl) {
+      totalEl.textContent = `${owned}/${TOTAL_CARDS}`;
+    }
+  }
+
+
+  
+  // =========================
   // Sync on return (重要)
   // =========================
   function syncStatus() {
     clearFxOverlay();
     renderHKP();
     updateHigachaButtonState();
+    renderRankAndCards(); 
     const st = ensureDailyState();
     tryProgressDaily(st);
   }
@@ -781,4 +820,36 @@ TOTAL ${getHKP()} HKP`;
   }
 
   document.addEventListener("DOMContentLoaded", boot);
+
+  function boot() {
+  clearFxOverlay();
+
+  renderFlash();
+  renderBlitz();
+
+  initTabs();
+  const saved = localStorage.getItem(MODE_KEY);
+  setMode(saved === "blitz" ? "blitz" : "flash");
+
+  renderHKP();
+  updateHigachaButtonState();
+  renderRankPlaceholder();
+  disableCardTotal();
+
+  initHkpHelp();
+  initDailyHelp();
+  initHigacha();
+  initBrief();
+  initInstall();
+
+  initDailyDebugControls();
+
+  const st = ensureDailyState();
+  tryProgressDaily(st);
+
+  renderRankAndCards(); // ← ★ 初回描画
+
+  initSyncHooks();
+}
+  
 })();
