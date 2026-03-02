@@ -26,11 +26,21 @@
       <div class="statusTitle">STATUS</div>
 
       <div class="statusGrid">
-        <!-- Rank -->
-        <div class="statusItem">
-          <div class="k">ランク</div>
-          <div class="v" id="rankValue">-</div>
-          <div class="mini">カード総数 <span class="miniNum" id="cardTotalValue">-</span></div>
+        <!-- Rank / Cards summary (from cards-hub) -->
+        <div class="statusItem statusEmbed" aria-label="ランク・カード情報（cards-hub）">
+          <iframe
+            class="statusFrame"
+            src="/cards-hub/status.html"
+            loading="lazy"
+            title="STATUS（cards-hub）"
+          ></iframe>
+        
+          <!-- フォールバック（iframeが無効な環境向け。レイアウトは変えない） -->
+          <div class="statusFallback" aria-hidden="true">
+            <div class="k">ランク</div>
+            <div class="v">-</div>
+            <div class="mini">カード総数 <span class="miniNum">-</span></div>
+          </div>
         </div>
 
         <!-- HKP -->
